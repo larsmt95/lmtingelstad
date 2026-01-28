@@ -1,0 +1,15 @@
+# Quarto
+.quarto/
+**/*_quarto_ipynb
+
+# R / RStudio
+.RData
+.Rhistory
+.Rproj.user/
+
+# Quarto output (bygges automatisk)
+_site/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,11 @@
+---
+title: "Lars Tingelstad"
+subtitle: "Dataanalyse | R | Visualisering"
+---
+
+Jeg er dataanalytiker med erfaring i R, SQL og Power BI. Jeg jobber med datainnhenting, modellering og visualisering for beslutningsstøtte.
+
+### Utvalgte prosjekter
+
+-   [**Strava – treningsanalyse**](projects/project_3_strava/)\
+    End-to-end analyse fra API → database → Power BI.

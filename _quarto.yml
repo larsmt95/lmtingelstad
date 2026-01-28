@@ -1,0 +1,28 @@
+project:
+  type: website
+  output-dir: _site
+
+
+website:
+  title: "Portefølje | Lars Martin Tingelstad"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: projects/project_3_strava/
+        text: Strava
+      - href: projects/project_phd_paper3/
+        text: PhD
+      - href: about.qmd
+        text: About
+
+format:
+  html:
+    theme:
+      - flatly
+      - brand
+    css: styles.css
+    toc: true
+
+editor: visual
+
