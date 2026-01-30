@@ -14,13 +14,14 @@ execute:
 
 2-3 setninger
 
--   Forskningsspørsmål
+-   ForskningsspC8rsmC%l
 
 -   Datasett (kort)
 
 -   Hvorfor analysen er relevant
 
-```{r} ## Data rydding library(here) source("project_phd_paper3/01_data_prep.R")}
+```{r, eval=FALSE}
+source("project_phd_paper3/01_data_prep.R")
 ```
 
 
@@ -34,7 +35,7 @@ execute:
 
 -   Viktige karakteristika
 
--   Èn tabell eller figur
+-   Cn tabell eller figur
 
 Kort tolkning
 
@@ -46,7 +47,7 @@ Kort tolkning
 
 -   Hvorfor denne modellen
 
--   2-3 nøkkelfunn (bullet points)
+-   2-3 nC8kkelfunn (bullet points)
 
 3.3 Tilleggsanalyser (regresjon)
 
@@ -66,4 +67,4 @@ KUN HVIS
 
 ## Praktisk relevans
 
-Hvordan dette kan brukes i praksis / beslutningsstøtte.
+Hvordan dette kan brukes i praksis / beslutningsstC8tte.
