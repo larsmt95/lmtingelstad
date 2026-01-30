@@ -20,7 +20,7 @@ jobs:
 
       - name: Install R packages
         run: |
-          Rscript -e "install.packages(c('dplyr','httr','jsonlite','DBI','RPostgres'), repos='https://cloud.r-project.org')"
+          Rscript -e "install.packages(c('dplyr','httr','jsonlite','DBI','RPostgres', 'knitr', 'rmarkdown'), repos='https://cloud.r-project.org')"
 
       - name: Render Quarto site
         run: quarto render
