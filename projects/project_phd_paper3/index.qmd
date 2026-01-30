@@ -20,9 +20,6 @@ execute:
 
 -   Hvorfor analysen er relevant
 
-```{r, eval=FALSE}
-source("project_phd_paper3/01_data_prep.R")
-```
 
 
 # Resultater
