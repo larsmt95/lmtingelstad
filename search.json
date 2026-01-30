@@ -1,0 +1,163 @@
+[
+  {
+    "objectID": "projects/project_phd_paper3/index.html",
+    "href": "projects/project_phd_paper3/index.html",
+    "title": "Longitudinal development in physical performance in adolescent team sport athletes",
+    "section": "",
+    "text": "2-3 setninger\n\nForskningsspC8rsmC%l\nDatasett (kort)\nHvorfor analysen er relevant"
+  },
+  {
+    "objectID": "projects/project_phd_paper3/index.html#viktigste-funn",
+    "href": "projects/project_phd_paper3/index.html#viktigste-funn",
+    "title": "Longitudinal development in physical performance in adolescent team sport athletes",
+    "section": "Viktigste funn",
+    "text": "Viktigste funn\n\nPunkt 1 (klar, ikke statistisk)\nPunkt 2\nPunkt 3"
+  },
+  {
+    "objectID": "projects/project_phd_paper3/index.html#praktisk-relevans",
+    "href": "projects/project_phd_paper3/index.html#praktisk-relevans",
+    "title": "Longitudinal development in physical performance in adolescent team sport athletes",
+    "section": "Praktisk relevans",
+    "text": "Praktisk relevans\nHvordan dette kan brukes i praksis / beslutningsstC8tte."
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html",
+    "href": "projects/project_3_strava/index.html",
+    "title": "Strava – treningsanalyse",
+    "section": "",
+    "text": "Dette prosjektet bruker egne treningsdata fra Strava for å analysere treningsbelastning, utvikling over tid og mønstre i treningspreferanser. Formålet er å demonstrere ferdigheter innen datainnhenting, datamodellering og visualisering i Power BI."
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#datakilder",
+    "href": "projects/project_3_strava/index.html#datakilder",
+    "title": "Strava – treningsanalyse",
+    "section": "Datakilder",
+    "text": "Datakilder\n\nStrava API (personlige aktivitetsdata)\n\nMetadata: type økt, varighet, distanse, hastighet, tid\n\nTreningsdagbok styrketrening\n\nMetadata: dato, belastning, volum, øvelse"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#datainnhenting",
+    "href": "projects/project_3_strava/index.html#datainnhenting",
+    "title": "Strava – treningsanalyse",
+    "section": "Datainnhenting",
+    "text": "Datainnhenting\n\nOAuth-autentisering\nHenting av aktiviteter via API\nPeriodisk refresh\n… data fra andre venner"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#datamodellering",
+    "href": "projects/project_3_strava/index.html#datamodellering",
+    "title": "Strava – treningsanalyse",
+    "section": "Datamodellering",
+    "text": "Datamodellering\n\nFaktatabell: aktiviteter fra strava og treningsdagbok styrke\nDatodimensjon\nAktivitetstype\n\n\n\n\nDatamodell for egne treningsdata"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#analyse-og-innsikt",
+    "href": "projects/project_3_strava/index.html#analyse-og-innsikt",
+    "title": "Strava – treningsanalyse",
+    "section": "Analyse og innsikt",
+    "text": "Analyse og innsikt\n\nTreningspreferanser\n\n\n\nMine treningspreferanser\n\n\nEn tydelig preferanse mot å trene på ettermiddag, etter jobb, men tidligere på formiddagen i helg. Ingen klar trend i endring med tiden, bortsett fra en preferanse for tidlig trening i 2018.\n\n\nBeste prestasjoner\n\n\n\nMine beste prestasjoner\n\n\n\n\nTreningsvolum over tid\n\nEn, dessverre nedgang i total treningstid siden 2021. Og enda verre for løping. Veldig godt år i 2019.\n\n\n\nEndring MoM\n\n\nI 2025 var det en særlig nedgang på slutten av året.\n\n\nOversikt over styrkeøkter\n\n\n\nOversikt over styrkeøkter\n\n\n\nØverst til venstre: Jevn økning i benkpress med liten endring i total volum pr økt\nØverst til venstre: Triceps, pull ups og benk de mest vanlige øvelsene for overkropp, mens leg curl, hip abduction og tåhev for underkropp (preget av kneproblematikk siste årene)\nNederst til venstre: Variasjon i unike øvelser per måned siste året. Ok variasjon her.\nNederst til høyre: Andel overkropp vs underkropp. Never skip leg day, heh."
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#datarydding-og-modellering-power-bi",
+    "href": "projects/project_3_strava/index.html#datarydding-og-modellering-power-bi",
+    "title": "Strava – treningsanalyse",
+    "section": "Data­rydding og modellering (Power BI)",
+    "text": "Data­rydding og modellering (Power BI)\n\nUtgangspunkt (rådata)\nRådata bestod av:\n\nStrava-aktiviteter\nTreningsdagbok i bredt format (kolonner med uke, belastning og reps, økt + øvelse i rader)\n\nInkonsekvente øktnavn og øvelesesnavn, bredt format som ikke kunne analyseres, reps/load i samme celle\n\n\n\n\nRyddetrinn (Power Query)\nDataryddingen ble gjort fullt ut i Power Query, med fokus på reproduserbarhet.\nHovedsteg:\n\nStandardiserte kolonnenavn og datatyper\nSplittet og normaliserte treningsdagbok (bred → lang)\nRenset øktnavn og samlet varianter (UB1, Upper body, Overkropp → Overkropp)\n\n\n\nRyddetrinn (Power Query): Kroppsdel\n\nKroppsdel =\n  VAR x = UPPER ( 'facts_styrke'[Økt] )\n  RETURN\n  SWITCH (\n    TRUE (),\n    CONTAINSSTRING(x, \"UB\") || CONTAINSSTRING (x, \"UPPER\") || CONTAINSSTRING (x,          \"OVER\"),\n    \"Overkropp\",\n    CONTAINSSTRING (x, \"LB\" ) || CONTAINSSTRING (x, \"BEIN\" ) || CONTAINSSTRING (x,        \"LOWER\") || CONTAINSSTRING (x, \"REHAB\"),\n    \"Underkropp\",\n    \"Ukjent\"\n)\n\n\nFjernet tomme og ugyldige rader\nKombinerte årstabeller til én faktatabell\n\n\n\nEtter (modellklar struktur)\nResultatet er:\n\nÉn konsistent faktatabell for styrketrening\nSeparate dimensjoner for dato og aktivitet\nKlar separasjon mellom over- og underkropp\nDatagrunnlag egnet for DAX og tidsserieanalyse\n\n\nEksempler (Power Query)\n\n\nStrava-data\n\n\n\n\nDatarydding Strava\n\n\n\n\n\nStyrkefil 2024 | Før rydding\n\n\n\n\nStyrkefil 2024 pre\n\n\n\n\n\nStyrkefil 2024 | Etter rydding\n\n\n\n\nStyrkefil 2024 post\n\n\n\n\n\n\nDAX-mål (eksempler)\n\n\nSession LY\n\nSessions LY =\nCALCULATE (\n    [Sessions],\n    SAMEPERIODLASTYEAR ( 'Dim_date'[Date] )\n) \n\n\n\nMost Frequent Training Day\n\nMost Frequent Training Day = \nVAR DayCounts =\n    SUMMARIZE(\n        'Dim_Date',\n        'Dim_Date'[ukedag],\n        \"Sessions\", CALCULATE(COUNT('facts_strava'[type]))\n    )\nVAR TopDay =\n    TOPN(1, DayCounts, [Sessions], DESC)\nRETURN\n    MAXX(TopDay, 'Dim_Date'[ukedag])\n\n\n\nPersonal best (duration)\n\nPB Duration (sec) = \nCALCULATE(\n    MIN('facts_strava'[moving_time]),\n    FILTER(\n        ALL('facts_strava'),\n        'facts_strava'[Run Distance Category]\n            = SELECTEDVALUE('facts_strava'[Run Distance Category])\n        && 'facts_strava'[type] = \"Run\"\n    )\n)\n\n\n\nTopp 3 løp\n\nPallen = \nVAR ThisTime =\n    SELECTEDVALUE('facts_strava'[moving_time])\nRETURN\nRANKX(\n    ALLSELECTED('facts_strava'),\n    'facts_strava'[moving_time],\n    ThisTime,\n    ASC,\n    DENSE\n)"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#datainnhenting-strava-api-r",
+    "href": "projects/project_3_strava/index.html#datainnhenting-strava-api-r",
+    "title": "Strava – treningsanalyse",
+    "section": "Datainnhenting – Strava API (R)",
+    "text": "Datainnhenting – Strava API (R)\nStrava-data ble hentet via Strava REST API, autentisert med OAuth 2.0.\nLøsningen er bygget i R og lagrer data direkte i PostgreSQL for videre bruk i Power BI.\n\n1️⃣ Autentisering (OAuth)\nTilgangstoken hentes via Strava sin OAuth-flyt.\nSensitiv informasjon håndteres via miljøvariabler.\n\n\nR – Autentisering mot Strava API\n\nlibrary(httr) \nlibrary(jsonlite)  \n\nres &lt;- POST(\"https://www.strava.com/oauth/token\",   \n        body = list(client_id = Sys.getenv(\"STRAVA_CLIENT_ID\"), \n        client_secret = Sys.getenv(\"STRAVA_CLIENT_SECRET\"),\n        code = Sys.getenv(\"STRAVA_AUTH_CODE\"),\n        grant_type = \"authorization_code\"),\n        encode = \"form\")\n        \ntokens &lt;- content(res, \"parsed\") access_token &lt;- tokens$access_token \n\n\n\n2️⃣ Henting av aktivitetsdata (paginert)\nAlle aktiviteter hentes sidevis (200 per kall) til alle sider er lest.\n\n\nR – Nedlasting av Strava-aktiviteter\n\nlibrary(dplyr)  \n\nget_activities &lt;- function(page, token) {   \n  GET(\"https://www.strava.com/api/v3/athlete/activities\",\n  query = list(per_page = 200, page = page), \n  add_headers(Authorization = paste(\"Bearer\", token))\n  ) \n  }  \n  \nall_activities &lt;- list() \npage &lt;- 1  \n\nrepeat {\n  res  &lt;- get_activities(page, access_token)\n  data &lt;- fromJSON(content(res, \"text\"), flatten = TRUE) \n  \n  if (nrow(data) == 0) break  \n  \n  all_activities[[page]] &lt;- data   \n  page &lt;- page + 1 \n}  \n\nactivities &lt;- bind_rows(all_activities) \n\n\n\n3️⃣ Klargjøring av data (API → analyse)\nNested JSON-felter flates ut og reduseres til analyse­relevante kolonner.\n\n\nR – Klargjøring av aktivitetsdata\n\nactivities_sql &lt;- activities %&gt;%   select(\n  activity_id = id,\n  name,\n  type,\n  start_date,\n  distance,\n  moving_time,\n  elapsed_time,\n  total_elevation_gain,\n  average_speed,\n  max_speed,\n  average_watts,\n  max_watts,\n  average_heartrate,\n  max_heartrate,\n  location_city,\n  location_country,\n  athlete.id\n  ) \n\n\n\n4️⃣ Lagring i PostgreSQL\nData lagres i en dedikert database for videre bruk i Power BI.\n\n\nR – Lagring i PostgreSQL\n\nlibrary(DBI) \nlibrary(RPostgres)\n\ncon &lt;- dbConnect(\n  Postgres(),\n  dbname = \"strava\",\n  host = \"localhost\",\n  port = 5432,\n  user = Sys.getenv(\"PG_USER\"),\n  password = Sys.getenv(\"PG_PASSWORD\")\n  )  \n  \ndbWriteTable(\n  con,\n  name = Id(schema = \"public\", table = \"activities\"),\n  value = activities_sql,\n  overwrite = TRUE\n) \n\n\n\n5️⃣ Verifisering\nEnkel validering sikrer at data er korrekt lastet.\nSELECT COUNT(*) FROM public.activities;"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#begrensninger",
+    "href": "projects/project_3_strava/index.html#begrensninger",
+    "title": "Strava – treningsanalyse",
+    "section": "Begrensninger",
+    "text": "Begrensninger\n\nKun egne data (ikke generaliserbart)\nMangler eksterne belastningsmål (RPE, HRV)\nAvhengig av Strava-datakvalitet"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#videre-arbeid",
+    "href": "projects/project_3_strava/index.html#videre-arbeid",
+    "title": "Strava – treningsanalyse",
+    "section": "Videre arbeid",
+    "text": "Videre arbeid\n\nKombinere med subjektive data\nAutomatisert refresh\nPrediktive modeller for belastning\n\nVil du se mer eller diskutere prosjektet?\n📧 Send meg en e-post\n🔗 LinkedIn"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Lars Tingelstad",
+    "section": "",
+    "text": "Jeg er dataanalytiker med erfaring i R, SQL og Power BI. Jeg jobber med datainnhenting, modellering og visualisering for beslutningsstøtte.\n\nUtvalgte prosjekter\n\nStrava – treningsanalyse\nEnd-to-end analyse fra API → database → Power BI."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Lars Tingelstad",
+    "section": "",
+    "text": "Jeg er dataanalytiker med erfaring i R, SQL og Power BI. Jeg jobber med datainnhenting, modellering og visualisering for beslutningsstøtte.\n\nUtvalgte prosjekter\n\nStrava – treningsanalyse\nEnd-to-end analyse fra API → database → Power BI."
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html",
+    "href": "projects/project_3_strava/strava_powerbi.html",
+    "title": "Analyse av treningsdata",
+    "section": "",
+    "text": "Dette prosjektet bruker egne treningsdata fra Strava for å analysere treningsbelastning, utvikling over tid og mønstre i treningspreferanser. Formålet er å demonstrere ferdigheter innen datainnhenting, datamodellering og visualisering i Power BI."
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#datakilder",
+    "href": "projects/project_3_strava/strava_powerbi.html#datakilder",
+    "title": "Analyse av treningsdata",
+    "section": "Datakilder",
+    "text": "Datakilder\n\nStrava API (personlige aktivitetsdata)\n\nMetadata: type økt, varighet, distanse, hastighet, tid\n\nTreningsdagbok styrketrening\n\nMetadata: dato, belastning, volum, øvelse"
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#datainnhenting",
+    "href": "projects/project_3_strava/strava_powerbi.html#datainnhenting",
+    "title": "Analyse av treningsdata",
+    "section": "Datainnhenting",
+    "text": "Datainnhenting\n\nOAuth-autentisering\nHenting av aktiviteter via API\nPeriodisk refresh\n… data fra andre venner"
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#datamodellering",
+    "href": "projects/project_3_strava/strava_powerbi.html#datamodellering",
+    "title": "Analyse av treningsdata",
+    "section": "Datamodellering",
+    "text": "Datamodellering\n\nFaktatabell: aktiviteter fra strava og treningsdagbok styrke\nDatodimensjon\nAktivitetstype\n\n\n\n\nDatamodell for egne treningsdata"
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#analyse-og-innsikt",
+    "href": "projects/project_3_strava/strava_powerbi.html#analyse-og-innsikt",
+    "title": "Analyse av treningsdata",
+    "section": "Analyse og innsikt",
+    "text": "Analyse og innsikt\n\nTreningspreferanser\n\n\n\nMine treningspreferanser\n\n\nEn tydelig preferanse mot å trene på ettermiddag, etter jobb, men tidligere på formiddagen i helg. Ingen klar trend i endring med tiden, bortsett fra en preferanse for tidlig trening i 2018.\n\n\nBeste prestasjoner\n\n\n\nMine beste prestasjoner\n\n\n\n\nTreningsvolum over tid\n\nEn, dessverre nedgang i total treningstid siden 2021. Og enda verre for løping. Veldig godt år i 2019.\n\nI 2025 var det en særlig nedgang på slutten av året.\n\n\nOversikt over styrkeøkter\n\n\nØverst til venstre: Jevn økning i benkpress med liten endring i total volum pr økt\nØverst til venstre: Triceps, pull ups og benk de mest vanlige øvelsene for overkropp, mens leg curl, hip abduction og tåhev for underkropp (preget av kneproblematikk siste årene)\nNederst til venstre: Variasjon i unike øvelser per måned siste året. Ok variasjon her.\nNederst til høyre: Andel overkropp vs underkropp. Never skip leg day, heh."
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#datarydding-og-modellering-power-bi",
+    "href": "projects/project_3_strava/strava_powerbi.html#datarydding-og-modellering-power-bi",
+    "title": "Analyse av treningsdata",
+    "section": "Data­rydding og modellering (Power BI)",
+    "text": "Data­rydding og modellering (Power BI)\n\nUtgangspunkt (rådata)\nRådata bestod av:\n\nStrava-aktiviteter\nTreningsdagbok i bredt format (kolonner med uke, belastning og reps, økt + øvelse i rader)\n\nInkonsekvente øktnavn og øvelesesnavn, bredt format som ikke kunne analyseres, reps/load i samme celle\n\n\n\n\nRyddetrinn (Power Query)\nDataryddingen ble gjort fullt ut i Power Query, med fokus på reproduserbarhet.\nHovedsteg:\n\nStandardiserte kolonnenavn og datatyper\nSplittet og normaliserte treningsdagbok (bred → lang)\nRenset øktnavn og samlet varianter (UB1, Upper body, Overkropp → Overkropp)\n\n\n\nRyddetrinn (Power Query): Kroppsdel\n\nKroppsdel =\nVAR x = UPPER ( 'facts_styrke'[Økt] )\nRETURN\nSWITCH (\n    TRUE (),\n    CONTAINSSTRING ( x, \"UB\" ) || CONTAINSSTRING ( x, \"UPPER\" ) || CONTAINSSTRING ( x, \"OVER\" ),\n        \"Overkropp\",\n    CONTAINSSTRING ( x, \"LB\" ) || CONTAINSSTRING ( x, \"BEIN\" ) || CONTAINSSTRING ( x, \"LOWER\" ) || CONTAINSSTRING ( x, \"REHAB\" ),\n        \"Underkropp\",\n    \"Ukjent\"\n)\n\n\nFjernet tomme og ugyldige rader\nKombinerte årstabeller til én faktatabell\n\n\n\nEtter (modellklar struktur)\nResultatet er:\n\nÉn konsistent faktatabell for styrketrening\nSeparate dimensjoner for dato og aktivitet\nKlar separasjon mellom over- og underkropp\nDatagrunnlag egnet for DAX og tidsserieanalyse\n\n\n\n\nDatarydding Strava\n\n\n\n\n\nStyrkefil 2024 pre\n\n\n\n\n\nStyrkefil 2024 post\n\n\n\n\nDAX-mål\n\n\nDAX- Session LY\n\nSessions LY =\nCALCULATE (\n    [Sessions],\n    SAMEPERIODLASTYEAR ( 'Dim_date'[Date] )\n) \n\n\ntreningsvolum\nrullerende gjennomsnitt\nsesongaggregater\nInteraktive slicere og drill-down"
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#datainnhenting-strava-api-r",
+    "href": "projects/project_3_strava/strava_powerbi.html#datainnhenting-strava-api-r",
+    "title": "Analyse av treningsdata",
+    "section": "Datainnhenting – Strava API (R)",
+    "text": "Datainnhenting – Strava API (R)\nStrava-data ble hentet via Strava REST API, autentisert med OAuth 2.0.\nLøsningen er bygget i R og lagrer data direkte i PostgreSQL for videre bruk i Power BI.\n\n1️⃣ Autentisering (OAuth)\nTilgangstoken hentes via Strava sin OAuth-flyt.\nSensitiv informasjon håndteres via miljøvariabler.\n\n\nR – Autentisering mot Strava API\n\nlibrary(httr) \nlibrary(jsonlite)  \n\nres &lt;- POST(\"https://www.strava.com/oauth/token\",   \n        body = list(client_id = Sys.getenv(\"STRAVA_CLIENT_ID\"), \n        client_secret = Sys.getenv(\"STRAVA_CLIENT_SECRET\"),\n        code = Sys.getenv(\"STRAVA_AUTH_CODE\"),\n        grant_type = \"authorization_code\"),\n        encode = \"form\")\n        \ntokens &lt;- content(res, \"parsed\") access_token &lt;- tokens$access_token \n\n\n\n2️⃣ Henting av aktivitetsdata (paginert)\nAlle aktiviteter hentes sidevis (200 per kall) til alle sider er lest.\n\n\nR – Nedlasting av Strava-aktiviteter\n\nlibrary(dplyr)  \n\nget_activities &lt;- function(page, token) {   \n  GET(\"https://www.strava.com/api/v3/athlete/activities\",\n  query = list(per_page = 200, page = page), \n  add_headers(Authorization = paste(\"Bearer\", token))\n  ) \n  }  \n  \nall_activities &lt;- list() \npage &lt;- 1  \n\nrepeat {\n  res  &lt;- get_activities(page, access_token)\n  data &lt;- fromJSON(content(res, \"text\"), flatten = TRUE) \n  \n  if (nrow(data) == 0) break  \n  \n  all_activities[[page]] &lt;- data   \n  page &lt;- page + 1 \n}  \n\nactivities &lt;- bind_rows(all_activities) \n\n\n\n3️⃣ Klargjøring av data (API → analyse)\nNested JSON-felter flates ut og reduseres til analyse­relevante kolonner.\n\n\nR – Klargjøring av aktivitetsdata\n\nactivities_sql &lt;- activities %&gt;%   select(\n  activity_id = id,\n  name,\n  type,\n  start_date,\n  distance,\n  moving_time,\n  elapsed_time,\n  total_elevation_gain,\n  average_speed,\n  max_speed,\n  average_watts,\n  max_watts,\n  average_heartrate,\n  max_heartrate,\n  location_city,\n  location_country,\n  athlete.id\n  ) \n\n\n\n4️⃣ Lagring i PostgreSQL\nData lagres i en dedikert database for videre bruk i Power BI.\n\n\nR – Lagring i PostgreSQL\n\nlibrary(DBI) \nlibrary(RPostgres)\n\ncon &lt;- dbConnect(\n  Postgres(),\n  dbname = \"strava\",\n  host = \"localhost\",\n  port = 5432,\n  user = Sys.getenv(\"PG_USER\"),\n  password = Sys.getenv(\"PG_PASSWORD\")\n  )  \n  \ndbWriteTable(\n  con,\n  name = Id(schema = \"public\", table = \"activities\"),\n  value = activities_sql,\n  overwrite = TRUE\n) \n\n\n\n5️⃣ Verifisering\nEnkel validering sikrer at data er korrekt lastet.\nSELECT COUNT(*) FROM public.activities;"
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#begrensninger",
+    "href": "projects/project_3_strava/strava_powerbi.html#begrensninger",
+    "title": "Analyse av treningsdata",
+    "section": "Begrensninger",
+    "text": "Begrensninger\n\nKun egne data (ikke generaliserbart)\nMangler eksterne belastningsmål (RPE, HRV)\nAvhengig av Strava-datakvalitet"
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#videre-arbeid",
+    "href": "projects/project_3_strava/strava_powerbi.html#videre-arbeid",
+    "title": "Analyse av treningsdata",
+    "section": "Videre arbeid",
+    "text": "Videre arbeid\n\nKombinere med subjektive data\nAutomatisert refresh\nPrediktive modeller for belastning"
+  }
+]
