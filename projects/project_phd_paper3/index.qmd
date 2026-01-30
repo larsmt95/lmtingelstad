@@ -12,56 +12,9 @@ execute:
 
 # Bakgrunn
 
-2-3 setninger
 
--   ForskningsspC8rsmC%l
+**Vil du se mer eller diskutere prosjektet?**\
+📧 [Send meg en e-post](mailto:larsmartin95@hotmail.com?subject=Henvendelse%20fra%20portef%C3%B8lje)
 
--   Datasett (kort)
+🔗 [LinkedIn](https://www.linkedin.com/in/lars-martin-tingelstad-657940113/)
 
--   Hvorfor analysen er relevant
-
-
-
-# Resultater
-
-3.1 Deskriptiv statistikk
-
-(script 01 og 02)
-
--   Hva slags data
-
--   Viktige karakteristika
-
--   Cn tabell eller figur
-
-Kort tolkning
-
-3.2 Hovedmodeller
-
-(script 03 mixed)
-
--   Hva modellen tester
-
--   Hvorfor denne modellen
-
--   2-3 nC8kkelfunn (bullet points)
-
-3.3 Tilleggsanalyser (regresjon)
-
-KUN HVIS
-
--   Det gir ekstra innsikt
-
--   Styrker hovedfunn
-
-3.4 Visualisering
-
-## Viktigste funn
-
--   Punkt 1 (klar, ikke statistisk)
--   Punkt 2
--   Punkt 3
-
-## Praktisk relevans
-
-Hvordan dette kan brukes i praksis / beslutningsstC8tte.

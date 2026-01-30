@@ -7,9 +7,9 @@ format:
     lightbox: true
 ---
 
-# Data preperation \| SQL
+# Data preperation \| SQL 
 
-### Datakvalitet & forståelse
+### Datakvalitet & forståelse 
 
 1.  Sjekk rader per tabell
 
@@ -135,3 +135,8 @@ WHERE table_type = 'BASE TABLE';
 </details>
 
 # Data visualisering \| Power BI
+
+**Vil du se mer eller diskutere prosjektet?**\
+📧 [Send meg en e-post](mailto:larsmartin95@hotmail.com?subject=Henvendelse%20fra%20portef%C3%B8lje)
+
+🔗 [LinkedIn](https://www.linkedin.com/in/lars-martin-tingelstad-657940113/)

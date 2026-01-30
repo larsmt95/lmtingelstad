@@ -4,7 +4,7 @@ project:
 
 
 website:
-  title: "Portefølje | Lars Martin Tingelstad"
+  title: "Portefølje | Lars Martin Tingelstad" 
   navbar:
     left:
       - href: index.qmd
@@ -13,6 +13,8 @@ website:
         text: Strava
       - href: projects/project_phd_paper3/
         text: PhD
+      - href: projects/project_2_Bike_Store/
+        text: Bike Store
       - href: about.qmd
         text: About
 
