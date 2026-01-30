@@ -74,28 +74,14 @@
     "href": "projects/project_2_Bike_Store/index.html",
     "title": "Bike store | SQL & Power BI",
     "section": "",
-    "text": "Data preperation | SQL\n\nDatakvalitet & forståelse\n\nSjekk rader per tabell\nSjekk NULLs i nøkkelkolonner\nSjekk duplikater\nVerifiser relasjoner\n\n\n\nBygge dimensjonstabeller\n\n\nDimensjonstabeller\n\nCREATE TABLE categories (\ncategory_id INT PRIMARY KEY,\ncategory_name TEXT\n);\n\nCREATE TABLE brands (\nbrand_id INT PRIMARY KEY,\nbrand_name TEXT\n);\n\nCREATE TABLE stores (\nstore_id INT PRIMARY KEY,\nstore_name TEXT,\nphone TEXT,\nemail TEXT,\nstreet TEXT,\ncity TEXT,\nstate TEXT,\nzip_code TEXT\n);\n\nCREATE TABLE customers (\ncustomer_id INT PRIMARY KEY,\nfirst_name TEXT,\nlast_name TEXT,\nphone TEXT,\nemail TEXT,\nstreet TEXT,\ncity TEXT,\nstate TEXT,\nzip_code TEXT\n);\n\nCREATE TABLE staffs (\nstaff_id INT PRIMARY KEY,\nfirst_name TEXT,\nlast_name TEXT,\nemail TEXT,\nphone TEXT,\nactive INT,\nstore_id INT,\nmanager_id INT\n);\n\nCREATE TABLE products (\nproduct_id INT PRIMARY KEY,\nproduct_name TEXT,\nbrand_id INT,\ncategory_id INT,\nmodel_year INT,\nlist_price NUMERIC\n);\n\nCREATE TABLE orders (\norder_id INT PRIMARY KEY,\ncustomer_id INT,\norder_status INT,\norder_date DATE,\nrequired_date DATE,\nshipped_date DATE,\nstore_id INT,\nstaff_id INT\n);\n\nCREATE TABLE order_items (\norder_id INT,\nitem_id INT,\nproduct_id INT,\nquantity INT,\nlist_price NUMERIC,\ndiscount NUMERIC,\nPRIMARY KEY (order_id, item_id)\n);\n\nCREATE TABLE stocks (\nstore_id INT,\nproduct_id INT,\nquantity INT,\nPRIMARY KEY (store_id, product_id)\n);\n\nSELECT table_schema, table_name\nFROM information_schema.tables\nWHERE table_type = 'BASE TABLE';\n\n\n\nFaktatabell\n\n\n\n\n\nAnalyse-views\n\n\nSQL analyser\n\n\n\n\n\n\nData visualisering | Power BI"
+    "text": "Data preperation | SQL\n\nDatakvalitet & forståelse\n\nSjekk rader per tabell\nSjekk NULLs i nøkkelkolonner\nSjekk duplikater\nVerifiser relasjoner\n\n\n\nBygge dimensjonstabeller\n\n\nDimensjonstabeller\n\nCREATE TABLE categories (\ncategory_id INT PRIMARY KEY,\ncategory_name TEXT\n);\n\nCREATE TABLE brands (\nbrand_id INT PRIMARY KEY,\nbrand_name TEXT\n);\n\nCREATE TABLE stores (\nstore_id INT PRIMARY KEY,\nstore_name TEXT,\nphone TEXT,\nemail TEXT,\nstreet TEXT,\ncity TEXT,\nstate TEXT,\nzip_code TEXT\n);\n\nCREATE TABLE customers (\ncustomer_id INT PRIMARY KEY,\nfirst_name TEXT,\nlast_name TEXT,\nphone TEXT,\nemail TEXT,\nstreet TEXT,\ncity TEXT,\nstate TEXT,\nzip_code TEXT\n);\n\nCREATE TABLE staffs (\nstaff_id INT PRIMARY KEY,\nfirst_name TEXT,\nlast_name TEXT,\nemail TEXT,\nphone TEXT,\nactive INT,\nstore_id INT,\nmanager_id INT\n);\n\nCREATE TABLE products (\nproduct_id INT PRIMARY KEY,\nproduct_name TEXT,\nbrand_id INT,\ncategory_id INT,\nmodel_year INT,\nlist_price NUMERIC\n);\n\nCREATE TABLE orders (\norder_id INT PRIMARY KEY,\ncustomer_id INT,\norder_status INT,\norder_date DATE,\nrequired_date DATE,\nshipped_date DATE,\nstore_id INT,\nstaff_id INT\n);\n\nCREATE TABLE order_items (\norder_id INT,\nitem_id INT,\nproduct_id INT,\nquantity INT,\nlist_price NUMERIC,\ndiscount NUMERIC,\nPRIMARY KEY (order_id, item_id)\n);\n\nCREATE TABLE stocks (\nstore_id INT,\nproduct_id INT,\nquantity INT,\nPRIMARY KEY (store_id, product_id)\n);\n\nSELECT table_schema, table_name\nFROM information_schema.tables\nWHERE table_type = 'BASE TABLE';\n\n\n\nFaktatabell\n\n\n\n\n\nAnalyse-views\n\n\nSQL analyser\n\n\n\n\n\n\nData visualisering | Power BI\nVil du se mer eller diskutere prosjektet?\n📧 Send meg en e-post\n🔗 LinkedIn"
   },
   {
     "objectID": "projects/project_phd_paper3/index.html",
     "href": "projects/project_phd_paper3/index.html",
     "title": "Longitudinal development in physical performance in adolescent team sport athletes",
     "section": "",
-    "text": "2-3 setninger\n\nForskningsspC8rsmC%l\nDatasett (kort)\nHvorfor analysen er relevant"
-  },
-  {
-    "objectID": "projects/project_phd_paper3/index.html#viktigste-funn",
-    "href": "projects/project_phd_paper3/index.html#viktigste-funn",
-    "title": "Longitudinal development in physical performance in adolescent team sport athletes",
-    "section": "Viktigste funn",
-    "text": "Viktigste funn\n\nPunkt 1 (klar, ikke statistisk)\nPunkt 2\nPunkt 3"
-  },
-  {
-    "objectID": "projects/project_phd_paper3/index.html#praktisk-relevans",
-    "href": "projects/project_phd_paper3/index.html#praktisk-relevans",
-    "title": "Longitudinal development in physical performance in adolescent team sport athletes",
-    "section": "Praktisk relevans",
-    "text": "Praktisk relevans\nHvordan dette kan brukes i praksis / beslutningsstC8tte."
+    "text": "Bakgrunn\nVil du se mer eller diskutere prosjektet?\n📧 Send meg en e-post\n🔗 LinkedIn"
   },
   {
     "objectID": "projects/project_3_strava/index.html",
