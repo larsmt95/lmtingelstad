@@ -40,7 +40,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-960d9d362f81d399278ec3e29b622b37.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-28ce2f92125236a284ff4f393e5b0d14.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -134,6 +134,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#datamodellering" id="toc-datamodellering" class="nav-link" data-scroll-target="#datamodellering">Datamodellering</a></li>
   <li><a href="#analyse-og-innsikt" id="toc-analyse-og-innsikt" class="nav-link" data-scroll-target="#analyse-og-innsikt">Analyse og innsikt</a>
   <ul class="collapse">
+  <li><a href="#dashboard-utøver" id="toc-dashboard-utøver" class="nav-link" data-scroll-target="#dashboard-utøver">Dashboard utøver</a></li>
+  <li><a href="#treningsvolum" id="toc-treningsvolum" class="nav-link" data-scroll-target="#treningsvolum">📊 Treningsvolum</a></li>
+  <li><a href="#treningsmønster-per-uke" id="toc-treningsmønster-per-uke" class="nav-link" data-scroll-target="#treningsmønster-per-uke">📈 Treningsmønster per uke</a></li>
+  <li><a href="#power-curve" id="toc-power-curve" class="nav-link" data-scroll-target="#power-curve">⚡ Power Curve</a></li>
+  <li><a href="#sammenligning-utøver" id="toc-sammenligning-utøver" class="nav-link" data-scroll-target="#sammenligning-utøver">Sammenligning utøver</a></li>
   <li><a href="#treningspreferanser" id="toc-treningspreferanser" class="nav-link" data-scroll-target="#treningspreferanser">Treningspreferanser</a></li>
   <li><a href="#beste-prestasjoner" id="toc-beste-prestasjoner" class="nav-link" data-scroll-target="#beste-prestasjoner">Beste prestasjoner</a></li>
   <li><a href="#treningsvolum-over-tid" id="toc-treningsvolum-over-tid" class="nav-link" data-scroll-target="#treningsvolum-over-tid">Treningsvolum over tid</a></li>
@@ -183,6 +188,15 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>Dette prosjektet bruker egne treningsdata fra Strava for å analysere treningsbelastning, utvikling over tid og mønstre i treningspreferanser. Formålet er å demonstrere ferdigheter innen datainnhenting, datamodellering og visualisering i Power BI.</p>
+<ul>
+<li>Bygget en automatisert pipeline (Strava API → R → PostgreSQL → Power BI</li>
+</ul>
+<!-- -->
+<ul>
+<li><p>Modellert stjerneskjema med fakta- og dimensjonstabeller</p></li>
+<li><p>Utviklet DAX-mål for trend, PB og preferanseanalyse</p></li>
+<li><p>Resultat: Interaktive dashboards for belastning, prestasjon og treningsmønster</p></li>
+</ul>
 <section id="datakilder" class="level2">
 <h2 class="anchored" data-anchor-id="datakilder">Datakilder</h2>
 <ul>
@@ -214,49 +228,74 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/datamodell_strava.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Datamodell for egne treningsdata"><img src="images/datamodell_strava.png" class="img-fluid figure-img" alt="Datamodell for egne treningsdata"></a></p>
-<figcaption>Datamodell for egne treningsdata</figcaption>
+<p><a href="images/datamodell_v2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Datamodell for treningsdata fra Strava og treningsdagbok fra google sheet (facts_styrke)"><img src="images/datamodell_v2.png" class="img-fluid figure-img" alt="Datamodell for treningsdata fra Strava og treningsdagbok fra google sheet (facts_styrke)"></a></p>
+<figcaption>Datamodell for treningsdata fra Strava og treningsdagbok fra google sheet (facts_styrke)</figcaption>
 </figure>
 </div>
 </section>
 <section id="analyse-og-innsikt" class="level2">
 <h2 class="anchored" data-anchor-id="analyse-og-innsikt">Analyse og innsikt</h2>
+<section id="dashboard-utøver" class="level3">
+<h3 class="anchored" data-anchor-id="dashboard-utøver">Dashboard utøver</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/utøver dashboard.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Oversikt over treningsvolum, trender, utvikling og prestasjon på utøvernivå."><img src="images/utøver dashboard.png" class="img-fluid figure-img" alt="Oversikt over treningsvolum, trender, utvikling og prestasjon på utøvernivå."></a></p>
+<figcaption>Oversikt over treningsvolum, trender, utvikling og prestasjon på utøvernivå.</figcaption>
+</figure>
+</div>
+<p>Dette dashboardet muliggjør direkte sammenligning av treningsmengde, intensitetsfordeling og prestasjon mellom utøvere innen valgt år. Målet er å identifisere forskjeller i treningsprofil og fysisk kapasitet.</p>
+</section>
+<section id="treningsvolum" class="level3">
+<h3 class="anchored" data-anchor-id="treningsvolum">📊 Treningsvolum</h3>
+<p>Lik totalmengde betyr ikke lik belastningsprofil. Konsistens over uker er en viktigere indikator på robusthet enn enkelttopper.</p>
+</section>
+<section id="treningsmønster-per-uke" class="level3">
+<h3 class="anchored" data-anchor-id="treningsmønster-per-uke">📈 Treningsmønster per uke</h3>
+<p>Stabil progresjon kan indikere bedre periodisering. Store topper kan gi rask fremgang – men også økt skaderisiko.</p>
+</section>
+<section id="power-curve" class="level3">
+<h3 class="anchored" data-anchor-id="power-curve">⚡ Power Curve</h3>
+<p>Utøverne har ulike fysiologiske profiler. Dashboardet synliggjør styrker og svakheter på tvers av energisystemer.</p>
+</section>
+<section id="sammenligning-utøver" class="level3">
+<h3 class="anchored" data-anchor-id="sammenligning-utøver">Sammenligning utøver</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/sammenligning.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Sammenligning av treningsvolum, intensitet og prestasjon (power curve) mellom utøvere i et gitt år."><img src="images/sammenligning.png" class="img-fluid figure-img" alt="Sammenligning av treningsvolum, intensitet og prestasjon (power curve) mellom utøvere i et gitt år."></a></p>
+<figcaption>Sammenligning av treningsvolum, intensitet og prestasjon (power curve) mellom utøvere i et gitt år.</figcaption>
+</figure>
+</div>
+<p>Individuell oversikt over treningsutvikling, aktivitetsfordeling og prestasjon – med fokus på progresjon og belastningskontroll.</p>
+</section>
 <section id="treningspreferanser" class="level3">
 <h3 class="anchored" data-anchor-id="treningspreferanser">Treningspreferanser</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/treningspreferanser_strava.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Mine treningspreferanser"><img src="images/treningspreferanser_strava.png" class="img-fluid figure-img" alt="Mine treningspreferanser"></a></p>
+<p><a href="images/treningspreferanser_strava.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Mine treningspreferanser"><img src="images/treningspreferanser_strava.png" class="img-fluid figure-img" alt="Mine treningspreferanser"></a></p>
 <figcaption>Mine treningspreferanser</figcaption>
 </figure>
 </div>
-<p>En tydelig preferanse mot å trene på ettermiddag, etter jobb, men tidligere på formiddagen i helg. Ingen klar trend i endring med tiden, bortsett fra en preferanse for tidlig trening i 2018.</p>
+<p>En tydelig preferanse mot å trene på ettermiddag, etter jobb, men tidligere på formiddagen i helg. Stabil døgnpreferanse over flere år, med midlertidig forskyvning mot morgenøkter i 2018.</p>
 </section>
 <section id="beste-prestasjoner" class="level3">
 <h3 class="anchored" data-anchor-id="beste-prestasjoner">Beste prestasjoner</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/mine_beste_prestasjoner.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Mine beste prestasjoner"><img src="images/mine_beste_prestasjoner.png" class="img-fluid figure-img" alt="Mine beste prestasjoner"></a></p>
+<p><a href="images/mine_beste_prestasjoner.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Mine beste prestasjoner"><img src="images/mine_beste_prestasjoner.png" class="img-fluid figure-img" alt="Mine beste prestasjoner"></a></p>
 <figcaption>Mine beste prestasjoner</figcaption>
 </figure>
 </div>
 </section>
 <section id="treningsvolum-over-tid" class="level3">
 <h3 class="anchored" data-anchor-id="treningsvolum-over-tid">Treningsvolum over tid</h3>
-<p><a href="images/Utvikling i treningsvolum.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="images/Utvikling i treningsvolum.png" class="img-fluid"></a></p>
-<p>En, dessverre nedgang i total treningstid siden 2021. Og enda verre for løping. Veldig godt år i 2019.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Endring MoM.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Endring MoM"><img src="images/Endring MoM.png" class="img-fluid figure-img" alt="Endring MoM"></a></p>
-<figcaption>Endring MoM</figcaption>
-</figure>
-</div>
+<p><a href="images/Utvikling i treningsvolum.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="images/Utvikling i treningsvolum.png" class="img-fluid"></a></p>
 <p>I 2025 var det en særlig nedgang på slutten av året.</p>
 </section>
 <section id="oversikt-over-styrkeøkter" class="level3">
 <h3 class="anchored" data-anchor-id="oversikt-over-styrkeøkter">Oversikt over styrkeøkter</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/styrkedata.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Oversikt over styrkeøkter"><img src="images/styrkedata.png" class="img-fluid figure-img" alt="Oversikt over styrkeøkter"></a></p>
+<p><a href="images/styrkedata.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Oversikt over styrkeøkter"><img src="images/styrkedata.png" class="img-fluid figure-img" alt="Oversikt over styrkeøkter"></a></p>
 <figcaption>Oversikt over styrkeøkter</figcaption>
 </figure>
 </div>
@@ -328,7 +367,7 @@ Strava-data
 </summary>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/Datarydding strava.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Datarydding Strava"><img src="images/Datarydding strava.png" class="img-fluid figure-img" data-fig-width="50%" alt="Datarydding Strava"></a></p>
+<p><a href="images/Datarydding strava.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Datarydding Strava"><img src="images/Datarydding strava.png" class="img-fluid figure-img" data-fig-width="50%" alt="Datarydding Strava"></a></p>
 <figcaption>Datarydding Strava</figcaption>
 </figure>
 </div>
@@ -339,7 +378,7 @@ Styrkefil 2024 | Før rydding
 </summary>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/styrke_2024_pre.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Styrkefil 2024 pre"><img src="images/styrke_2024_pre.png" class="img-fluid figure-img" alt="Styrkefil 2024 pre"></a></p>
+<p><a href="images/styrke_2024_pre.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Styrkefil 2024 pre"><img src="images/styrke_2024_pre.png" class="img-fluid figure-img" alt="Styrkefil 2024 pre"></a></p>
 <figcaption>Styrkefil 2024 pre</figcaption>
 </figure>
 </div>
@@ -350,7 +389,7 @@ Styrkefil 2024 | Etter rydding
 </summary>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/styrke_2024_post.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Styrkefil 2024 post"><img src="images/styrke_2024_post.png" class="img-fluid figure-img" alt="Styrkefil 2024 post"></a></p>
+<p><a href="images/styrke_2024_post.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Styrkefil 2024 post"><img src="images/styrke_2024_post.png" class="img-fluid figure-img" alt="Styrkefil 2024 post"></a></p>
 <figcaption>Styrkefil 2024 post</figcaption>
 </figure>
 </div>
@@ -529,6 +568,247 @@ dbWriteTable(
   overwrite = TRUE
 ) </code></pre>
 </details>
+<details>
+<summary>
+R – Full refresh av alle utøvere
+</summary>
+<pre><code>update_all_athletes &lt;- function() {
+  
+  library(httr)
+  library(jsonlite)
+  library(dplyr)
+  library(DBI)
+  library(RPostgres)
+  
+  con &lt;- dbConnect(
+    RPostgres::Postgres(),
+    dbname   = "strava",
+    host     = "localhost",
+    port     = 5432,
+    user     = "postgres",
+    password = "legandary007"
+  )
+  
+  athletes &lt;- dbGetQuery(
+    con,
+    "SELECT athlete_id, refresh_token FROM public.strava_tokens"
+  )
+  
+  if (nrow(athletes) == 0) {
+    message("Ingen registrerte utøvere.")
+    dbDisconnect(con)
+    return(invisible(NULL))
+  }
+  
+  for (i in seq_len(nrow(athletes))) {
+    
+    athlete_id    &lt;- as.numeric(athletes$athlete_id[i])
+    refresh_token &lt;- athletes$refresh_token[i]
+    
+    cat("\n--- Starter bruker:", athlete_id, "---\n")
+    
+    # ---- Refresh token ----
+    res_token &lt;- POST(
+      "https://www.strava.com/oauth/token",
+      body = list(
+        client_id     = "197542",
+        client_secret = "b6433d7c6b92ff61402f5118969b37afcbe49906",
+        refresh_token = refresh_token,
+        grant_type    = "refresh_token"
+      ),
+      encode = "form"
+    )
+    
+    if (status_code(res_token) != 200) {
+      message("Refresh feilet for ", athlete_id)
+      next
+    }
+    
+    access_token &lt;- content(res_token, "parsed")$access_token
+    
+    # ---- Finn siste aktivitet ----
+    last_date &lt;- dbGetQuery(
+      con,
+      paste0(
+        "SELECT MAX(start_date)
+         FROM public.activities
+         WHERE athlete_id = ", athlete_id
+      )
+    )[[1]]
+    
+    after_ts &lt;- if (is.na(last_date)) {
+      0
+    } else {
+      as.integer(as.POSIXct(last_date, tz = "UTC")) - 3600
+    }
+    
+    # ---- Hent nye aktiviteter ----
+    all_activities &lt;- list()
+    page &lt;- 1
+    
+    repeat {
+      
+      res &lt;- GET(
+        "https://www.strava.com/api/v3/athlete/activities",
+        query = list(
+          per_page = 200,
+          page = page,
+          after = after_ts
+        ),
+        add_headers(Authorization = paste("Bearer", access_token))
+      )
+      
+      if (status_code(res) != 200) break
+      
+      data &lt;- fromJSON(content(res, "text"), flatten = TRUE)
+      
+      if (length(data) == 0) break
+      
+      all_activities[[page]] &lt;- data
+      page &lt;- page + 1
+      
+      Sys.sleep(1)
+    }
+    
+    if (length(all_activities) == 0) {
+      message("Ingen nye økter for ", athlete_id)
+      next
+    }
+    
+    activities &lt;- bind_rows(all_activities)
+    
+    # ---- Klargjør data ----
+    activities_sql &lt;- activities %&gt;%
+      rename(activity_id = id) %&gt;%
+      select(any_of(c(
+        "activity_id",
+        "name",
+        "type",
+        "start_date",
+        "distance",
+        "moving_time",
+        "elapsed_time",
+        "total_elevation_gain",
+        "average_speed",
+        "average_heartrate",
+        "location_city",
+        "location_state",
+        "location_country",
+        "max_speed",
+        "average_watts",
+        "max_watts",
+        "elev_high",
+        "elev_low",
+        "has_kudoed",
+        "max_heartrate"
+      )))
+      
+      required_cols &lt;- c(
+        "activity_id","name","type","start_date","distance",
+        "moving_time","elapsed_time","total_elevation_gain",
+        "average_speed","average_heartrate",
+        "location_city","location_state","location_country",
+        "max_speed","average_watts","max_watts",
+        "elev_high","elev_low","has_kudoed",
+        "max_heartrate"
+      )
+    
+    missing_cols &lt;- setdiff(required_cols, names(activities_sql))
+    
+    if (length(missing_cols) &gt; 0) {
+      activities_sql[missing_cols] &lt;- NA
+    }
+    
+    activities_sql &lt;- activities_sql %&gt;%    
+      mutate(
+        athlete_id = athlete_id,
+        distance = as.numeric(distance),
+        moving_time = as.numeric(moving_time),
+        elapsed_time = as.numeric(elapsed_time),
+        total_elevation_gain = as.numeric(total_elevation_gain),
+        average_speed = as.numeric(average_speed),
+        max_speed = as.numeric(max_speed),
+        average_heartrate = as.numeric(average_heartrate),
+        max_heartrate = as.numeric(max_heartrate),
+        average_watts = as.numeric(average_watts),
+        max_watts = as.numeric(max_watts),
+        elev_high = as.numeric(elev_high),
+        elev_low = as.numeric(elev_low)
+      )
+    
+    # ---- Midlertidig tabell ----
+    dbWriteTable(
+      con,
+      "temp_activities",
+      activities_sql,
+      temporary = TRUE,
+      overwrite = TRUE
+    )
+    
+    # ---- Insert med ON CONFLICT ----
+    dbExecute(
+      con,
+      "
+      INSERT INTO public.activities (
+        activity_id,
+        name,
+        type,
+        start_date,
+        distance,
+        moving_time,
+        elapsed_time,
+        total_elevation_gain,
+        average_speed,
+        average_heartrate,
+        location_city,
+        location_state,
+        location_country,
+        max_speed,
+        average_watts,
+        max_watts,
+        elev_high,
+        elev_low,
+        has_kudoed,
+        max_heartrate,
+        athlete_id
+      )
+      SELECT
+        activity_id,
+        name,
+        type,
+        start_date,
+        distance,
+        moving_time,
+        elapsed_time,
+        total_elevation_gain,
+        average_speed,
+        average_heartrate,
+        location_city,
+        location_state,
+        location_country,
+        max_speed,
+        average_watts,
+        max_watts,
+        elev_high,
+        elev_low,
+        has_kudoed,
+        max_heartrate,
+        athlete_id
+      FROM temp_activities
+      ON CONFLICT (activity_id) DO NOTHING
+      "
+    )
+    
+    message("Ferdig med bruker ", athlete_id)
+  }
+  
+  dbDisconnect(con)
+  message("Oppdatering ferdig.")
+}
+
+
+update_all_athletes()</code></pre>
+</details>
 </section>
 <section id="verifisering" class="level3">
 <h3 class="anchored" data-anchor-id="verifisering">5️⃣ Verifisering</h3>
@@ -539,8 +819,7 @@ dbWriteTable(
 <section id="begrensninger" class="level2">
 <h2 class="anchored" data-anchor-id="begrensninger">Begrensninger</h2>
 <ul>
-<li>Kun egne data (ikke generaliserbart)</li>
-<li>Mangler eksterne belastningsmål (RPE, HRV)</li>
+<li>Fravær av subjektive belastningsmål begrenser total belastningsmodellering (RPE, HRV)</li>
 <li>Avhengig av Strava-datakvalitet</li>
 </ul>
 </section>
