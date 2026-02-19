@@ -40,7 +40,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-28ce2f92125236a284ff4f393e5b0d14.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-43a498ee2f929a5d3b049c805ab68679.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -187,22 +187,22 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Dette prosjektet bruker egne treningsdata fra Strava for å analysere treningsbelastning, utvikling over tid og mønstre i treningspreferanser. Formålet er å demonstrere ferdigheter innen datainnhenting, datamodellering og visualisering i Power BI.</p>
+<p>Dette prosjektet bruker treningsdata fra Strava og egen treningsdagbok for å analysere treningsbelastning, utvikling over tid og mønstre i treningspreferanser. Formålet er å demonstrere ferdigheter innen datainnhenting, datamodellering og visualisering i Power BI.</p>
 <ul>
-<li>Bygget en automatisert pipeline (Strava API → R → PostgreSQL → Power BI</li>
+<li>Bygget en automatisert pipeline (Strava API → R → PostgreSQL → Power BI)</li>
 </ul>
 <!-- -->
 <ul>
 <li><p>Modellert stjerneskjema med fakta- og dimensjonstabeller</p></li>
-<li><p>Utviklet DAX-mål for trend, PB og preferanseanalyse</p></li>
+<li><p>Utviklet DAX-mål for trend, PB, preferanse- og prestasjonsanalyse</p></li>
 <li><p>Resultat: Interaktive dashboards for belastning, prestasjon og treningsmønster</p></li>
 </ul>
 <section id="datakilder" class="level2">
 <h2 class="anchored" data-anchor-id="datakilder">Datakilder</h2>
 <ul>
-<li>Strava API (personlige aktivitetsdata)
+<li>Strava API (aktivitetsdata)
 <ul>
-<li>Metadata: type økt, varighet, distanse, hastighet, tid</li>
+<li>Metadata: type økt, varighet, distanse, hastighet, tid mm.</li>
 </ul></li>
 <li>Treningsdagbok styrketrening
 <ul>
@@ -331,8 +331,7 @@ ul.task-list li input[type="checkbox"] {
 </ol>
 <details>
 <summary>
-Ryddetrinn (Power Query): Kroppsdel
-</summary>
+<p>Ryddetrinn (Power Query): Kroppsdel</p>
 <pre class="dax"><code>Kroppsdel =
   VAR x = UPPER ( 'facts_styrke'[Økt] )
   RETURN
@@ -344,7 +343,7 @@ Ryddetrinn (Power Query): Kroppsdel
     "Underkropp",
     "Ukjent"
 )</code></pre>
-</details>
+</summary></details>
 <ol start="4" type="1">
 <li><p>Fjernet tomme og ugyldige rader</p></li>
 <li><p>Kombinerte årstabeller til én faktatabell</p></li>
