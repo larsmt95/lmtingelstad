@@ -7,22 +7,22 @@ format:
     lightbox: true
 ---
 
-Dette prosjektet bruker egne treningsdata fra Strava for å analysere treningsbelastning, utvikling over tid og mønstre i treningspreferanser. Formålet er å demonstrere ferdigheter innen datainnhenting, datamodellering og visualisering i Power BI.
+Dette prosjektet bruker treningsdata fra Strava og egen treningsdagbok for å analysere treningsbelastning, utvikling over tid og mønstre i treningspreferanser. Formålet er å demonstrere ferdigheter innen datainnhenting, datamodellering og visualisering i Power BI.
 
--   Bygget en automatisert pipeline (Strava API → R → PostgreSQL → Power BI
+-   Bygget en automatisert pipeline (Strava API → R → PostgreSQL → Power BI)
 
 <!-- -->
 
 -   Modellert stjerneskjema med fakta- og dimensjonstabeller
 
--   Utviklet DAX-mål for trend, PB og preferanseanalyse
+-   Utviklet DAX-mål for trend, PB, preferanse- og prestasjonsanalyse
 
 -   Resultat: Interaktive dashboards for belastning, prestasjon og treningsmønster
 
 ## Datakilder
 
--   Strava API (personlige aktivitetsdata)
-    -   Metadata: type økt, varighet, distanse, hastighet, tid
+-   Strava API (aktivitetsdata)
+    -   Metadata: type økt, varighet, distanse, hastighet, tid mm.
 -   Treningsdagbok styrketrening
     -   Metadata: dato, belastning, volum, øvelse
 
@@ -45,7 +45,7 @@ Dette prosjektet bruker egne treningsdata fra Strava for å analysere treningsbe
 
 ### Dashboard utøver
 
-![Oversikt over treningsvolum, trender, utvikling og prestasjon på utøvernivå.](images/utøver dashboard.png)
+![Oversikt over treningsvolum, trender, utvikling og prestasjon på utøvernivå.](images/utøver%20dashboard.png)
 
 Dette dashboardet muliggjør direkte sammenligning av treningsmengde, intensitetsfordeling og prestasjon mellom utøvere innen valgt år. Målet er å identifisere forskjeller i treningsprofil og fysisk kapasitet.
 
@@ -121,7 +121,9 @@ Dataryddingen ble gjort fullt ut i **Power Query**, med fokus på reproduserbarh
 
 <details>
 
-<summary>Ryddetrinn (Power Query): Kroppsdel</summary>
+<summary>
+
+Ryddetrinn (Power Query): Kroppsdel</smmary>
 
 ``` dax
 Kroppsdel =
