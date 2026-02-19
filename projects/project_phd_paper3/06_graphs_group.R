@@ -60,7 +60,7 @@ for (test_name in unique_tests) {
 }
 
 
-# --- GJENNOMSNITT PER GRUPPE/ÅR ----
+# --- GJENNOMSNITT PER GRUPPE/CR ----
 mean_group_age_yearly <- mean_group_age_yearly %>% 
   #group_by(id) %>%
   #filter(all(c("round1", "round2", "round3") %in% time)) %>%
@@ -219,7 +219,7 @@ vars_hurtighet <- c("cmj", "sprint30", "cod", "yyir")
 # vars_hurtighet_2 <- c("cod", "yyir", "totpwr", "relforce", "relpwr")
 vars_styrke <- c("totpwr", "relforce", "relpwr")
 vars_antropometri <- c("height", "bodymass")
-vars_skade <- c("relhams", "meanadd", "reladd", "meanabd", "relabd")
+vars_skade <- c("meanhams", "relhams", "meanadd", "reladd", "meanabd", "relabd")
 # vars_combined <- c("cmj", "sprint30", "totforce", "meanhams", "height", "bodymass")
 
 # # --- Y-akse titler ---
@@ -227,7 +227,7 @@ y_titles_hurtighet <- c("CMJ (cm)", "CoD (s)", "YYIR1 (m)", "30 m sprint (s)")
 # y_titles_hurtighet <- c("CoD (s)", "YYIR1 (m)", "Total power (W)", "Relative force (N/kg)", "Relative power (W/kg)")
 y_titles_styrke <- c("Total force (N)", "Total power (W)", "Relative force (N/kg)", "Relative power (W/kg)")
 y_titles_antropometri <- c("Height (cm)", "Body mass (kg)")
-y_titles_skade <- c("Relative hamstring (N/kg)",
+y_titles_skade <- c("Eccentric hamstring (N)", "Relative hamstring (N/kg)",
                     "Hip adduction (N)", "Relative hip ADD (Nm/kg)",
                     "Hip abduction (N)", "Relative hip ABD (Nm/kg)")
 # y_titles_combined <- c("CMJ (cm)", "30 m sprint (s)",
@@ -243,7 +243,7 @@ titles_antropometri <- c("A", "B")
 titles_skade <- c("A", "B", "C", "D", "E")
 titles_combined <- c("A", "B", "C", "D", "E", "F")
 
-# --- Funksjon for å lage plots med lister ---
+# --- Funksjon for C% lage plots med lister ---
 create_plots <- function(vars, y_titles, plot_titles, ylim_list) {
   mapply(function(var, y_title, p_title) {
     perform_analysis_and_plot(
@@ -314,8 +314,6 @@ combined_plot <- wrap_plots(plots_skade, ncol = 2) +
 # Juster margene etter behov
 combined_plot <- combined_plot +
   theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))
-
-
 
 combined_plot
 

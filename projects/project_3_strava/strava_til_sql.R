@@ -9,19 +9,53 @@ library(RPostgres)
 res <- POST(
   "https://www.strava.com/oauth/token",
   body = list(
-    client_id     = Sys.getenv("197542"),
-    client_secret = Sys.getenv("b6433d7c6b92ff61402f5118969b37afcbe49906"),
-    code          = "KODEN_DU_FIKK",
+    client_id     = "197542",
+    client_secret = "b6433d7c6b92ff61402f5118969b37afcbe49906",
+    code          = "fff596723b0aa2dcca9c0e4bd2894f93a62b027c", # fra kompis
     grant_type    = "authorization_code"
   ),
   encode = "form"
 )
 
+status_code(res)
 tokens <- content(res, "parsed")
+tokens$athlete$username
+
+tokens$scope
+
+res <- GET(
+  "https://www.strava.com/api/v3/athlete/activities",
+  add_headers(Authorization = paste("Bearer", tokens$access_token))
+)
+
+status_code(res)
+content(res, "text")
+
+
+access_token <- tokens$access_token
+access_token
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## oppdatere egne data
-access_token <- "e5174152cbf7853a3e58459f5c7476230c554948"
+access_token <- "09e4709237503a3d8a38e3557046d870ba03c932"
 
 get_activities <- function(page) {
   GET(
@@ -48,95 +82,12 @@ activities <- bind_rows(all_activities)
 
 activities
 
-
-## SQL
-
-library(DBI)
-library(RPostgres)
-
-## koble til default-databasen
-con <- dbConnect(
-  Postgres(),
-  dbname   = "postgres",
-  host     = "localhost",
-  port     = 5432,
-  user     = "postgres",
-  password = "legandary007"
-)
-
-## opprette database
-# dbExecute(con, "CREATE DATABASE strava")
-
-## koble p?? nytt - n?? mot strava 
-dbDisconnect(con)
-
-con <- dbConnect(
-  Postgres(),
-  dbname   = "strava",
-  host     = "localhost",
-  port     = 5432,
-  user     = "postgres",
-  password = "legandary007"
-)
+res <- get_activities(1)
+status_code(res)
+content(res, "text")
 
 
-## klargj??re data - nested (Strava) til flate kolonner (SQL/powerBI)
 
-library(dplyr)
-
-activities_sql <- dplyr::select(
-  activities,
-  activity_id = id,
-  name,
-  type,
-  start_date,
-  distance,
-  moving_time,
-  elapsed_time,
-  total_elevation_gain,
-  average_speed,
-  average_heartrate,
-  location_city,
-  location_state,
-  location_country,
-  max_speed,
-  average_watts,
-  max_watts,
-  elev_high,
-  elev_low,
-  has_kudoed,
-  average_temp,
-  average_heartrate,
-  max_heartrate,
-  athlete.id
-)
-
-names(activities)
-
-activities[id]
-
-
-## Skrive til Postgres
-
-dbWriteTable(
-  con,
-  name = Id(schema = "public", table = "activities"),
-  value = activities_sql,
-  overwrite = TRUE
-)
-
-
-## Verifiser 
-
-dbGetQuery(con, "SELECT COUNT(*) FROM activities")
-
-
-## Lage indeks
-
-dbGetQuery(con, "
-  SELECT COUNT(*)
-  FROM public.activities
-")
 
 
 

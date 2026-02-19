@@ -55,7 +55,7 @@ percent_age2_with_phv <- percent_age2_var %>%
 percent_age2_with_phv <- percent_age2_with_phv %>% filter(id != 601)
 percent_age2_with_phv %>% select(id, height) %>% arrange(height)
 
-# Funksjon for å lage plott med felles tema
+# Funksjon for C% lage plott med felles tema
 create_plot <- function(percent_age2_with_phv, y_var, y_label, title = NULL, show_x_title = FALSE) {
   
   model <- lm(as.formula(paste(y_var, "~ phv_base * sex")), data = percent_age2_with_phv)
@@ -77,9 +77,9 @@ create_plot <- function(percent_age2_with_phv, y_var, y_label, title = NULL, sho
       aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
       formula = y ~ x,
       parse = TRUE,
-      size = 5,
+      size = 4,
       label.x = "right",
-      label.y = "top"
+      label.y = c(1.15, 0.85)   # litt vertikal separasjon
     ) +
     scale_fill_manual(values = c("boys" = "lightblue", "girls" = "pink")) +
     theme(
@@ -94,8 +94,8 @@ create_plot <- function(percent_age2_with_phv, y_var, y_label, title = NULL, sho
       axis.title.x = if (show_x_title) element_text(size = 12, color = "black") else element_blank(),
       strip.background = element_blank(),
       strip.placement = "outside",
-      legend.text = element_text(size = 14),      # 🔹 Øker tekststørrelse på legend
-      legend.title = element_text(size = 14)  # 🔹 Øker tittel på legend
+      legend.text = element_text(size = 14),      # p9 Cker tekststC8rrelse pC% legend
+      legend.title = element_text(size = 14)  # p9 Cker tittel pC% legend
     ) +
     labs(x = "YPHV (y)", y = y_label, title = title)
   
@@ -143,9 +143,12 @@ cod_plot
 bodymass_plot
 height_plot
 
-
+combined_plot
 ggsave("MATURATION_sprint_2.svg", plot = sprint_plot, width = 6, height = 5, dpi = 300)
 ggsave("MATURATION_force.svg", plot = force_plot, width = 6, height = 5, dpi = 300)
 ggsave("MATURATION_smj.svg", plot = cmj_plot, width = 6, height = 5, dpi = 300)
+
+ggsave("combined_plot_final.svg", plot = combined_plot, width = 8, height = 10, dpi = 300)
+
 
 
