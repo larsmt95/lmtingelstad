@@ -1,11 +1,52 @@
 ---
 title: "Lars Tingelstad"
-subtitle: "Dataanalyse | R | Visualisering"
+subtitle: "Dataanalytiker med PhD | SQL, Power BI og R | Strukturert analyse og beslutningsstøtte"
+format:
+  html:
+    toc: true
+    lightbox: true
 ---
 
-Jeg er dataanalytiker med erfaring i R, SQL og Power BI. Jeg jobber med datainnhenting, modellering og visualisering for beslutningsstøtte.
+Jeg er dataanalytiker med doktorgrad og solid erfaring innen datamodellering, statistisk analyse og dashboardutvikling. Jeg jobber strukturert fra datainnhenting og kvalitetskontroll til modellering, visualisering og operativ beslutningsstøtte.
 
-### Utvalgte prosjekter
+Min styrke ligger i å kombinere metodisk presisjon med evnen til å omsette komplekse analyser til tydelige og handlingsrettede anbefalinger. Jeg har erfaring med store longitudinelle datasett, KPI-design og utvikling av beslutningsstøttende rapporter i Power BI.
 
--   [**Strava – treningsanalyse**](projects/project_3_strava/)\
-    End-to-end analyse fra API → database → Power BI.
+### Kontakt 
+
+|  |  |
+|----------------------------------|--------------------------------------|
+| 📧 [Send meg en e-post](mailto:larsmartin95@hotmail.com?subject=Henvendelse%20fra%20portef%C3%B8lje) | 🔗 [LinkedIn](https://www.linkedin.com/in/lars-martin-tingelstad-657940113/) |
+
+### Teknisk kompetanse
+
+| **SQL** | **Power BI** | **R** | **Excel** |
+|----|----|----|----|
+| Datamodellering og spørringer i PostgreSQL, filtrering, aggregering, joins og analyse av relasjonelle datasett. | Datamodellering (stjerneskjema), DAX-målinger, tidsintelligens, KPI-design, interaktive dashboards og rapportstruktur. | Datahåndtering (dplyr, tidyr), visualisering (ggplot2), statistisk modellering (ANOVA, regresjon, mixed effects-modeller). | Power Query, pivottabeller og strukturerte analyser. |
+
+------------------------------------------------------------------------
+
+### **Nøkkelkompetanse**
+
+-   Datarensing og kvalitetskontroll
+
+-   Statistisk modellering og inferens
+
+-   KPI-utvikling og marginanalyse
+
+-   Visualisering og innsiktsformidling
+
+-   Beslutningsstøtte og forretningsforståelse
+
+-   Prosjektledelse og tverrfaglig samarbeid
+
+------------------------------------------------------------------------
+
+### **Sertifiseringer \| Kurs**
+
+**Data Analyst in Power BI – DataCamp (02.2025)**
+
+-   DAX, datamodellering, KPI-rapportering, trendanalyse og datavisualisering.
+
+**Data Analyst Associate – DataCamp (02.2025)**
+
+-    SQL, eksplorativ analyse (EDA), statistisk testing og innsiktskommunikasjon.

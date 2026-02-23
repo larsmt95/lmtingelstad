@@ -3,3 +3,8 @@
 figcaption {
   font-style: italic;
 }
+
+strong {
+  font-weight: 700;
+  color: #000;
+}
