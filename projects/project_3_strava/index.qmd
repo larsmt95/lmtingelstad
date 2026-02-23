@@ -121,9 +121,7 @@ Dataryddingen ble gjort fullt ut i **Power Query**, med fokus på reproduserbarh
 
 <details>
 
-<summary>
-
-Ryddetrinn (Power Query): Kroppsdel</smmary>
+<summary>Ryddetrinn (Power Query): Kroppsdel</summary>
 
 ``` dax
 Kroppsdel =
@@ -389,6 +387,8 @@ dbWriteTable(
 </details>
 
 <details>
+
+### Full refresh alle utøvere
 
 <summary>R – Full refresh av alle utøvere</summary>
 

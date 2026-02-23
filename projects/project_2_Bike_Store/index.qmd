@@ -1,6 +1,6 @@
 ---
 title: "Bike Store – End-to-end analyse med SQL og Power BI"
-subtitle: "AnalysereEt komplett analyseprosjekt som viser hvordan salgsdata kan struktureres, modelleres og visualiseres for å forklare hva som driver omsetning og vekst på tvers av butikker, produkter og tid."
+subtitle: "Et komplett analyseprosjekt som viser hvordan salgsdata kan struktureres, modelleres og visualiseres for å forklare hva som driver omsetning og vekst på tvers av butikker, produkter og tid."
 format:
   html:
     toc: true
@@ -157,9 +157,9 @@ All visualisering er bygget på views, ikke råtabeller, for å sikre korrekt lo
 
 ### Overview
 
-![](bilder/bikestore_overview.png)
+![](bilder/dashboard.png)
 
-Dashboardet viser at salgsveksten i Bike Store er sterk (+30,9 % YoY), men samtidig tydelig konsentrert.
+Dashboardet viser at salgsveksten i Bike Store er sterk (+42,0 % YoY), men samtidig tydelig konsentrert.
 
 En begrenset andel produkter og én hovedbutikk står for størstedelen av omsetningen, noe som indikerer både høy avhengighet og potensial for sortiments- og lageroptimalisering.
 
