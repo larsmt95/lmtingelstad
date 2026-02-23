@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse av treningsdata – Portefølje | Lars Martin Tingelstad</title>
+<title>Financial Performance &amp; Profitability Analysis – Portefølje | Lars Martin Tingelstad</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -41,6 +41,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-c00b42e811b0fd9a18ac62455ba22490.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -126,33 +129,36 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#datakilder" id="toc-datakilder" class="nav-link active" data-scroll-target="#datakilder">Datakilder</a></li>
-  <li><a href="#datainnhenting" id="toc-datainnhenting" class="nav-link" data-scroll-target="#datainnhenting">Datainnhenting</a></li>
-  <li><a href="#datamodellering" id="toc-datamodellering" class="nav-link" data-scroll-target="#datamodellering">Datamodellering</a></li>
-  <li><a href="#analyse-og-innsikt" id="toc-analyse-og-innsikt" class="nav-link" data-scroll-target="#analyse-og-innsikt">Analyse og innsikt</a>
+  <li><a href="#financial-performance-dashboard-power-bi" id="toc-financial-performance-dashboard-power-bi" class="nav-link active" data-scroll-target="#financial-performance-dashboard-power-bi">Financial Performance Dashboard – Power BI</a>
   <ul class="collapse">
-  <li><a href="#treningspreferanser" id="toc-treningspreferanser" class="nav-link" data-scroll-target="#treningspreferanser">Treningspreferanser</a></li>
-  <li><a href="#beste-prestasjoner" id="toc-beste-prestasjoner" class="nav-link" data-scroll-target="#beste-prestasjoner">Beste prestasjoner</a></li>
-  <li><a href="#treningsvolum-over-tid" id="toc-treningsvolum-over-tid" class="nav-link" data-scroll-target="#treningsvolum-over-tid">Treningsvolum over tid</a></li>
-  <li><a href="#oversikt-over-styrkeøkter" id="toc-oversikt-over-styrkeøkter" class="nav-link" data-scroll-target="#oversikt-over-styrkeøkter">Oversikt over styrkeøkter</a></li>
-  </ul></li>
-  <li><a href="#datarydding-og-modellering-power-bi" id="toc-datarydding-og-modellering-power-bi" class="nav-link" data-scroll-target="#datarydding-og-modellering-power-bi">Data­rydding og modellering (Power BI)</a>
+  <li><a href="#formål-med-prosjektet" id="toc-formål-med-prosjektet" class="nav-link" data-scroll-target="#formål-med-prosjektet">Formål med prosjektet</a></li>
+  <li><a href="#datamodell-og-teknisk-oppsett" id="toc-datamodell-og-teknisk-oppsett" class="nav-link" data-scroll-target="#datamodell-og-teknisk-oppsett">Datamodell og teknisk oppsett</a></li>
+  <li><a href="#executive-summary" id="toc-executive-summary" class="nav-link" data-scroll-target="#executive-summary">Executive Summary</a>
   <ul class="collapse">
-  <li><a href="#utgangspunkt-rådata" id="toc-utgangspunkt-rådata" class="nav-link" data-scroll-target="#utgangspunkt-rådata">Utgangspunkt (rådata)</a></li>
-  <li><a href="#ryddetrinn-power-query" id="toc-ryddetrinn-power-query" class="nav-link" data-scroll-target="#ryddetrinn-power-query">Ryddetrinn (Power Query)</a></li>
-  <li><a href="#etter-modellklar-struktur" id="toc-etter-modellklar-struktur" class="nav-link" data-scroll-target="#etter-modellklar-struktur">Etter (modellklar struktur)</a></li>
-  <li><a href="#dax-mål" id="toc-dax-mål" class="nav-link" data-scroll-target="#dax-mål">DAX-mål</a></li>
+  <li><a href="#innsikt-fra-dashboardet" id="toc-innsikt-fra-dashboardet" class="nav-link" data-scroll-target="#innsikt-fra-dashboardet">Innsikt fra dashboardet:</a></li>
   </ul></li>
-  <li><a href="#datainnhenting-strava-api-r" id="toc-datainnhenting-strava-api-r" class="nav-link" data-scroll-target="#datainnhenting-strava-api-r">Datainnhenting – Strava API (R)</a>
+  <li><a href="#market-drilldown" id="toc-market-drilldown" class="nav-link" data-scroll-target="#market-drilldown">Market &amp; Drilldown</a>
   <ul class="collapse">
-  <li><a href="#autentisering-oauth" id="toc-autentisering-oauth" class="nav-link" data-scroll-target="#autentisering-oauth">1️⃣ Autentisering (OAuth)</a></li>
-  <li><a href="#henting-av-aktivitetsdata-paginert" id="toc-henting-av-aktivitetsdata-paginert" class="nav-link" data-scroll-target="#henting-av-aktivitetsdata-paginert">2️⃣ Henting av aktivitetsdata (paginert)</a></li>
-  <li><a href="#klargjøring-av-data-api-analyse" id="toc-klargjøring-av-data-api-analyse" class="nav-link" data-scroll-target="#klargjøring-av-data-api-analyse">3️⃣ Klargjøring av data (API → analyse)</a></li>
-  <li><a href="#lagring-i-postgresql" id="toc-lagring-i-postgresql" class="nav-link" data-scroll-target="#lagring-i-postgresql">4️⃣ Lagring i PostgreSQL</a></li>
-  <li><a href="#verifisering" id="toc-verifisering" class="nav-link" data-scroll-target="#verifisering">5️⃣ Verifisering</a></li>
+  <li><a href="#overordnet-utvikling" id="toc-overordnet-utvikling" class="nav-link" data-scroll-target="#overordnet-utvikling">Overordnet utvikling</a></li>
   </ul></li>
-  <li><a href="#begrensninger" id="toc-begrensninger" class="nav-link" data-scroll-target="#begrensninger">Begrensninger</a></li>
-  <li><a href="#videre-arbeid" id="toc-videre-arbeid" class="nav-link" data-scroll-target="#videre-arbeid">Videre arbeid</a></li>
+  <li><a href="#strategisk-tolkning" id="toc-strategisk-tolkning" class="nav-link" data-scroll-target="#strategisk-tolkning">Strategisk tolkning</a></li>
+  <li><a href="#shipping-mode-regional-margin-analysis" id="toc-shipping-mode-regional-margin-analysis" class="nav-link" data-scroll-target="#shipping-mode-regional-margin-analysis">Shipping Mode &amp; Regional Margin Analysis</a>
+  <ul class="collapse">
+  <li><a href="#hovedfunn" id="toc-hovedfunn" class="nav-link" data-scroll-target="#hovedfunn">Hovedfunn</a></li>
+  <li><a href="#viktig-innsikt" id="toc-viktig-innsikt" class="nav-link" data-scroll-target="#viktig-innsikt">Viktig innsikt</a></li>
+  </ul></li>
+  <li><a href="#discount-margin-breakdown" id="toc-discount-margin-breakdown" class="nav-link" data-scroll-target="#discount-margin-breakdown">Discount &amp; Margin Breakdown</a>
+  <ul class="collapse">
+  <li><a href="#kpier" id="toc-kpier" class="nav-link" data-scroll-target="#kpier">KPIer</a></li>
+  <li><a href="#breakpoint-identifikasjon" id="toc-breakpoint-identifikasjon" class="nav-link" data-scroll-target="#breakpoint-identifikasjon">Breakpoint-identifikasjon</a></li>
+  </ul></li>
+  <li><a href="#profit-per-unit-vs-discount" id="toc-profit-per-unit-vs-discount" class="nav-link" data-scroll-target="#profit-per-unit-vs-discount">Profit per Unit vs Discount</a>
+  <ul class="collapse">
+  <li><a href="#hvem-rammes-hardest" id="toc-hvem-rammes-hardest" class="nav-link" data-scroll-target="#hvem-rammes-hardest">Hvem rammes hardest?</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#konklusjon" id="toc-konklusjon" class="nav-link" data-scroll-target="#konklusjon">Konklusjon</a></li>
+  <li><a href="#hva-denne-casen-demonstrerer" id="toc-hva-denne-casen-demonstrerer" class="nav-link" data-scroll-target="#hva-denne-casen-demonstrerer">Hva denne casen demonstrerer</a></li>
   </ul>
 </nav>
     </div>
@@ -161,8 +167,8 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Analyse av treningsdata</h1>
-<p class="subtitle lead">Datainnhenting, modellering og visualisering</p>
+<h1 class="title">Financial Performance &amp; Profitability Analysis</h1>
+<p class="subtitle lead">KPI-design, marginanalyse og beslutningsstøtte i Power BI.</p>
 </div>
 
 
@@ -179,305 +185,155 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Dette prosjektet bruker egne treningsdata fra Strava for å analysere treningsbelastning, utvikling over tid og mønstre i treningspreferanser. Formålet er å demonstrere ferdigheter innen datainnhenting, datamodellering og visualisering i Power BI.</p>
-<section id="datakilder" class="level2">
-<h2 class="anchored" data-anchor-id="datakilder">Datakilder</h2>
+<section id="financial-performance-dashboard-power-bi" class="level1">
+<h1>Financial Performance Dashboard – Power BI</h1>
+<p>I dette prosjektet utviklet jeg en helhetlig Power BI-rapport for å analysere omsetning, lønnsomhet og drivere bak marginutvikling. Gjennom strukturert KPI-design, DAX-beregninger og interaktiv drilldown identifiserte jeg hvordan fraktstrategi og rabatter påvirker profitabilitet – og hvor tiltak bør settes inn for å forbedre lønnsomheten.</p>
+<section id="formål-med-prosjektet" class="level2">
+<h2 class="anchored" data-anchor-id="formål-med-prosjektet">Formål med prosjektet</h2>
+<p>Målet var å utvikle et beslutningsstøttende dashboard som:</p>
 <ul>
-<li>Strava API (personlige aktivitetsdata)
+<li><p>Gir rask oversikt over finansiell utvikling (YoY)</p></li>
+<li><p>Avdekker drivere bak resultatene (segment, kategori, region, by)</p></li>
+<li><p>Kombinerer operativ og strategisk innsikt</p></li>
+<li><p>Er visuelt strukturert for ledelsesbruk</p></li>
+</ul>
+</section>
+<section id="datamodell-og-teknisk-oppsett" class="level2">
+<h2 class="anchored" data-anchor-id="datamodell-og-teknisk-oppsett">Datamodell og teknisk oppsett</h2>
+<p><strong>Datamodell:</strong></p>
 <ul>
-<li>Metadata: type økt, varighet, distanse, hastighet, tid</li>
+<li><p>Faktatabell: Sales-transaksjoner</p></li>
+<li><p>Dimensjoner: Dato, Kategori, Segment, Region, State, City</p></li>
+<li><p>Relasjoner strukturert som stjerneskjema</p></li>
+</ul>
+<p><strong>Eksempler på DAX-mål:</strong></p>
+<ul>
+<li><p>Total Sales</p></li>
+<li><p>Sales LY</p></li>
+<li><p>Sales % vs LY</p></li>
+<li><p>Profit Margin</p></li>
+<li><p>Avg Order Value</p></li>
+<li><p>Dynamiske KPI-farger (conditional formatting)</p></li>
+<li><p>Dynamisk Top/Bottom 10</p></li>
+</ul>
+</section>
+<section id="executive-summary" class="level2">
+<h2 class="anchored" data-anchor-id="executive-summary">Executive Summary</h2>
+<p><a href="images/clipboard-151602034.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/clipboard-151602034.png" class="img-fluid"></a></p>
+<section id="innsikt-fra-dashboardet" class="level3">
+<h3 class="anchored" data-anchor-id="innsikt-fra-dashboardet">Innsikt fra dashboardet:</h3>
+<p>Volumvekst driver omsetning, men margin forbedres ikke proporsjonalt grunnet kostnadsvekst og lavere gjennomsnittlig ordreverdi.</p>
+<ul>
+<li><p>Omsetning: +20 %</p></li>
+<li><p>Profit: +14 %</p></li>
+<li><p>Kostnad: +21 % → marginpress</p></li>
+<li><p>Order volume: +28 %</p></li>
+<li><p>AOV ned (-6 % på market-siden)</p></li>
+</ul>
+</section>
+</section>
+<section id="market-drilldown" class="level2">
+<h2 class="anchored" data-anchor-id="market-drilldown">Market &amp; Drilldown</h2>
+<p><a href="bilder/market dash.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="bilder/market dash.png" class="img-fluid"></a></p>
+<section id="overordnet-utvikling" class="level3">
+<h3 class="anchored" data-anchor-id="overordnet-utvikling">Overordnet utvikling</h3>
+<p>🔎 Volumvekst driver omsetning, men fallende AOV og sterk kostnadsvekst indikerer marginpress.</p>
+<p>🔎 Omsetningen er konsentrert i få stater. Avhengighet av toppmarkedene øker eksponering mot regionale svingninger.</p>
+<p>🔎 Omsetning korrelerer ikke lineært med lønnsomhet. Noen markeder bidrar lite til bunnlinjen relativt til volum.</p>
+</section>
+</section>
+<section id="strategisk-tolkning" class="level2">
+<h2 class="anchored" data-anchor-id="strategisk-tolkning">Strategisk tolkning</h2>
+<ul>
+<li><p>Vekst er volumdrevet, ikke prisdrevet.</p></li>
+<li><p>Marginoptimalisering bør skje på delstatsnivå.</p></li>
+<li><p>Ressursallokering bør vurderes mot lønnsomhetsbidrag, ikke kun omsetning.</p></li>
+</ul>
+</section>
+<section id="shipping-mode-regional-margin-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="shipping-mode-regional-margin-analysis">Shipping Mode &amp; Regional Margin Analysis</h2>
+<p><a href="bilder/levering og margin.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="bilder/levering og margin.png" class="img-fluid"></a></p>
+<section id="hovedfunn" class="level3">
+<h3 class="anchored" data-anchor-id="hovedfunn">Hovedfunn</h3>
+<ul>
+<li><p>First Class høyest total margin (~14 %)</p></li>
+<li><p>Same Day generelt lønnsom</p>
+<ul>
+<li>Men: Same Day i South gir -8,4 % margin</li>
 </ul></li>
-<li>Treningsdagbok styrketrening
-<ul>
-<li>Metadata: dato, belastning, volum, øvelse</li>
-</ul></li>
+<li><p>Teknologi i South-region trekker ned</p></li>
 </ul>
 </section>
-<section id="datainnhenting" class="level2">
-<h2 class="anchored" data-anchor-id="datainnhenting">Datainnhenting</h2>
+<section id="viktig-innsikt" class="level3">
+<h3 class="anchored" data-anchor-id="viktig-innsikt">Viktig innsikt</h3>
+<p>Fraktmåte er ikke problemet globalt – den er regionalt sensitiv.</p>
+</section>
+</section>
+<section id="discount-margin-breakdown" class="level2">
+<h2 class="anchored" data-anchor-id="discount-margin-breakdown">Discount &amp; Margin Breakdown</h2>
+<p><a href="bilder/rabatt &amp; volum.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="bilder/rabatt &amp; volum.png" class="img-fluid"></a></p>
+<section id="kpier" class="level3">
+<h3 class="anchored" data-anchor-id="kpier">KPIer</h3>
 <ul>
-<li>OAuth-autentisering</li>
-<li>Henting av aktiviteter via API</li>
-<li>Periodisk refresh</li>
-<li><em>… data fra andre venner</em></li>
+<li><p>Profit margin uten rabatt: 29,5 %</p></li>
+<li><p>Med rabatt: -2,9 %</p></li>
+<li><p>Margin delta: -32 %</p></li>
 </ul>
 </section>
-<section id="datamodellering" class="level2">
-<h2 class="anchored" data-anchor-id="datamodellering">Datamodellering</h2>
+<section id="breakpoint-identifikasjon" class="level3">
+<h3 class="anchored" data-anchor-id="breakpoint-identifikasjon">Breakpoint-identifikasjon</h3>
 <ul>
-<li>Faktatabell: aktiviteter fra strava og treningsdagbok styrke</li>
-<li>Datodimensjon</li>
-<li>Aktivitetstype</li>
+<li>0–10 % rabatt → margin robust</li>
 </ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/datamodell_strava.png" class="img-fluid figure-img"></p>
-<figcaption>Datamodell for egne treningsdata</figcaption>
-</figure>
-</div>
-</section>
-<section id="analyse-og-innsikt" class="level2">
-<h2 class="anchored" data-anchor-id="analyse-og-innsikt">Analyse og innsikt</h2>
-<section id="treningspreferanser" class="level3">
-<h3 class="anchored" data-anchor-id="treningspreferanser">Treningspreferanser</h3>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/treningspreferanser_strava.png" class="img-fluid figure-img"></p>
-<figcaption>Mine treningspreferanser</figcaption>
-</figure>
-</div>
-<p>En tydelig preferanse mot å trene på ettermiddag, etter jobb, men tidligere på formiddagen i helg. Ingen klar trend i endring med tiden, bortsett fra en preferanse for tidlig trening i 2018.</p>
-</section>
-<section id="beste-prestasjoner" class="level3">
-<h3 class="anchored" data-anchor-id="beste-prestasjoner">Beste prestasjoner</h3>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/mine_beste_prestasjoner.png" class="img-fluid figure-img"></p>
-<figcaption>Mine beste prestasjoner</figcaption>
-</figure>
-</div>
-</section>
-<section id="treningsvolum-over-tid" class="level3">
-<h3 class="anchored" data-anchor-id="treningsvolum-over-tid">Treningsvolum over tid</h3>
-<p><img src="images/Utvikling i treningsvolum.png" class="img-fluid"></p>
-<p>En, dessverre nedgang i total treningstid siden 2021. Og enda verre for løping. Veldig godt år i 2019.</p>
-<p><img src="images/Endring MoM.png" class="img-fluid"></p>
-<p>I 2025 var det en særlig nedgang på slutten av året.</p>
-</section>
-<section id="oversikt-over-styrkeøkter" class="level3">
-<h3 class="anchored" data-anchor-id="oversikt-over-styrkeøkter">Oversikt over styrkeøkter</h3>
-<p><img src="images/styrkedata.png" class="img-fluid"></p>
+<!-- -->
 <ul>
-<li><p>Øverst til venstre: Jevn økning i benkpress med liten endring i total volum pr økt</p></li>
-<li><p>Øverst til venstre: Triceps, pull ups og benk de mest vanlige øvelsene for overkropp, mens leg curl, hip abduction og tåhev for underkropp (preget av kneproblematikk siste årene)</p></li>
-<li><p>Nederst til venstre: Variasjon i unike øvelser per måned siste året. Ok variasjon her.</p></li>
-<li><p>Nederst til høyre: Andel overkropp vs underkropp. Never skip leg day, heh.</p></li>
+<li>11–20 % → svekkes</li>
+</ul>
+<!-- -->
+<ul>
+<li>21–30 % → kollaps</li>
+</ul>
+<!-- -->
+<ul>
+<li>30 %+ → kraftig negativ</li>
+</ul>
+<p><strong>Lønnsomhetsknekkpunkt -&gt; 21–30 % rabatt</strong>.</p>
+</section>
+</section>
+<section id="profit-per-unit-vs-discount" class="level2">
+<h2 class="anchored" data-anchor-id="profit-per-unit-vs-discount">Profit per Unit vs Discount</h2>
+<p>Scatter-analysen viser:</p>
+<ul>
+<li><p>Fallende enhetsmargin ved økende rabatt</p></li>
+<li><p>Høye rabatter kompenseres ikke av volum</p></li>
+<li><p>Tapet skyldes prisstrategi, ikke etterspørselssvikt</p></li>
+</ul>
+<section id="hvem-rammes-hardest" class="level3">
+<h3 class="anchored" data-anchor-id="hvem-rammes-hardest">Hvem rammes hardest?</h3>
+<p>Segment- og kategorianalyse viser:</p>
+<ul>
+<li><p>Technology og Furniture mest utsatt</p></li>
+<li><p>Flere segmenter går fra ~30 % margin til negativ</p></li>
+<li><p>Rabatt driver lønnsomhetstap på tvers av segmenter</p></li>
 </ul>
 </section>
 </section>
-<section id="datarydding-og-modellering-power-bi" class="level2">
-<h2 class="anchored" data-anchor-id="datarydding-og-modellering-power-bi">Data­rydding og modellering (Power BI)</h2>
-<section id="utgangspunkt-rådata" class="level3">
-<h3 class="anchored" data-anchor-id="utgangspunkt-rådata">Utgangspunkt (rådata)</h3>
-<p>Rådata bestod av:</p>
+</section>
+<section id="konklusjon" class="level1">
+<h1>Konklusjon</h1>
+<p>Analysen viser at lønnsomhetsutfordringen primært er rabattdrevet, ikke volumdrevet.</p>
+<p>Rabatter over 20 % bør begrenses eller knyttes til dokumentert volumgevinst.</p>
+<p>Fraktstrategi bør differensieres regionalt.</p>
+</section>
+<section id="hva-denne-casen-demonstrerer" class="level1">
+<h1>Hva denne casen demonstrerer</h1>
 <ul>
-<li><p>Strava-aktiviteter</p></li>
-<li><p>Treningsdagbok i bredt format (kolonner med uke, belastning og reps, økt + øvelse i rader)</p>
-<ul>
-<li>Inkonsekvente øktnavn og øvelesesnavn, bredt format som ikke kunne analyseres, reps/load i samme celle</li>
-</ul></li>
-</ul>
-</section>
-<section id="ryddetrinn-power-query" class="level3">
-<h3 class="anchored" data-anchor-id="ryddetrinn-power-query">Ryddetrinn (Power Query)</h3>
-<p>Dataryddingen ble gjort fullt ut i <strong>Power Query</strong>, med fokus på reproduserbarhet.</p>
-<p><strong>Hovedsteg:</strong></p>
-<ol type="1">
-<li><p>Standardiserte kolonnenavn og datatyper</p></li>
-<li><p>Splittet og normaliserte treningsdagbok (bred → lang)</p></li>
-<li><p>Renset øktnavn og samlet varianter (UB1, Upper body, Overkropp → Overkropp)</p></li>
-</ol>
-<details>
-<summary>
-Ryddetrinn (Power Query): Kroppsdel
-</summary>
-<pre class="dax"><code>Kroppsdel =
-VAR x = UPPER ( 'facts_styrke'[Økt] )
-RETURN
-SWITCH (
-    TRUE (),
-    CONTAINSSTRING ( x, "UB" ) || CONTAINSSTRING ( x, "UPPER" ) || CONTAINSSTRING ( x, "OVER" ),
-        "Overkropp",
-    CONTAINSSTRING ( x, "LB" ) || CONTAINSSTRING ( x, "BEIN" ) || CONTAINSSTRING ( x, "LOWER" ) || CONTAINSSTRING ( x, "REHAB" ),
-        "Underkropp",
-    "Ukjent"
-)</code></pre>
-</details>
-<ol start="4" type="1">
-<li><p>Fjernet tomme og ugyldige rader</p></li>
-<li><p>Kombinerte årstabeller til én faktatabell</p></li>
-</ol>
-</section>
-<section id="etter-modellklar-struktur" class="level3">
-<h3 class="anchored" data-anchor-id="etter-modellklar-struktur">Etter (modellklar struktur)</h3>
-<p>Resultatet er:</p>
-<ul>
-<li><p>Én konsistent <strong>faktatabell for styrketrening</strong></p></li>
-<li><p>Separate dimensjoner for dato og aktivitet</p></li>
-<li><p>Klar separasjon mellom over- og underkropp</p></li>
-<li><p>Datagrunnlag egnet for DAX og tidsserieanalyse</p></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/Datarydding strava.png" class="img-fluid figure-img"></p>
-<figcaption>Datarydding Strava</figcaption>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/styrke_2024_pre.png" class="img-fluid figure-img"></p>
-<figcaption>Styrkefil 2024 pre</figcaption>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/styrke_2024_post.png" class="img-fluid figure-img"></p>
-<figcaption>Styrkefil 2024 post</figcaption>
-</figure>
-</div>
-</section>
-<section id="dax-mål" class="level3">
-<h3 class="anchored" data-anchor-id="dax-mål">DAX-mål</h3>
-<details>
-<summary>
-DAX- Session LY
-</summary>
-<pre class="dax"><code>Sessions LY =
-CALCULATE (
-    [Sessions],
-    SAMEPERIODLASTYEAR ( 'Dim_date'[Date] )
-) </code></pre>
-</details>
-<ul>
-<li>treningsvolum</li>
-<li>rullerende gjennomsnitt</li>
-<li>sesongaggregater</li>
-<li>Interaktive slicere og drill-down</li>
-</ul>
-</section>
-</section>
-<section id="datainnhenting-strava-api-r" class="level2">
-<h2 class="anchored" data-anchor-id="datainnhenting-strava-api-r">Datainnhenting – Strava API (R)</h2>
-<p>Strava-data ble hentet via <strong>Strava REST API</strong>, autentisert med OAuth 2.0.</p>
-<p>Løsningen er bygget i R og lagrer data direkte i <strong>PostgreSQL</strong> for videre bruk i Power BI.</p>
-<section id="autentisering-oauth" class="level3">
-<h3 class="anchored" data-anchor-id="autentisering-oauth">1️⃣ Autentisering (OAuth)</h3>
-<p>Tilgangstoken hentes via Strava sin OAuth-flyt.<br>
-<em>Sensitiv informasjon håndteres via miljøvariabler.</em></p>
-<details>
-<summary>
-R – Autentisering mot Strava API
-</summary>
-<pre><code>library(httr) 
-library(jsonlite)  
-
-res &lt;- POST("https://www.strava.com/oauth/token",   
-        body = list(client_id = Sys.getenv("STRAVA_CLIENT_ID"), 
-        client_secret = Sys.getenv("STRAVA_CLIENT_SECRET"),
-        code = Sys.getenv("STRAVA_AUTH_CODE"),
-        grant_type = "authorization_code"),
-        encode = "form")
-        
-tokens &lt;- content(res, "parsed") access_token &lt;- tokens$access_token </code></pre>
-</details>
-</section>
-<section id="henting-av-aktivitetsdata-paginert" class="level3">
-<h3 class="anchored" data-anchor-id="henting-av-aktivitetsdata-paginert">2️⃣ Henting av aktivitetsdata (paginert)</h3>
-<p>Alle aktiviteter hentes sidevis (200 per kall) til alle sider er lest.</p>
-<details>
-<summary>
-R – Nedlasting av Strava-aktiviteter
-</summary>
-<pre><code>library(dplyr)  
-
-get_activities &lt;- function(page, token) {   
-  GET("https://www.strava.com/api/v3/athlete/activities",
-  query = list(per_page = 200, page = page), 
-  add_headers(Authorization = paste("Bearer", token))
-  ) 
-  }  
-  
-all_activities &lt;- list() 
-page &lt;- 1  
-
-repeat {
-  res  &lt;- get_activities(page, access_token)
-  data &lt;- fromJSON(content(res, "text"), flatten = TRUE) 
-  
-  if (nrow(data) == 0) break  
-  
-  all_activities[[page]] &lt;- data   
-  page &lt;- page + 1 
-}  
-
-activities &lt;- bind_rows(all_activities) </code></pre>
-</details>
-</section>
-<section id="klargjøring-av-data-api-analyse" class="level3">
-<h3 class="anchored" data-anchor-id="klargjøring-av-data-api-analyse">3️⃣ Klargjøring av data (API → analyse)</h3>
-<p>Nested JSON-felter flates ut og reduseres til analyse­relevante kolonner.</p>
-<details>
-<summary>
-R – Klargjøring av aktivitetsdata
-</summary>
-<pre><code>activities_sql &lt;- activities %&gt;%   select(
-  activity_id = id,
-  name,
-  type,
-  start_date,
-  distance,
-  moving_time,
-  elapsed_time,
-  total_elevation_gain,
-  average_speed,
-  max_speed,
-  average_watts,
-  max_watts,
-  average_heartrate,
-  max_heartrate,
-  location_city,
-  location_country,
-  athlete.id
-  ) </code></pre>
-</details>
-</section>
-<section id="lagring-i-postgresql" class="level3">
-<h3 class="anchored" data-anchor-id="lagring-i-postgresql">4️⃣ Lagring i PostgreSQL</h3>
-<p>Data lagres i en dedikert database for videre bruk i Power BI.</p>
-<details>
-<summary>
-R – Lagring i PostgreSQL
-</summary>
-<pre><code>library(DBI) 
-library(RPostgres)
-
-con &lt;- dbConnect(
-  Postgres(),
-  dbname = "strava",
-  host = "localhost",
-  port = 5432,
-  user = Sys.getenv("PG_USER"),
-  password = Sys.getenv("PG_PASSWORD")
-  )  
-  
-dbWriteTable(
-  con,
-  name = Id(schema = "public", table = "activities"),
-  value = activities_sql,
-  overwrite = TRUE
-) </code></pre>
-</details>
-</section>
-<section id="verifisering" class="level3">
-<h3 class="anchored" data-anchor-id="verifisering">5️⃣ Verifisering</h3>
-<p>Enkel validering sikrer at data er korrekt lastet.</p>
-<pre><code>SELECT COUNT(*) FROM public.activities;</code></pre>
-</section>
-</section>
-<section id="begrensninger" class="level2">
-<h2 class="anchored" data-anchor-id="begrensninger">Begrensninger</h2>
-<ul>
-<li>Kun egne data (ikke generaliserbart)</li>
-<li>Mangler eksterne belastningsmål (RPE, HRV)</li>
-<li>Avhengig av Strava-datakvalitet</li>
-</ul>
-</section>
-<section id="videre-arbeid" class="level2">
-<h2 class="anchored" data-anchor-id="videre-arbeid">Videre arbeid</h2>
-<ul>
-<li>Kombinere med subjektive data</li>
-<li>Automatisert refresh</li>
-<li>Prediktive modeller for belastning</li>
+<li><p>Strukturert KPI-design</p></li>
+<li><p>DAX for tidsintelligens</p></li>
+<li><p>Dynamisk rangering (Top/Bottom 10)</p></li>
+<li><p>Forretningsforståelse</p></li>
+<li><p>Visual storytelling</p></li>
+<li><p>Evne til å oversette tall til innsikt</p></li>
 </ul>
 
 
@@ -885,6 +741,38 @@ dbWriteTable(
   });
   </script>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

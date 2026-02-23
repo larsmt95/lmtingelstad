@@ -2,26 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://larsmt95.github.io/lm_portifolio/about.html</loc>
-    <lastmod>2026-02-19T07:50:29.826Z</lastmod>
+    <lastmod>2026-02-23T10:40:14.073Z</lastmod>
   </url>
   <url>
     <loc>https://larsmt95.github.io/lm_portifolio/projects/project_3_strava/strava_powerbi.html</loc>
-    <lastmod>2026-02-19T07:50:29.947Z</lastmod>
+    <lastmod>2026-02-23T10:40:14.205Z</lastmod>
   </url>
   <url>
     <loc>https://larsmt95.github.io/lm_portifolio/projects/project_2_Bike_Store/index.html</loc>
-    <lastmod>2026-02-19T07:50:29.906Z</lastmod>
+    <lastmod>2026-02-23T10:40:14.163Z</lastmod>
   </url>
   <url>
-    <loc>https://larsmt95.github.io/lm_portifolio/index.html</loc>
-    <lastmod>2026-02-19T07:50:29.826Z</lastmod>
-  </url>
-  <url>
-    <loc>https://larsmt95.github.io/lm_portifolio/projects/project_3_strava/index.html</loc>
-    <lastmod>2026-02-19T07:50:29.922Z</lastmod>
+    <loc>https://larsmt95.github.io/lm_portifolio/projects/project_1_salg_lønnsomhetsanalyse/index.html</loc>
+    <lastmod>2026-02-23T10:40:14.144Z</lastmod>
   </url>
   <url>
     <loc>https://larsmt95.github.io/lm_portifolio/projects/project_phd_paper3/index.html</loc>
-    <lastmod>2026-02-19T07:50:29.949Z</lastmod>
+    <lastmod>2026-02-23T10:40:14.703Z</lastmod>
+  </url>
+  <url>
+    <loc>https://larsmt95.github.io/lm_portifolio/projects/project_3_strava/index.html</loc>
+    <lastmod>2026-02-23T10:40:14.177Z</lastmod>
+  </url>
+  <url>
+    <loc>https://larsmt95.github.io/lm_portifolio/index.html</loc>
+    <lastmod>2026-02-23T10:40:14.073Z</lastmod>
   </url>
 </urlset>

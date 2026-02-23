@@ -40,7 +40,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-43a498ee2f929a5d3b049c805ab68679.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-c00b42e811b0fd9a18ac62455ba22490.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -157,6 +157,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#henting-av-aktivitetsdata-paginert" id="toc-henting-av-aktivitetsdata-paginert" class="nav-link" data-scroll-target="#henting-av-aktivitetsdata-paginert">2️⃣ Henting av aktivitetsdata (paginert)</a></li>
   <li><a href="#klargjøring-av-data-api-analyse" id="toc-klargjøring-av-data-api-analyse" class="nav-link" data-scroll-target="#klargjøring-av-data-api-analyse">3️⃣ Klargjøring av data (API → analyse)</a></li>
   <li><a href="#lagring-i-postgresql" id="toc-lagring-i-postgresql" class="nav-link" data-scroll-target="#lagring-i-postgresql">4️⃣ Lagring i PostgreSQL</a></li>
+  <li><a href="#full-refresh-alle-utøvere" id="toc-full-refresh-alle-utøvere" class="nav-link" data-scroll-target="#full-refresh-alle-utøvere">Full refresh alle utøvere</a></li>
   <li><a href="#verifisering" id="toc-verifisering" class="nav-link" data-scroll-target="#verifisering">5️⃣ Verifisering</a></li>
   </ul></li>
   <li><a href="#begrensninger" id="toc-begrensninger" class="nav-link" data-scroll-target="#begrensninger">Begrensninger</a></li>
@@ -331,7 +332,8 @@ ul.task-list li input[type="checkbox"] {
 </ol>
 <details>
 <summary>
-<p>Ryddetrinn (Power Query): Kroppsdel</p>
+Ryddetrinn (Power Query): Kroppsdel
+</summary>
 <pre class="dax"><code>Kroppsdel =
   VAR x = UPPER ( 'facts_styrke'[Økt] )
   RETURN
@@ -343,7 +345,7 @@ ul.task-list li input[type="checkbox"] {
     "Underkropp",
     "Ukjent"
 )</code></pre>
-</summary></details>
+</details>
 <ol start="4" type="1">
 <li><p>Fjernet tomme og ugyldige rader</p></li>
 <li><p>Kombinerte årstabeller til én faktatabell</p></li>
@@ -568,6 +570,9 @@ dbWriteTable(
 ) </code></pre>
 </details>
 <details>
+</details></section>
+<section id="full-refresh-alle-utøvere" class="level3">
+<h3 class="anchored" data-anchor-id="full-refresh-alle-utøvere">Full refresh alle utøvere</h3>
 <summary>
 R – Full refresh av alle utøvere
 </summary>
@@ -807,7 +812,7 @@ R – Full refresh av alle utøvere
 
 
 update_all_athletes()</code></pre>
-</details>
+
 </section>
 <section id="verifisering" class="level3">
 <h3 class="anchored" data-anchor-id="verifisering">5️⃣ Verifisering</h3>
