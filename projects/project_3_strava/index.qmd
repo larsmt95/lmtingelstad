@@ -386,11 +386,11 @@ dbWriteTable(
 
 </details>
 
-<details>
-
 ### Full refresh alle utøvere
 
-<summary>R – Full refresh av alle utøvere</summary>
+<details>
+
+<summary>R – Full refresh nye økter/utøvere</summary>
 
 ```         
 update_all_athletes <- function() {
@@ -645,14 +645,3 @@ SELECT COUNT(*) FROM public.activities;
 
 -   Fravær av subjektive belastningsmål begrenser total belastningsmodellering (RPE, HRV)
 -   Avhengig av Strava-datakvalitet
-
-## Videre arbeid
-
--   Kombinere med subjektive data
--   Automatisert refresh
--   Prediktive modeller for belastning
-
-**Vil du se mer eller diskutere prosjektet?**\
-📧 [Send meg en e-post](mailto:larsmartin95@hotmail.com?subject=Henvendelse%20fra%20portef%C3%B8lje)
-
-🔗 [LinkedIn](https://www.linkedin.com/in/lars-martin-tingelstad-657940113/)
