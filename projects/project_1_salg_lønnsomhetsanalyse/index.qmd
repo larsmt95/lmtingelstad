@@ -1,13 +1,11 @@
 ---
-title: "Financial Performance & Profitability Analysis"
-subtitle: "KPI-design, marginanalyse og beslutningsstøtte i Power BI."
+title: "Finansiell innsikt for strategiske beslutninger"
+subtitle: ""
 format:
   html:
     toc: true
     lightbox: true
 ---
-
-# Financial Performance Dashboard – Power BI
 
 I dette prosjektet utviklet jeg en helhetlig Power BI-rapport for å analysere omsetning, lønnsomhet og drivere bak marginutvikling. Gjennom strukturert KPI-design, DAX-beregninger og interaktiv drilldown identifiserte jeg hvordan fraktstrategi og rabatter påvirker profitabilitet – og hvor tiltak bør settes inn for å forbedre lønnsomheten.
 
@@ -25,13 +23,19 @@ Målet var å utvikle et beslutningsstøttende dashboard som:
 
 ## Datamodell og teknisk oppsett
 
-**Datamodell:**
+<details>
 
--    Faktatabell: Sales-transaksjoner
+<summary>Datamodell</summary>
 
--    Dimensjoner: Dato, Kategori, Segment, Region, State, City
+![](images/clipboard-422633206.png)
 
--    Relasjoner strukturert som stjerneskjema
+</details>
+
+-   Faktatabell: Sales-transaksjoner
+
+-   Dimensjoner: Dato, Kategori, Segment, Lokasjon
+
+-   Relasjoner strukturert som stjerneskjema
 
 **Eksempler på DAX-mål:**
 
@@ -65,11 +69,9 @@ Volumvekst driver omsetning, men margin forbedres ikke proporsjonalt grunnet kos
 
 -   Order volume: +28 %
 
--   AOV ned (-6 % på market-siden)
-
 ## Market & Drilldown
 
-![](bilder/market dash.png)
+![](bilder/market%20dash.png)
 
 ### Overordnet utvikling
 
@@ -87,9 +89,9 @@ Volumvekst driver omsetning, men margin forbedres ikke proporsjonalt grunnet kos
 
 -   Ressursallokering bør vurderes mot lønnsomhetsbidrag, ikke kun omsetning.
 
-## Shipping Mode & Regional Margin Analysis
+## Fraktmetode og regional marginanalyse
 
-![](bilder/levering og margin.png)
+![](bilder/levering%20og%20margin.png)
 
 ### Hovedfunn
 
@@ -105,9 +107,9 @@ Volumvekst driver omsetning, men margin forbedres ikke proporsjonalt grunnet kos
 
 Fraktmåte er ikke problemet globalt – den er regionalt sensitiv.
 
-## Discount & Margin Breakdown
+## Rabatt- og marginanalyse
 
-![](bilder/rabatt & volum.png)
+![](bilder/rabatt%20&%20volum.png)
 
 ### KPIer
 
@@ -117,7 +119,7 @@ Fraktmåte er ikke problemet globalt – den er regionalt sensitiv.
 
 -   Margin delta: -32 %
 
-### Breakpoint-identifikasjon
+### Identifisering av knekkpunkt
 
 -   0–10 % rabatt → margin robust
 
@@ -135,7 +137,7 @@ Fraktmåte er ikke problemet globalt – den er regionalt sensitiv.
 
 **Lønnsomhetsknekkpunkt -\> 21–30 % rabatt**.
 
-## Profit per Unit vs Discount
+## Resultat per enhet vs. rabatt
 
 Scatter-analysen viser:
 
