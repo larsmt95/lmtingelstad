@@ -4,7 +4,7 @@ project:
 
 
 website:
-  title: "Portefølje | Lars Martin Tingelstad" 
+  title: "Lars Martin Tingelstad, PhD" 
   navbar:
     left:
       - href: index.qmd
@@ -15,8 +15,7 @@ website:
         text: Bike Store
       - href: projects/project_1_salg_lønnsomhetsanalyse/
         text: Lønnsomhetsanalyse
-      - href: projects/project_phd_paper3/
-        text: PhD
+
 
 format:
   html:

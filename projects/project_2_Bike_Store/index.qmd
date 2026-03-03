@@ -15,11 +15,11 @@ Denne delen dokumenterer hvordan rådata er kvalitetssikret og strukturert til e
 
 Før modellering ble datasettet gjennomgått for å avdekke strukturelle og forretningsmessige avvik.
 
-Fokuset var å sikre at nøkkelrelasjoner og verdier var konsistente og egnet for analyse.
+Fokuset var å sikre at nøkkelrelasjoner og verdier var konsistente og egnet for analyse:
 
--   Verifisering av radantall per tabell\
--   Kontroll av NULL-verdier i primær- og fremmednøkler\
--   Sjekk for duplikater\
+-   Verifisering av radantall per tabell
+-   Kontroll av NULL-verdier i primær- og fremmednøkler
+-   Sjekk for duplikater
 -   Validering av relasjoner mellom ordre, produkter og butikker
 
 ### Bygge dimensjonstabeller
@@ -145,13 +145,11 @@ ORDER BY store_name, year, month;
 
 SQL-modellen fungerer som et semantisk lag for Power BI.
 
-All visualisering er bygget på views, ikke råtabeller, for å sikre korrekt logikk og ryddig modellering.
-
 <details>
 
 <summary>Datamodell</summary>
 
-![](bilder/datamodel_bikestore.png)
+![](bilder/datamodell_v2.png)
 
 </details>
 
@@ -162,5 +160,3 @@ All visualisering er bygget på views, ikke råtabeller, for å sikre korrekt lo
 Dashboardet viser at salgsveksten i Bike Store er sterk (+42,0 % YoY), men samtidig tydelig konsentrert.
 
 En begrenset andel produkter og én hovedbutikk står for størstedelen av omsetningen, noe som indikerer både høy avhengighet og potensial for sortiments- og lageroptimalisering.
-
-**Ønsker du å se mer detaljer eller diskutere analysen videre?**\
