@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Bike Store – End-to-end analyse med SQL og Power BI – Portefølje | Lars Martin Tingelstad</title>
+<title>Bike Store – End-to-end analyse med SQL og Power BI – Lars Martin Tingelstad, PhD</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -75,7 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c00b42e811b0fd9a18ac62455ba22490.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-43a498ee2f929a5d3b049c805ab68679.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -119,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">Portefølje | Lars Martin Tingelstad</span>
+    <span class="navbar-title">Lars Martin Tingelstad, PhD</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -143,10 +143,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li class="nav-item">
     <a class="nav-link" href="../../projects/project_1_salg_lønnsomhetsanalyse/"> 
 <span class="menu-text">Lønnsomhetsanalyse</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../projects/project_phd_paper3/"> 
-<span class="menu-text">PhD</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -206,14 +202,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="datakvalitet-forståelse" class="level3">
 <h3 class="anchored" data-anchor-id="datakvalitet-forståelse">Datakvalitet &amp; forståelse</h3>
 <p>Før modellering ble datasettet gjennomgått for å avdekke strukturelle og forretningsmessige avvik.</p>
-<p>Fokuset var å sikre at nøkkelrelasjoner og verdier var konsistente og egnet for analyse.</p>
+<p>Fokuset var å sikre at nøkkelrelasjoner og verdier var konsistente og egnet for analyse:</p>
 <ul>
-<li>Verifisering av radantall per tabell<br>
-</li>
-<li>Kontroll av NULL-verdier i primær- og fremmednøkler<br>
-</li>
-<li>Sjekk for duplikater<br>
-</li>
+<li>Verifisering av radantall per tabell</li>
+<li>Kontroll av NULL-verdier i primær- og fremmednøkler</li>
+<li>Sjekk for duplikater</li>
 <li>Validering av relasjoner mellom ordre, produkter og butikker</li>
 </ul>
 </section>
@@ -327,20 +320,17 @@ SQL output
 <section id="data-visualisering-power-bi" class="level1">
 <h1>Data visualisering | Power BI</h1>
 <p>SQL-modellen fungerer som et semantisk lag for Power BI.</p>
-<p>All visualisering er bygget på views, ikke råtabeller, for å sikre korrekt logikk og ryddig modellering.</p>
 <details>
 <summary>
 Datamodell
 </summary>
-<p><a href="bilder/datamodel_bikestore.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="bilder/datamodel_bikestore.png" class="img-fluid"></a></p>
+<p><a href="bilder/datamodell_v2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="bilder/datamodell_v2.png" class="img-fluid"></a></p>
 </details>
 <section id="overview" class="level3">
 <h3 class="anchored" data-anchor-id="overview">Overview</h3>
 <p><a href="bilder/dashboard.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="bilder/dashboard.png" class="img-fluid"></a></p>
 <p>Dashboardet viser at salgsveksten i Bike Store er sterk (+42,0 % YoY), men samtidig tydelig konsentrert.</p>
 <p>En begrenset andel produkter og én hovedbutikk står for størstedelen av omsetningen, noe som indikerer både høy avhengighet og potensial for sortiments- og lageroptimalisering.</p>
-<p><strong>Ønsker du å se mer detaljer eller diskutere analysen videre?</strong><br>
-</p>
 
 
 </section>
@@ -420,7 +410,7 @@ Datamodell
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/larsmt95\.github\.io\/lm_portifolio\/");
+        var filterRegex = new RegExp("https:\/\/larsmt95\.github\.io\/lmtingelstad\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
