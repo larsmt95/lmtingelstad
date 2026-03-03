@@ -370,8 +370,8 @@ library(RPostgres)
 con <- dbConnect(
   Postgres(),
   dbname = "strava",
-  host = "localhost",
-  port = 5432,
+  host = "xxx",
+  port = xxx,
   user = Sys.getenv("PG_USER"),
   password = Sys.getenv("PG_PASSWORD")
   )  
@@ -405,9 +405,9 @@ update_all_athletes <- function() {
     RPostgres::Postgres(),
     dbname   = "strava",
     host     = "localhost",
-    port     = 5432,
-    user     = "postgres",
-    password = "legandary007"
+    port     = xxx,
+    user     = "xxx",
+    password = "xxx"
   )
   
   athletes <- dbGetQuery(
@@ -432,8 +432,8 @@ update_all_athletes <- function() {
     res_token <- POST(
       "https://www.strava.com/oauth/token",
       body = list(
-        client_id     = "197542",
-        client_secret = "b6433d7c6b92ff61402f5118969b37afcbe49906",
+        client_id     = "xxx",
+        client_secret = "xxx",
         refresh_token = refresh_token,
         grant_type    = "refresh_token"
       ),
