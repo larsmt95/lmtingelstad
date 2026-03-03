@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Financial Performance &amp; Profitability Analysis – Lars Martin Tingelstad, PhD</title>
+<title>Finansiell innsikt for strategiske beslutninger – Lars Martin Tingelstad, PhD</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -125,9 +125,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#financial-performance-dashboard-power-bi" id="toc-financial-performance-dashboard-power-bi" class="nav-link active" data-scroll-target="#financial-performance-dashboard-power-bi">Financial Performance Dashboard – Power BI</a>
-  <ul class="collapse">
-  <li><a href="#formål-med-prosjektet" id="toc-formål-med-prosjektet" class="nav-link" data-scroll-target="#formål-med-prosjektet">Formål med prosjektet</a></li>
+  <li><a href="#formål-med-prosjektet" id="toc-formål-med-prosjektet" class="nav-link active" data-scroll-target="#formål-med-prosjektet">Formål med prosjektet</a></li>
   <li><a href="#datamodell-og-teknisk-oppsett" id="toc-datamodell-og-teknisk-oppsett" class="nav-link" data-scroll-target="#datamodell-og-teknisk-oppsett">Datamodell og teknisk oppsett</a></li>
   <li><a href="#executive-summary" id="toc-executive-summary" class="nav-link" data-scroll-target="#executive-summary">Executive Summary</a>
   <ul class="collapse">
@@ -138,20 +136,19 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#overordnet-utvikling" id="toc-overordnet-utvikling" class="nav-link" data-scroll-target="#overordnet-utvikling">Overordnet utvikling</a></li>
   </ul></li>
   <li><a href="#strategisk-tolkning" id="toc-strategisk-tolkning" class="nav-link" data-scroll-target="#strategisk-tolkning">Strategisk tolkning</a></li>
-  <li><a href="#shipping-mode-regional-margin-analysis" id="toc-shipping-mode-regional-margin-analysis" class="nav-link" data-scroll-target="#shipping-mode-regional-margin-analysis">Shipping Mode &amp; Regional Margin Analysis</a>
+  <li><a href="#fraktmetode-og-regional-marginanalyse" id="toc-fraktmetode-og-regional-marginanalyse" class="nav-link" data-scroll-target="#fraktmetode-og-regional-marginanalyse">Fraktmetode og regional marginanalyse</a>
   <ul class="collapse">
   <li><a href="#hovedfunn" id="toc-hovedfunn" class="nav-link" data-scroll-target="#hovedfunn">Hovedfunn</a></li>
   <li><a href="#viktig-innsikt" id="toc-viktig-innsikt" class="nav-link" data-scroll-target="#viktig-innsikt">Viktig innsikt</a></li>
   </ul></li>
-  <li><a href="#discount-margin-breakdown" id="toc-discount-margin-breakdown" class="nav-link" data-scroll-target="#discount-margin-breakdown">Discount &amp; Margin Breakdown</a>
+  <li><a href="#rabatt--og-marginanalyse" id="toc-rabatt--og-marginanalyse" class="nav-link" data-scroll-target="#rabatt--og-marginanalyse">Rabatt- og marginanalyse</a>
   <ul class="collapse">
   <li><a href="#kpier" id="toc-kpier" class="nav-link" data-scroll-target="#kpier">KPIer</a></li>
-  <li><a href="#breakpoint-identifikasjon" id="toc-breakpoint-identifikasjon" class="nav-link" data-scroll-target="#breakpoint-identifikasjon">Breakpoint-identifikasjon</a></li>
+  <li><a href="#identifisering-av-knekkpunkt" id="toc-identifisering-av-knekkpunkt" class="nav-link" data-scroll-target="#identifisering-av-knekkpunkt">Identifisering av knekkpunkt</a></li>
   </ul></li>
-  <li><a href="#profit-per-unit-vs-discount" id="toc-profit-per-unit-vs-discount" class="nav-link" data-scroll-target="#profit-per-unit-vs-discount">Profit per Unit vs Discount</a>
+  <li><a href="#resultat-per-enhet-vs.-rabatt" id="toc-resultat-per-enhet-vs.-rabatt" class="nav-link" data-scroll-target="#resultat-per-enhet-vs.-rabatt">Resultat per enhet vs.&nbsp;rabatt</a>
   <ul class="collapse">
   <li><a href="#hvem-rammes-hardest" id="toc-hvem-rammes-hardest" class="nav-link" data-scroll-target="#hvem-rammes-hardest">Hvem rammes hardest?</a></li>
-  </ul></li>
   </ul></li>
   <li><a href="#konklusjon" id="toc-konklusjon" class="nav-link" data-scroll-target="#konklusjon">Konklusjon</a></li>
   <li><a href="#hva-denne-casen-demonstrerer" id="toc-hva-denne-casen-demonstrerer" class="nav-link" data-scroll-target="#hva-denne-casen-demonstrerer">Hva denne casen demonstrerer</a></li>
@@ -163,8 +160,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Financial Performance &amp; Profitability Analysis</h1>
-<p class="subtitle lead">KPI-design, marginanalyse og beslutningsstøtte i Power BI.</p>
+<h1 class="title">Finansiell innsikt for strategiske beslutninger</h1>
 </div>
 
 
@@ -181,8 +177,6 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="financial-performance-dashboard-power-bi" class="level1">
-<h1>Financial Performance Dashboard – Power BI</h1>
 <p>I dette prosjektet utviklet jeg en helhetlig Power BI-rapport for å analysere omsetning, lønnsomhet og drivere bak marginutvikling. Gjennom strukturert KPI-design, DAX-beregninger og interaktiv drilldown identifiserte jeg hvordan fraktstrategi og rabatter påvirker profitabilitet – og hvor tiltak bør settes inn for å forbedre lønnsomheten.</p>
 <section id="formål-med-prosjektet" class="level2">
 <h2 class="anchored" data-anchor-id="formål-med-prosjektet">Formål med prosjektet</h2>
@@ -196,10 +190,15 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="datamodell-og-teknisk-oppsett" class="level2">
 <h2 class="anchored" data-anchor-id="datamodell-og-teknisk-oppsett">Datamodell og teknisk oppsett</h2>
-<p><strong>Datamodell:</strong></p>
+<details>
+<summary>
+Datamodell
+</summary>
+<p><a href="images/clipboard-422633206.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/clipboard-422633206.png" class="img-fluid"></a></p>
+</details>
 <ul>
 <li><p>Faktatabell: Sales-transaksjoner</p></li>
-<li><p>Dimensjoner: Dato, Kategori, Segment, Region, State, City</p></li>
+<li><p>Dimensjoner: Dato, Kategori, Segment, Lokasjon</p></li>
 <li><p>Relasjoner strukturert som stjerneskjema</p></li>
 </ul>
 <p><strong>Eksempler på DAX-mål:</strong></p>
@@ -215,7 +214,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="executive-summary" class="level2">
 <h2 class="anchored" data-anchor-id="executive-summary">Executive Summary</h2>
-<p><a href="images/clipboard-151602034.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/clipboard-151602034.png" class="img-fluid"></a></p>
+<p><a href="images/clipboard-151602034.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/clipboard-151602034.png" class="img-fluid"></a></p>
 <section id="innsikt-fra-dashboardet" class="level3">
 <h3 class="anchored" data-anchor-id="innsikt-fra-dashboardet">Innsikt fra dashboardet:</h3>
 <p>Volumvekst driver omsetning, men margin forbedres ikke proporsjonalt grunnet kostnadsvekst og lavere gjennomsnittlig ordreverdi.</p>
@@ -224,13 +223,12 @@ ul.task-list li input[type="checkbox"] {
 <li><p>Profit: +14 %</p></li>
 <li><p>Kostnad: +21 % → marginpress</p></li>
 <li><p>Order volume: +28 %</p></li>
-<li><p>AOV ned (-6 % på market-siden)</p></li>
 </ul>
 </section>
 </section>
 <section id="market-drilldown" class="level2">
 <h2 class="anchored" data-anchor-id="market-drilldown">Market &amp; Drilldown</h2>
-<p><a href="bilder/market dash.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="bilder/market dash.png" class="img-fluid"></a></p>
+<p><a href="bilder/market dash.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="bilder/market dash.png" class="img-fluid"></a></p>
 <section id="overordnet-utvikling" class="level3">
 <h3 class="anchored" data-anchor-id="overordnet-utvikling">Overordnet utvikling</h3>
 <p>🔎 Volumvekst driver omsetning, men fallende AOV og sterk kostnadsvekst indikerer marginpress.</p>
@@ -246,9 +244,9 @@ ul.task-list li input[type="checkbox"] {
 <li><p>Ressursallokering bør vurderes mot lønnsomhetsbidrag, ikke kun omsetning.</p></li>
 </ul>
 </section>
-<section id="shipping-mode-regional-margin-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="shipping-mode-regional-margin-analysis">Shipping Mode &amp; Regional Margin Analysis</h2>
-<p><a href="bilder/levering og margin.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="bilder/levering og margin.png" class="img-fluid"></a></p>
+<section id="fraktmetode-og-regional-marginanalyse" class="level2">
+<h2 class="anchored" data-anchor-id="fraktmetode-og-regional-marginanalyse">Fraktmetode og regional marginanalyse</h2>
+<p><a href="bilder/levering og margin.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="bilder/levering og margin.png" class="img-fluid"></a></p>
 <section id="hovedfunn" class="level3">
 <h3 class="anchored" data-anchor-id="hovedfunn">Hovedfunn</h3>
 <ul>
@@ -265,9 +263,9 @@ ul.task-list li input[type="checkbox"] {
 <p>Fraktmåte er ikke problemet globalt – den er regionalt sensitiv.</p>
 </section>
 </section>
-<section id="discount-margin-breakdown" class="level2">
-<h2 class="anchored" data-anchor-id="discount-margin-breakdown">Discount &amp; Margin Breakdown</h2>
-<p><a href="bilder/rabatt &amp; volum.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="bilder/rabatt &amp; volum.png" class="img-fluid"></a></p>
+<section id="rabatt--og-marginanalyse" class="level2">
+<h2 class="anchored" data-anchor-id="rabatt--og-marginanalyse">Rabatt- og marginanalyse</h2>
+<p><a href="bilder/rabatt &amp; volum.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="bilder/rabatt &amp; volum.png" class="img-fluid"></a></p>
 <section id="kpier" class="level3">
 <h3 class="anchored" data-anchor-id="kpier">KPIer</h3>
 <ul>
@@ -276,8 +274,8 @@ ul.task-list li input[type="checkbox"] {
 <li><p>Margin delta: -32 %</p></li>
 </ul>
 </section>
-<section id="breakpoint-identifikasjon" class="level3">
-<h3 class="anchored" data-anchor-id="breakpoint-identifikasjon">Breakpoint-identifikasjon</h3>
+<section id="identifisering-av-knekkpunkt" class="level3">
+<h3 class="anchored" data-anchor-id="identifisering-av-knekkpunkt">Identifisering av knekkpunkt</h3>
 <ul>
 <li>0–10 % rabatt → margin robust</li>
 </ul>
@@ -296,8 +294,8 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>Lønnsomhetsknekkpunkt -&gt; 21–30 % rabatt</strong>.</p>
 </section>
 </section>
-<section id="profit-per-unit-vs-discount" class="level2">
-<h2 class="anchored" data-anchor-id="profit-per-unit-vs-discount">Profit per Unit vs Discount</h2>
+<section id="resultat-per-enhet-vs.-rabatt" class="level2">
+<h2 class="anchored" data-anchor-id="resultat-per-enhet-vs.-rabatt">Resultat per enhet vs.&nbsp;rabatt</h2>
 <p>Scatter-analysen viser:</p>
 <ul>
 <li><p>Fallende enhetsmargin ved økende rabatt</p></li>
@@ -312,7 +310,6 @@ ul.task-list li input[type="checkbox"] {
 <li><p>Flere segmenter går fra ~30 % margin til negativ</p></li>
 <li><p>Rabatt driver lønnsomhetstap på tvers av segmenter</p></li>
 </ul>
-</section>
 </section>
 </section>
 <section id="konklusjon" class="level1">

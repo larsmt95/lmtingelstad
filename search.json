@@ -156,64 +156,64 @@
   {
     "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html",
     "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html",
-    "title": "Financial Performance & Profitability Analysis",
+    "title": "Finansiell innsikt for strategiske beslutninger",
     "section": "",
-    "text": "I dette prosjektet utviklet jeg en helhetlig Power BI-rapport for å analysere omsetning, lønnsomhet og drivere bak marginutvikling. Gjennom strukturert KPI-design, DAX-beregninger og interaktiv drilldown identifiserte jeg hvordan fraktstrategi og rabatter påvirker profitabilitet – og hvor tiltak bør settes inn for å forbedre lønnsomheten.\n\n\nMålet var å utvikle et beslutningsstøttende dashboard som:\n\nGir rask oversikt over finansiell utvikling (YoY)\nAvdekker drivere bak resultatene (segment, kategori, region, by)\nKombinerer operativ og strategisk innsikt\nEr visuelt strukturert for ledelsesbruk\n\n\n\n\nDatamodell:\n\nFaktatabell: Sales-transaksjoner\nDimensjoner: Dato, Kategori, Segment, Region, State, City\nRelasjoner strukturert som stjerneskjema\n\nEksempler på DAX-mål:\n\nTotal Sales\nSales LY\nSales % vs LY\nProfit Margin\nAvg Order Value\nDynamiske KPI-farger (conditional formatting)\nDynamisk Top/Bottom 10\n\n\n\n\n\n\n\nVolumvekst driver omsetning, men margin forbedres ikke proporsjonalt grunnet kostnadsvekst og lavere gjennomsnittlig ordreverdi.\n\nOmsetning: +20 %\nProfit: +14 %\nKostnad: +21 % → marginpress\nOrder volume: +28 %\nAOV ned (-6 % på market-siden)\n\n\n\n\n\n\n\n\n🔎 Volumvekst driver omsetning, men fallende AOV og sterk kostnadsvekst indikerer marginpress.\n🔎 Omsetningen er konsentrert i få stater. Avhengighet av toppmarkedene øker eksponering mot regionale svingninger.\n🔎 Omsetning korrelerer ikke lineært med lønnsomhet. Noen markeder bidrar lite til bunnlinjen relativt til volum.\n\n\n\n\n\nVekst er volumdrevet, ikke prisdrevet.\nMarginoptimalisering bør skje på delstatsnivå.\nRessursallokering bør vurderes mot lønnsomhetsbidrag, ikke kun omsetning.\n\n\n\n\n\n\n\n\nFirst Class høyest total margin (~14 %)\nSame Day generelt lønnsom\n\nMen: Same Day i South gir -8,4 % margin\n\nTeknologi i South-region trekker ned\n\n\n\n\nFraktmåte er ikke problemet globalt – den er regionalt sensitiv.\n\n\n\n\n\n\n\n\nProfit margin uten rabatt: 29,5 %\nMed rabatt: -2,9 %\nMargin delta: -32 %\n\n\n\n\n\n0–10 % rabatt → margin robust\n\n\n\n11–20 % → svekkes\n\n\n\n21–30 % → kollaps\n\n\n\n30 %+ → kraftig negativ\n\nLønnsomhetsknekkpunkt -&gt; 21–30 % rabatt.\n\n\n\n\nScatter-analysen viser:\n\nFallende enhetsmargin ved økende rabatt\nHøye rabatter kompenseres ikke av volum\nTapet skyldes prisstrategi, ikke etterspørselssvikt\n\n\n\nSegment- og kategorianalyse viser:\n\nTechnology og Furniture mest utsatt\nFlere segmenter går fra ~30 % margin til negativ\nRabatt driver lønnsomhetstap på tvers av segmenter"
+    "text": "I dette prosjektet utviklet jeg en helhetlig Power BI-rapport for å analysere omsetning, lønnsomhet og drivere bak marginutvikling. Gjennom strukturert KPI-design, DAX-beregninger og interaktiv drilldown identifiserte jeg hvordan fraktstrategi og rabatter påvirker profitabilitet – og hvor tiltak bør settes inn for å forbedre lønnsomheten."
   },
   {
     "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#formål-med-prosjektet",
     "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#formål-med-prosjektet",
-    "title": "Financial Performance & Profitability Analysis",
-    "section": "",
-    "text": "Målet var å utvikle et beslutningsstøttende dashboard som:\n\nGir rask oversikt over finansiell utvikling (YoY)\nAvdekker drivere bak resultatene (segment, kategori, region, by)\nKombinerer operativ og strategisk innsikt\nEr visuelt strukturert for ledelsesbruk"
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Formål med prosjektet",
+    "text": "Formål med prosjektet\nMålet var å utvikle et beslutningsstøttende dashboard som:\n\nGir rask oversikt over finansiell utvikling (YoY)\nAvdekker drivere bak resultatene (segment, kategori, region, by)\nKombinerer operativ og strategisk innsikt\nEr visuelt strukturert for ledelsesbruk"
   },
   {
     "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#datamodell-og-teknisk-oppsett",
     "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#datamodell-og-teknisk-oppsett",
-    "title": "Financial Performance & Profitability Analysis",
-    "section": "",
-    "text": "Datamodell:\n\nFaktatabell: Sales-transaksjoner\nDimensjoner: Dato, Kategori, Segment, Region, State, City\nRelasjoner strukturert som stjerneskjema\n\nEksempler på DAX-mål:\n\nTotal Sales\nSales LY\nSales % vs LY\nProfit Margin\nAvg Order Value\nDynamiske KPI-farger (conditional formatting)\nDynamisk Top/Bottom 10"
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Datamodell og teknisk oppsett",
+    "text": "Datamodell og teknisk oppsett\n\n\nDatamodell\n\n\n\n\nFaktatabell: Sales-transaksjoner\nDimensjoner: Dato, Kategori, Segment, Lokasjon\nRelasjoner strukturert som stjerneskjema\n\nEksempler på DAX-mål:\n\nTotal Sales\nSales LY\nSales % vs LY\nProfit Margin\nAvg Order Value\nDynamiske KPI-farger (conditional formatting)\nDynamisk Top/Bottom 10"
   },
   {
     "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#executive-summary",
     "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#executive-summary",
-    "title": "Financial Performance & Profitability Analysis",
-    "section": "",
-    "text": "Volumvekst driver omsetning, men margin forbedres ikke proporsjonalt grunnet kostnadsvekst og lavere gjennomsnittlig ordreverdi.\n\nOmsetning: +20 %\nProfit: +14 %\nKostnad: +21 % → marginpress\nOrder volume: +28 %\nAOV ned (-6 % på market-siden)"
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Executive Summary",
+    "text": "Executive Summary\n\n\nInnsikt fra dashboardet:\nVolumvekst driver omsetning, men margin forbedres ikke proporsjonalt grunnet kostnadsvekst og lavere gjennomsnittlig ordreverdi.\n\nOmsetning: +20 %\nProfit: +14 %\nKostnad: +21 % → marginpress\nOrder volume: +28 %"
   },
   {
     "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#market-drilldown",
     "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#market-drilldown",
-    "title": "Financial Performance & Profitability Analysis",
-    "section": "",
-    "text": "🔎 Volumvekst driver omsetning, men fallende AOV og sterk kostnadsvekst indikerer marginpress.\n🔎 Omsetningen er konsentrert i få stater. Avhengighet av toppmarkedene øker eksponering mot regionale svingninger.\n🔎 Omsetning korrelerer ikke lineært med lønnsomhet. Noen markeder bidrar lite til bunnlinjen relativt til volum."
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Market & Drilldown",
+    "text": "Market & Drilldown\n\n\nOverordnet utvikling\n🔎 Volumvekst driver omsetning, men fallende AOV og sterk kostnadsvekst indikerer marginpress.\n🔎 Omsetningen er konsentrert i få stater. Avhengighet av toppmarkedene øker eksponering mot regionale svingninger.\n🔎 Omsetning korrelerer ikke lineært med lønnsomhet. Noen markeder bidrar lite til bunnlinjen relativt til volum."
   },
   {
     "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#strategisk-tolkning",
     "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#strategisk-tolkning",
-    "title": "Financial Performance & Profitability Analysis",
-    "section": "",
-    "text": "Vekst er volumdrevet, ikke prisdrevet.\nMarginoptimalisering bør skje på delstatsnivå.\nRessursallokering bør vurderes mot lønnsomhetsbidrag, ikke kun omsetning."
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Strategisk tolkning",
+    "text": "Strategisk tolkning\n\nVekst er volumdrevet, ikke prisdrevet.\nMarginoptimalisering bør skje på delstatsnivå.\nRessursallokering bør vurderes mot lønnsomhetsbidrag, ikke kun omsetning."
   },
   {
-    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#shipping-mode-regional-margin-analysis",
-    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#shipping-mode-regional-margin-analysis",
-    "title": "Financial Performance & Profitability Analysis",
-    "section": "",
-    "text": "First Class høyest total margin (~14 %)\nSame Day generelt lønnsom\n\nMen: Same Day i South gir -8,4 % margin\n\nTeknologi i South-region trekker ned\n\n\n\n\nFraktmåte er ikke problemet globalt – den er regionalt sensitiv."
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#fraktmetode-og-regional-marginanalyse",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#fraktmetode-og-regional-marginanalyse",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Fraktmetode og regional marginanalyse",
+    "text": "Fraktmetode og regional marginanalyse\n\n\nHovedfunn\n\nFirst Class høyest total margin (~14 %)\nSame Day generelt lønnsom\n\nMen: Same Day i South gir -8,4 % margin\n\nTeknologi i South-region trekker ned\n\n\n\nViktig innsikt\nFraktmåte er ikke problemet globalt – den er regionalt sensitiv."
   },
   {
-    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#discount-margin-breakdown",
-    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#discount-margin-breakdown",
-    "title": "Financial Performance & Profitability Analysis",
-    "section": "",
-    "text": "Profit margin uten rabatt: 29,5 %\nMed rabatt: -2,9 %\nMargin delta: -32 %\n\n\n\n\n\n0–10 % rabatt → margin robust\n\n\n\n11–20 % → svekkes\n\n\n\n21–30 % → kollaps\n\n\n\n30 %+ → kraftig negativ\n\nLønnsomhetsknekkpunkt -&gt; 21–30 % rabatt."
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#rabatt--og-marginanalyse",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#rabatt--og-marginanalyse",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Rabatt- og marginanalyse",
+    "text": "Rabatt- og marginanalyse\n\n\nKPIer\n\nProfit margin uten rabatt: 29,5 %\nMed rabatt: -2,9 %\nMargin delta: -32 %\n\n\n\nIdentifisering av knekkpunkt\n\n0–10 % rabatt → margin robust\n\n\n\n11–20 % → svekkes\n\n\n\n21–30 % → kollaps\n\n\n\n30 %+ → kraftig negativ\n\nLønnsomhetsknekkpunkt -&gt; 21–30 % rabatt."
   },
   {
-    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#profit-per-unit-vs-discount",
-    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#profit-per-unit-vs-discount",
-    "title": "Financial Performance & Profitability Analysis",
-    "section": "",
-    "text": "Scatter-analysen viser:\n\nFallende enhetsmargin ved økende rabatt\nHøye rabatter kompenseres ikke av volum\nTapet skyldes prisstrategi, ikke etterspørselssvikt\n\n\n\nSegment- og kategorianalyse viser:\n\nTechnology og Furniture mest utsatt\nFlere segmenter går fra ~30 % margin til negativ\nRabatt driver lønnsomhetstap på tvers av segmenter"
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#resultat-per-enhet-vs.-rabatt",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#resultat-per-enhet-vs.-rabatt",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Resultat per enhet vs. rabatt",
+    "text": "Resultat per enhet vs. rabatt\nScatter-analysen viser:\n\nFallende enhetsmargin ved økende rabatt\nHøye rabatter kompenseres ikke av volum\nTapet skyldes prisstrategi, ikke etterspørselssvikt\n\n\nHvem rammes hardest?\nSegment- og kategorianalyse viser:\n\nTechnology og Furniture mest utsatt\nFlere segmenter går fra ~30 % margin til negativ\nRabatt driver lønnsomhetstap på tvers av segmenter"
   }
 ]
