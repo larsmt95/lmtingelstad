@@ -10,11 +10,11 @@ website:
       - href: index.qmd
         text: Home
       - href: projects/project_3_strava/
-        text: Strava
+        text: Project - Strava
       - href: projects/project_2_Bike_Store/
-        text: Bike Store
+        text: Prosjet - Bike Store
       - href: projects/project_1_salg_lønnsomhetsanalyse/
-        text: Lønnsomhetsanalyse
+        text: Prosjekt - Lønnsomhetsanalyse
 
 
 format:
