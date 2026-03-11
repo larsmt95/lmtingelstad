@@ -21,14 +21,14 @@ Typisk arbeidsflyt i analyseprosjekter:
 
 **Datakilder → Datainnhenting → Datamodellering → Analyse → Visualisering → Beslutningsstøtte**
 
-- Datainnhenting fra API, databaser og filer  
-- Datarydding og strukturering  
-- Datamodellering (stjerneskjema)  
-- Analyse i SQL, R og DAX  
-- Visualisering i Power BI  
-- Innsiktsformidling til beslutningstakere
+-   Datainnhenting fra API, databaser og filer\
+-   Datarydding og strukturering\
+-   Datamodellering (stjerneskjema)\
+-   Analyse i SQL, R og DAX\
+-   Visualisering i Power BI\
+-   Innsiktsformidling til beslutningstakere
 
----
+------------------------------------------------------------------------
 
 ### Teknologi
 
@@ -36,83 +36,73 @@ Typisk arbeidsflyt i analyseprosjekter:
 |------------------|------------------|------------------|------------------|
 | Datamodellering i PostgreSQL, joins, aggregering, analyse av relasjonelle datasett. | Datamodellering (stjerneskjema), DAX-målinger, tidsintelligens, KPI-design og dashboards. | Datahåndtering (dplyr, tidyr), visualisering (ggplot2), statistisk modellering (ANOVA, regresjon, mixed models). | Power Query, pivottabeller og strukturert analyse av datasett. |
 
-
 ### Kjernekompetanse
 
-- Datainnhenting, datarensing og kvalitetskontroll  
-- Datamodellering og analyse av relasjonelle datasett  
-- Statistisk analyse og tidsserieanalyse  
-- KPI-design og resultatoppfølging  
-- Visualisering og innsiktsformidling  
-- Beslutningsstøtte for operative og strategiske beslutninger  
+-   Datainnhenting, datarensing og kvalitetskontroll\
+-   Datamodellering og analyse av relasjonelle datasett\
+-   Statistisk analyse og tidsserieanalyse\
+-   KPI-design og resultatoppfølging\
+-   Visualisering og innsiktsformidling\
+-   Beslutningsstøtte for operative og strategiske beslutninger
 
 ------------------------------------------------------------------------
 
-### Sertifiseringer | Kurs
+### Sertifiseringer \| Kurs
 
-**Data Analyst in Power BI – DataCamp (02.2025)**  
+**Data Analyst in Power BI – DataCamp (02.2025)**\
 DAX, datamodellering, KPI-rapportering, trendanalyse og datavisualisering.
 
-**Data Analyst Associate – DataCamp (02.2025)**  
+**Data Analyst Associate – DataCamp (02.2025)**\
 SQL, eksplorativ analyse (EDA), statistisk testing og innsiktskommunikasjon.
 
-## Prosjekter
+------------------------------------------------------------------------
 
-::: {.grid}
+### Prosjekter
 
+:::::: grid
 ::: {.g-col-4 .project-card}
-
-###📊 Sales Analytics
+📊 **Sales Analytics**
 
 Analyse av salgsdrivere i Bike Store ved bruk av SQL og Power BI.
 
 **Teknologi**
 
-SQL  
-Power BI  
-Datamodellering  
+SQL\
+Power BI\
+Datamodellering
 
 [Se prosjekt →](projects/project_2_Bike_Store/)
-
 :::
 
 ::: {.g-col-4 .project-card}
-
-###💰 Profitability Analysis
+💰 **Profitability Analysis**
 
 Analyse av hvordan rabatter, fraktstrategi og volum påvirker margin.
 
 **Teknologi**
 
-Power BI  
-DAX  
-KPI-design  
+Power BI\
+DAX\
+KPI-design
 
 [Se prosjekt →](projects/project_1_salg_lønnsomhetsanalyse/)
-
 :::
 
 ::: {.g-col-4 .project-card}
+🚴 **Strava Data Pipeline**
 
-###🚴 Strava Data Pipeline
-
-End-to-end pipeline for treningsdata.
-
+End-to-end pipeline for treningsdata. \
 Strava API → R → PostgreSQL → Power BI
 
 **Teknologi**
 
-R  
-PostgreSQL  
-Power BI  
+R\
+PostgreSQL\
+Power BI
 
 [Se prosjekt →](projects/project_3_strava/)
-
 :::
-
-:::
-
----
+::::::
 
 ### Kontakt
 
