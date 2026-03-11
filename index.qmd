@@ -7,17 +7,6 @@ format:
     lightbox: true
 ---
 
-::: {.hero}
-
-# Lars Martin Tingelstad
-
-Data & Analytics  
-SQL · Power BI · R
-
-Jeg utvikler analyser og dashboards som gjør data til beslutningsstøtte.
-
-:::
-
 Jeg hjelper organisasjoner med å strukturere data, analysere utvikling og bygge dashboards som gir bedre beslutningsgrunnlag.
 
 Jeg arbeider gjennom hele analyseprosessen – fra datainnhenting og datamodellering til analyse, visualisering og innsiktsformidling. Arbeidet mitt kombinerer statistisk metode, datamodellering og tydelig visualisering for å gjøre komplekse data forståelige og handlingsrettede.
