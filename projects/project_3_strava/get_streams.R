@@ -26,7 +26,7 @@ res_token <- POST(
   "https://www.strava.com/oauth/token",
   body = list(
     client_id     = "197542",
-    client_secret = "b6433d7c6b92ff61402f5118969b37afcbe49906",
+    client_secret = "02158c298b1171bcd6a696382d0a2b93ee0da6c8",
     refresh_token = "c79b9a060376a117e15396fb1f51ea02ae1cd4bd",
     grant_type    = "refresh_token"
   ),

@@ -1,123 +1,179 @@
 ---
-title: "Strava – treningsanalyse"
-subtitle: "Datainnhenting, modellering og visualisering"
+title: "Strava Analytics Pipeline"
+subtitle: "API-integrasjon, datamodellering og analyse av treningsdata"
 format:
   html:
     toc: true
     lightbox: true
 ---
 
-Dette prosjektet bruker treningsdata fra Strava og egen treningsdagbok for å analysere treningsbelastning, utvikling over tid og mønstre i treningspreferanser. Formålet er å demonstrere ferdigheter innen datainnhenting, datamodellering og visualisering i Power BI.
+## Problemstilling
 
--   Bygget en automatisert pipeline (Strava API → R → PostgreSQL → Power BI)
+Treningsdata fra apper og manuelle logger lagres ofte i separate systemer og i ulike formater. Dette gjør det vanskelig å analysere treningsbelastning, utvikling over tid og prestasjonsmønstre.
 
-<!-- -->
+Målet med prosjektet var å bygge en automatisert pipeline som:
 
--   Modellert stjerneskjema med fakta- og dimensjonstabeller
+-   henter aktivitetsdata fra Strava API
+-   strukturerer data i en database
+-   modellerer datasettet for analyse
+-   visualiserer innsikt i Power BI
 
--   Utviklet DAX-mål for trend, PB, preferanse- og prestasjonsanalyse
+------------------------------------------------------------------------
 
--   Resultat: Interaktive dashboards for belastning, prestasjon og treningsmønster
+## Executive summary
+
+-   Bygget en automatisert data pipeline (**Strava API → R → PostgreSQL → Power BI**)\
+-   Strukturert treningsdata i et stjerneskjema for analyse\
+-   Utviklet dashboards for analyse av treningsbelastning, prestasjon og treningsmønster
+
+Prosjektet demonstrerer en komplett analysepipeline fra **datainnhenting til visualisering**.
+
+------------------------------------------------------------------------
+
+## Data pipeline
+
+Arkitektur for løsningen:
+
+**Strava API → Datainnhenting (R) → Databasenivå (PostgreSQL) → Datamodell (Star schema) → Analyse (DAX / Power BI)**
+
+Pipeline gjør det mulig å:
+
+-   automatisere datainnhenting
+-   lagre historiske treningsdata
+-   analysere utvikling over tid
+
+------------------------------------------------------------------------
 
 ## Datakilder
 
--   Strava API (aktivitetsdata)
-    -   Metadata: type økt, varighet, distanse, hastighet, tid mm.
--   Treningsdagbok styrketrening
-    -   Metadata: dato, belastning, volum, øvelse
+**Strava API**
 
-## Datainnhenting
+-   aktivitetsdata
+-   metadata som type økt, varighet, distanse, hastighet og puls
 
--   OAuth-autentisering
--   Henting av aktiviteter via API
--   Periodisk refresh
--   *... data fra andre venner*
+**Treningsdagbok styrketrening**
 
-## Datamodellering
+-   dato
+-   øvelse
+-   belastning
+-   volum
 
--   Faktatabell: aktiviteter fra strava og treningsdagbok styrke
--   Datodimensjon
--   Aktivitetstype
+------------------------------------------------------------------------
 
-![Datamodell for treningsdata fra Strava og treningsdagbok fra google sheet (facts_styrke)](images/datamodell_v2.png)
+## Datamodell
 
-## Analyse og innsikt
+Datasettet ble strukturert som et stjerneskjema.
 
-### Dashboard utøver
+**Faktatabeller**
 
-![Oversikt over treningsvolum, trender, utvikling og prestasjon på utøvernivå.](images/utøver%20dashboard.png)
+-   aktiviteter fra Strava
+-   styrketreningsøkter fra treningsdagbok
 
-Dette dashboardet muliggjør direkte sammenligning av treningsmengde, intensitetsfordeling og prestasjon mellom utøvere innen valgt år. Målet er å identifisere forskjeller i treningsprofil og fysisk kapasitet.
+**Dimensjoner**
 
-### 📊 Treningsvolum
+-   dato
+-   aktivitetstype
+-   utøver
 
-Lik totalmengde betyr ikke lik belastningsprofil. Konsistens over uker er en viktigere indikator på robusthet enn enkelttopper.
+![Datamodell](images/datamodell_v2.png)
 
-### 📈 Treningsmønster per uke
+------------------------------------------------------------------------
 
-Stabil progresjon kan indikere bedre periodisering. Store topper kan gi rask fremgang – men også økt skaderisiko.
+## Analyse og visualisering
 
-### ⚡ Power Curve
+### Utøver-dashboard
 
-Utøverne har ulike fysiologiske profiler. Dashboardet synliggjør styrker og svakheter på tvers av energisystemer.
+![Utøver dashboard](images/utøver%20dashboard.png)
 
-### Sammenligning utøver
+Dashboardet gir oversikt over:
 
-![Sammenligning av treningsvolum, intensitet og prestasjon (power curve) mellom utøvere i et gitt år.](images/sammenligning.png)
+-   treningsvolum over tid
+-   intensitetsfordeling
+-   prestasjonsutvikling
 
-Individuell oversikt over treningsutvikling, aktivitetsfordeling og prestasjon – med fokus på progresjon og belastningskontroll.
+### Innsikt
+
+-   Stabil treningsmengde over tid er en bedre indikator på robusthet enn enkeltuker med høyt volum
+-   Utøvere har tydelig ulike fysiologiske profiler i power curve
+-   Treningspreferanser viser en tydelig døgnrytme i treningsmønster
+
+------------------------------------------------------------------------
+
+### Sammenligning av utøvere
+
+![Sammenligning](images/sammenligning.png)
+
+Dette dashboardet gjør det mulig å sammenligne:
+
+-   treningsvolum
+-   intensitetsprofil
+-   prestasjon
+
+på tvers av utøvere innen valgt periode.
+
+------------------------------------------------------------------------
 
 ### Treningspreferanser
 
-![Mine treningspreferanser](images/treningspreferanser_strava.png)
+![Treningspreferanser](images/treningspreferanser_strava.png)
 
-En tydelig preferanse mot å trene på ettermiddag, etter jobb, men tidligere på formiddagen i helg. Stabil døgnpreferanse over flere år, med midlertidig forskyvning mot morgenøkter i 2018.
+Analysen viser en tydelig preferanse for trening på ettermiddag etter arbeidstid, med tidligere økter i helgene.
+
+------------------------------------------------------------------------
 
 ### Beste prestasjoner
 
-![Mine beste prestasjoner](images/mine_beste_prestasjoner.png)
+![Beste prestasjoner](images/mine_beste_prestasjoner.png)
+
+------------------------------------------------------------------------
 
 ### Treningsvolum over tid
 
-![](images/Utvikling%20i%20treningsvolum.png)
+![Treningsvolum](images/Utvikling%20i%20treningsvolum.png)
 
-I 2025 var det en særlig nedgang på slutten av året.
+Analysen viser perioder med stabil treningsmengde og enkelte faser med lavere aktivitetsnivå.
+
+------------------------------------------------------------------------
 
 ### Oversikt over styrkeøkter
 
-![Oversikt over styrkeøkter](images/styrkedata.png){.lightbox}
+![Styrkedata](images/styrkedata.png){.lightbox}
 
--   **Øverst til venstre**: Jevn økning i benkpress med liten endring i total volum pr økt
+-   Jevn progresjon i benkpress
+-   Overkroppsøvelser som benkpress, pull ups og triceps dominerer treningen
+-   Underkroppsøvelser påvirket av tidligere kneproblematikk
+-   Variasjon i øvelsesutvalg gjennom året
 
--   **Øverst til venstre**: Triceps, pull ups og benk de mest vanlige øvelsene for overkropp, mens leg curl, hip abduction og tåhev for underkropp (preget av kneproblematikk siste årene)
+------------------------------------------------------------------------
 
--   **Nederst til venstre**: Variasjon i unike øvelser per måned siste året. Ok variasjon her.
+## Datarydding og modellering (Power BI)
 
--   **Nederst til høyre**: Andel overkropp vs underkropp. Never skip leg day, heh.
-
-## Data­rydding og modellering (Power BI)
-
-### Utgangspunkt (rådata)
+### Utgangspunkt
 
 Rådata bestod av:
 
 -   Strava-aktiviteter
+-   treningsdagbok i bredt format
 
--   Treningsdagbok i bredt format (kolonner med uke, belastning og reps, økt + øvelse i rader)
+Utfordringer:
 
-    -   Inkonsekvente øktnavn og øvelesesnavn, bredt format som ikke kunne analyseres, reps/load i samme celle
+-   inkonsistente øktnavn
+-   bredt datasett som ikke egnet seg for analyse
+-   reps og belastning lagret i samme celle
 
-### Ryddetrinn (Power Query)
+------------------------------------------------------------------------
 
-Dataryddingen ble gjort fullt ut i **Power Query**, med fokus på reproduserbarhet.
+### Datarydding i Power Query
 
-**Hovedsteg:**
+Hovedsteg:
 
-1.  Standardiserte kolonnenavn og datatyper
+1.  Standardisere kolonnenavn og datatyper
+2.  Transformere treningsdagbok fra bredt til langt format
+3.  Standardisere øktnavn
+4.  Fjerne tomme og ugyldige rader
+5.  Kombinere årstabeller til én faktatabell
 
-2.  Splittet og normaliserte treningsdagbok (bred → lang)
-
-3.  Renset øktnavn og samlet varianter (UB1, Upper body, Overkropp → Overkropp)
+------------------------------------------------------------------------
 
 <details>
 
@@ -139,21 +195,13 @@ Kroppsdel =
 
 </details>
 
-4.  Fjernet tomme og ugyldige rader
+### Resultat etter datarydding
 
-5.  Kombinerte årstabeller til én faktatabell
+-    én konsistent faktatabell for styrketrening
 
-### Etter (modellklar struktur)
+-   separate dimensjoner for dato og aktivitet
 
-Resultatet er:
-
--   Én konsistent **faktatabell for styrketrening**
-
--   Separate dimensjoner for dato og aktivitet
-
--   Klar separasjon mellom over- og underkropp
-
--   Datagrunnlag egnet for DAX og tidsserieanalyse
+-   datagrunnlag egnet for DAX og tidsserieanalyse
 
 #### Eksempler (Power Query)
 
@@ -258,9 +306,9 @@ RANKX(
 
 ## Datainnhenting – Strava API (R)
 
-Strava-data ble hentet via **Strava REST API**, autentisert med OAuth 2.0.
+Strava-data ble hentet via **Strava REST API** med OAuth-autentisering.
 
-Løsningen er bygget i R og lagrer data direkte i **PostgreSQL** for videre bruk i Power BI.
+Data hentes i R og lagres i PostgreSQL før analyse i Power BI.
 
 ### 1️⃣ Autentisering (OAuth)
 
@@ -287,9 +335,7 @@ tokens <- content(res, "parsed") access_token <- tokens$access_token
 
 </details>
 
-### 2️⃣ Henting av aktivitetsdata (paginert)
-
-Alle aktiviteter hentes sidevis (200 per kall) til alle sider er lest.
+### 2️⃣ Hente aktiviteter
 
 <details>
 
@@ -386,250 +432,6 @@ dbWriteTable(
 
 </details>
 
-### Full refresh alle utøvere
-
-<details>
-
-<summary>R – Full refresh nye økter/utøvere</summary>
-
-```         
-update_all_athletes <- function() {
-  
-  library(httr)
-  library(jsonlite)
-  library(dplyr)
-  library(DBI)
-  library(RPostgres)
-  
-  con <- dbConnect(
-    RPostgres::Postgres(),
-    dbname   = "strava",
-    host     = "localhost",
-    port     = xxx,
-    user     = "xxx",
-    password = "xxx"
-  )
-  
-  athletes <- dbGetQuery(
-    con,
-    "SELECT athlete_id, refresh_token FROM public.strava_tokens"
-  )
-  
-  if (nrow(athletes) == 0) {
-    message("Ingen registrerte utøvere.")
-    dbDisconnect(con)
-    return(invisible(NULL))
-  }
-  
-  for (i in seq_len(nrow(athletes))) {
-    
-    athlete_id    <- as.numeric(athletes$athlete_id[i])
-    refresh_token <- athletes$refresh_token[i]
-    
-    cat("\n--- Starter bruker:", athlete_id, "---\n")
-    
-    # ---- Refresh token ----
-    res_token <- POST(
-      "https://www.strava.com/oauth/token",
-      body = list(
-        client_id     = "xxx",
-        client_secret = "xxx",
-        refresh_token = refresh_token,
-        grant_type    = "refresh_token"
-      ),
-      encode = "form"
-    )
-    
-    if (status_code(res_token) != 200) {
-      message("Refresh feilet for ", athlete_id)
-      next
-    }
-    
-    access_token <- content(res_token, "parsed")$access_token
-    
-    # ---- Finn siste aktivitet ----
-    last_date <- dbGetQuery(
-      con,
-      paste0(
-        "SELECT MAX(start_date)
-         FROM public.activities
-         WHERE athlete_id = ", athlete_id
-      )
-    )[[1]]
-    
-    after_ts <- if (is.na(last_date)) {
-      0
-    } else {
-      as.integer(as.POSIXct(last_date, tz = "UTC")) - 3600
-    }
-    
-    # ---- Hent nye aktiviteter ----
-    all_activities <- list()
-    page <- 1
-    
-    repeat {
-      
-      res <- GET(
-        "https://www.strava.com/api/v3/athlete/activities",
-        query = list(
-          per_page = 200,
-          page = page,
-          after = after_ts
-        ),
-        add_headers(Authorization = paste("Bearer", access_token))
-      )
-      
-      if (status_code(res) != 200) break
-      
-      data <- fromJSON(content(res, "text"), flatten = TRUE)
-      
-      if (length(data) == 0) break
-      
-      all_activities[[page]] <- data
-      page <- page + 1
-      
-      Sys.sleep(1)
-    }
-    
-    if (length(all_activities) == 0) {
-      message("Ingen nye økter for ", athlete_id)
-      next
-    }
-    
-    activities <- bind_rows(all_activities)
-    
-    # ---- Klargjør data ----
-    activities_sql <- activities %>%
-      rename(activity_id = id) %>%
-      select(any_of(c(
-        "activity_id",
-        "name",
-        "type",
-        "start_date",
-        "distance",
-        "moving_time",
-        "elapsed_time",
-        "total_elevation_gain",
-        "average_speed",
-        "average_heartrate",
-        "location_city",
-        "location_state",
-        "location_country",
-        "max_speed",
-        "average_watts",
-        "max_watts",
-        "elev_high",
-        "elev_low",
-        "has_kudoed",
-        "max_heartrate"
-      )))
-      
-      required_cols <- c(
-        "activity_id","name","type","start_date","distance",
-        "moving_time","elapsed_time","total_elevation_gain",
-        "average_speed","average_heartrate",
-        "location_city","location_state","location_country",
-        "max_speed","average_watts","max_watts",
-        "elev_high","elev_low","has_kudoed",
-        "max_heartrate"
-      )
-    
-    missing_cols <- setdiff(required_cols, names(activities_sql))
-    
-    if (length(missing_cols) > 0) {
-      activities_sql[missing_cols] <- NA
-    }
-    
-    activities_sql <- activities_sql %>%    
-      mutate(
-        athlete_id = athlete_id,
-        distance = as.numeric(distance),
-        moving_time = as.numeric(moving_time),
-        elapsed_time = as.numeric(elapsed_time),
-        total_elevation_gain = as.numeric(total_elevation_gain),
-        average_speed = as.numeric(average_speed),
-        max_speed = as.numeric(max_speed),
-        average_heartrate = as.numeric(average_heartrate),
-        max_heartrate = as.numeric(max_heartrate),
-        average_watts = as.numeric(average_watts),
-        max_watts = as.numeric(max_watts),
-        elev_high = as.numeric(elev_high),
-        elev_low = as.numeric(elev_low)
-      )
-    
-    # ---- Midlertidig tabell ----
-    dbWriteTable(
-      con,
-      "temp_activities",
-      activities_sql,
-      temporary = TRUE,
-      overwrite = TRUE
-    )
-    
-    # ---- Insert med ON CONFLICT ----
-    dbExecute(
-      con,
-      "
-      INSERT INTO public.activities (
-        activity_id,
-        name,
-        type,
-        start_date,
-        distance,
-        moving_time,
-        elapsed_time,
-        total_elevation_gain,
-        average_speed,
-        average_heartrate,
-        location_city,
-        location_state,
-        location_country,
-        max_speed,
-        average_watts,
-        max_watts,
-        elev_high,
-        elev_low,
-        has_kudoed,
-        max_heartrate,
-        athlete_id
-      )
-      SELECT
-        activity_id,
-        name,
-        type,
-        start_date,
-        distance,
-        moving_time,
-        elapsed_time,
-        total_elevation_gain,
-        average_speed,
-        average_heartrate,
-        location_city,
-        location_state,
-        location_country,
-        max_speed,
-        average_watts,
-        max_watts,
-        elev_high,
-        elev_low,
-        has_kudoed,
-        max_heartrate,
-        athlete_id
-      FROM temp_activities
-      ON CONFLICT (activity_id) DO NOTHING
-      "
-    )
-    
-    message("Ferdig med bruker ", athlete_id)
-  }
-  
-  dbDisconnect(con)
-  message("Oppdatering ferdig.")
-}
-
-
-update_all_athletes()
-```
 
 </details>
 
@@ -641,7 +443,11 @@ Enkel validering sikrer at data er korrekt lastet.
 SELECT COUNT(*) FROM public.activities;
 ```
 
-## Begrensninger
+### Hva denne casen demonstrerer
 
--   Fravær av subjektive belastningsmål begrenser total belastningsmodellering (RPE, HRV)
--   Avhengig av Strava-datakvalitet
+- API-integrasjon
+- automatisert datainnhenting
+- database-lagring i PostgreSQL
+- datamodellering (stjerneskjema)
+- analyse og visualisering i Power BI
+- utvikling av end-to-end data pipeline

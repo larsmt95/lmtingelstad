@@ -8,3 +8,53 @@ strong {
   font-weight: 700;
   color: #000;
 }
+
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+  margin-bottom: 40px;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+}
+
+img {
+  border-radius: 6px;
+}
+
+.hero a {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px 18px;
+  border-radius: 6px;
+  background-color: #2c7be5;
+  color: white;
+  text-decoration: none;
+}
+
+.project-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: white;
+  transition: transform 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+}
+
+.project-card h3 {
+  margin-top: 0;
+}
+
+.project-card a {
+  font-weight: 500;
+}

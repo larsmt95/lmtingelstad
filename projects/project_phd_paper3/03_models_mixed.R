@@ -3,6 +3,14 @@ library(lmerTest)
 library(tidyverse)
 library(openxlsx)
 
+
+
+sprint_10 <- paper3_longer_vol2 %>% filter(test == "sprint10") 
+sprint_10$group <- relevel(sprint_10$group, ref = "girlsU14")
+
+sprint_10_test <- lmer(value ~ time * group + (1 | id), data = sprint_10, REML = TRUE)
+summary(sprint_10_test)
+
 # --- Sett opp referanser ---
 ref_combinations <- list(
   list(time_ref = "round1", group_ref = "boysU14"),
@@ -59,7 +67,7 @@ all_results <- all_results %>%
          t_value = `t value`,
          p_value = `Pr(>|t|)`)
 
-# --- Sett kolonnerekkefølge ---
+# --- Sett kolonnerekkefC8lge ---
 all_results <- all_results %>%
   select(Estimate, Std_Error, df, t_value, p_value, effect, test, CI_lower, CI_upper,
          reference, time_ref, group_ref)

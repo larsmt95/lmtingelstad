@@ -69,8 +69,8 @@ create_plot <- function(percent_age2_with_phv, y_var, y_label, title = NULL, sho
   plot <- percent_age2_with_phv %>% 
     ggplot(aes(x = phv_base, y = !!sym(y_var), color = sex, fill = sex)) +
     geom_hline(yintercept = 0, color = "grey", size = 0.5, linetype = "dashed", alpha = 1) +
-    geom_rect(aes(xmin = -0.5, xmax = 0.5, ymin = -Inf, ymax = Inf), fill = "grey90", alpha = 0.03, color = NA) +
-    geom_point(alpha = 0.5) +
+    # geom_rect(aes(xmin = -0.5, xmax = 0.5, ymin = -Inf, ymax = Inf), fill = "grey90", alpha = 0.03, color = NA) +
+    geom_point(alpha = 0.4, size = 1.5) +
     scale_color_manual(values = c("boys" = "skyblue", "girls" = "maroon")) +
     geom_smooth(method = "lm", formula = y ~ x, se = TRUE) +
     stat_poly_eq(
@@ -102,23 +102,27 @@ create_plot <- function(percent_age2_with_phv, y_var, y_label, title = NULL, sho
 }
 
 # --- Lag plots med y-titler og bokstav ----
-plots_list <- list(
+plots_list1 <- list(
   sprint_plot = create_plot(percent_age2_with_phv, "sprint30", "30 m sprint (s)", "A"),
   cmj_plot = create_plot(percent_age2_with_phv, "cmj", "CMJ (cm)", "B"),
-  force_plot = create_plot(percent_age2_with_phv, "totforce", "Total force (N)", "C"),
-  cod_plot = create_plot(percent_age2_with_phv, "cod", "CoD (s)", "D"),
-  bodymass_plot = create_plot(percent_age2_with_phv, "bodymass", "Body mass (kg)", "E", show_x_title = TRUE),
-  height_plot = create_plot(percent_age2_with_phv, "height", "Height (cm)", "F", show_x_title = TRUE)
+  force_plot = create_plot(percent_age2_with_phv, "totforce", "Total force (N)", "C", show_x_title = TRUE),
+  cod_plot = create_plot(percent_age2_with_phv, "cod", "CoD (s)", "D", show_x_title = TRUE)
+)
+
+plots_list2 <- list(
+  bodymass_plot = create_plot(percent_age2_with_phv, "bodymass", "Body mass (kg)", "A", show_x_title = TRUE),
+  height_plot = create_plot(percent_age2_with_phv, "height", "Height (cm)", "B", show_x_title = TRUE)
 )
 
 # --- Kombiner plots i grid med samlet legend ----
-combined_plot <- wrap_plots(plots_list, ncol = 2) +
+combined_plot_2 <- wrap_plots(plots_list2, ncol = 2) +
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom", legend.box = "horizontal") +
   theme(plot.margin = unit(c(1,1,1,1), "lines"))
 
 # --- Vis plot ----
-combined_plot
+combined_plot_1
+combined_plot_2
 
 # # --- Lagre som SVG ----
 # library(svglite)
@@ -150,5 +154,7 @@ ggsave("MATURATION_smj.svg", plot = cmj_plot, width = 6, height = 5, dpi = 300)
 
 ggsave("combined_plot_final.svg", plot = combined_plot, width = 8, height = 10, dpi = 300)
 
+ggsave("combined_plot_1_yeet.svg", plot = combined_plot_1, width = 8, height = 8, dpi = 300)
+ggsave("combined_plot_2_yeet.svg", plot = combined_plot_2, width = 8, height = 6, dpi = 300)
 
 

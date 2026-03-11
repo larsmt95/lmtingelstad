@@ -10,8 +10,8 @@ res <- POST(
   "https://www.strava.com/oauth/token",
   body = list(
     client_id     = "197542",
-    client_secret = "b6433d7c6b92ff61402f5118969b37afcbe49906",
-    code          = "fff596723b0aa2dcca9c0e4bd2894f93a62b027c", # fra kompis
+    client_secret = "02158c298b1171bcd6a696382d0a2b93ee0da6c8",
+    code          = "7059583f24b25744a3dd4052d4fac0a269c75a67", # fra kompis
     grant_type    = "authorization_code"
   ),
   encode = "form"
@@ -19,9 +19,38 @@ res <- POST(
 
 status_code(res)
 tokens <- content(res, "parsed")
-tokens$athlete$username
+str(tokens)
+tokens$athlete$id
+
+
 
 tokens$scope
+
+# LAGRE REFRESH_TOKEN I DATABASEN
+
+dbExecute(
+  con,
+  "
+  INSERT INTO public.strava_tokens (athlete_id, refresh_token, expires_at)
+  VALUES ($1,$2,$3)
+  ON CONFLICT (athlete_id)
+  DO UPDATE SET
+    refresh_token = EXCLUDED.refresh_token,
+    expires_at    = EXCLUDED.expires_at
+  ",
+  params = list(
+    tokens$athlete$id,
+    tokens$refresh_token,
+    tokens$expires_at
+  )
+)
+
+DBI::dbIsValid(con)
+
+
+update_all_athletes()
+
+  # -----------------------------------------------
 
 res <- GET(
   "https://www.strava.com/api/v3/athlete/activities",
@@ -37,8 +66,41 @@ access_token
 
 
 
+tokens <- content(res, "parsed")
 
+tokens$athlete$id
+tokens$refresh_token
 
+library(DBI)
+library(RPostgres)
+
+con <- dbConnect(
+  RPostgres::Postgres(),
+  dbname   = "strava",
+  host     = "localhost",
+  port     = 5432,
+  user     = "postgres",
+  password = "legandary007"
+)
+
+dbExecute(
+  con,
+  "
+  INSERT INTO public.strava_tokens (athlete_id, refresh_token, expires_at)
+  VALUES ($1, $2, $3)
+  ON CONFLICT (athlete_id)
+  DO UPDATE SET
+    refresh_token = EXCLUDED.refresh_token,
+    expires_at    = EXCLUDED.expires_at
+  ",
+  params = list(
+    tokens$athlete$id,
+    tokens$refresh_token,
+    tokens$expires_at
+  )
+)
+
+dbDisconnect(con)
 
 
 

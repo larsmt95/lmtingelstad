@@ -1,52 +1,132 @@
 ---
-title: "Lars Tingelstad"
-subtitle: "Dataanalytiker med PhD | SQL, Power BI og R | Strukturert analyse og beslutningsstøtte"
+title: "Lars Tingelstad. PhD"
+subtitle: "Data & Analytics | SQL · Power BI · R | Datamodellering, analyse og beslutningsstøtte"
 format:
   html:
-    toc: true
+    toc: false
     lightbox: true
 ---
 
-Jeg er dataanalytiker med doktorgrad og solid erfaring innen datamodellering, statistisk analyse og dashboardutvikling. Jeg jobber strukturert fra datainnhenting og kvalitetskontroll til modellering, visualisering og operativ beslutningsstøtte.
+::: {.hero}
 
-Min styrke ligger i å kombinere metodisk presisjon med evnen til å omsette komplekse analyser til tydelige og handlingsrettede anbefalinger. Jeg har erfaring med store longitudinelle datasett, KPI-design og utvikling av beslutningsstøttende rapporter i Power BI.
+# Lars Martin Tingelstad
 
-### Kontakt 
+Data & Analytics  
+SQL · Power BI · R
+
+Jeg utvikler analyser og dashboards som gjør data til beslutningsstøtte.
+
+:::
+
+Jeg hjelper organisasjoner med å strukturere data, analysere utvikling og bygge dashboards som gir bedre beslutningsgrunnlag.
+
+Jeg arbeider gjennom hele analyseprosessen – fra datainnhenting og datamodellering til analyse, visualisering og innsiktsformidling. Arbeidet mitt kombinerer statistisk metode, datamodellering og tydelig visualisering for å gjøre komplekse data forståelige og handlingsrettede.
+
+Min erfaring inkluderer analyse av komplekse og longitudinelle datasett, utvikling av KPI-rammeverk og bygging av beslutningsstøttende dashboards i Power BI.
+
+------------------------------------------------------------------------
+
+### Analyseprosess
+
+Typisk arbeidsflyt i analyseprosjekter:
+
+**Datakilder → Datainnhenting → Datamodellering → Analyse → Visualisering → Beslutningsstøtte**
+
+- Datainnhenting fra API, databaser og filer  
+- Datarydding og strukturering  
+- Datamodellering (stjerneskjema)  
+- Analyse i SQL, R og DAX  
+- Visualisering i Power BI  
+- Innsiktsformidling til beslutningstakere
+
+---
+
+### Teknologi
+
+| **SQL / Databaser** | **Power BI** | **R / Analyse** | **Excel / Databehandling** |
+|------------------|------------------|------------------|------------------|
+| Datamodellering i PostgreSQL, joins, aggregering, analyse av relasjonelle datasett. | Datamodellering (stjerneskjema), DAX-målinger, tidsintelligens, KPI-design og dashboards. | Datahåndtering (dplyr, tidyr), visualisering (ggplot2), statistisk modellering (ANOVA, regresjon, mixed models). | Power Query, pivottabeller og strukturert analyse av datasett. |
+
+
+### Kjernekompetanse
+
+- Datainnhenting, datarensing og kvalitetskontroll  
+- Datamodellering og analyse av relasjonelle datasett  
+- Statistisk analyse og tidsserieanalyse  
+- KPI-design og resultatoppfølging  
+- Visualisering og innsiktsformidling  
+- Beslutningsstøtte for operative og strategiske beslutninger  
+
+------------------------------------------------------------------------
+
+### Sertifiseringer | Kurs
+
+**Data Analyst in Power BI – DataCamp (02.2025)**  
+DAX, datamodellering, KPI-rapportering, trendanalyse og datavisualisering.
+
+**Data Analyst Associate – DataCamp (02.2025)**  
+SQL, eksplorativ analyse (EDA), statistisk testing og innsiktskommunikasjon.
+
+## Prosjekter
+
+::: {.grid}
+
+::: {.g-col-4 .project-card}
+
+###📊 Sales Analytics
+
+Analyse av salgsdrivere i Bike Store ved bruk av SQL og Power BI.
+
+**Teknologi**
+
+SQL  
+Power BI  
+Datamodellering  
+
+[Se prosjekt →](projects/project_2_Bike_Store/)
+
+:::
+
+::: {.g-col-4 .project-card}
+
+###💰 Profitability Analysis
+
+Analyse av hvordan rabatter, fraktstrategi og volum påvirker margin.
+
+**Teknologi**
+
+Power BI  
+DAX  
+KPI-design  
+
+[Se prosjekt →](projects/project_1_salg_lønnsomhetsanalyse/)
+
+:::
+
+::: {.g-col-4 .project-card}
+
+###🚴 Strava Data Pipeline
+
+End-to-end pipeline for treningsdata.
+
+Strava API → R → PostgreSQL → Power BI
+
+**Teknologi**
+
+R  
+PostgreSQL  
+Power BI  
+
+[Se prosjekt →](projects/project_3_strava/)
+
+:::
+
+:::
+
+---
+
+### Kontakt
 
 |  |  |
-|----------------------------------|--------------------------------------|
-| 📧 [Send meg en e-post](mailto:larsmartin95@hotmail.com?subject=Henvendelse%20fra%20portef%C3%B8lje) | 🔗 [LinkedIn](https://www.linkedin.com/in/lars-martin-tingelstad-657940113/) |
-
-### Teknisk kompetanse
-
-| **SQL** | **Power BI** | **R** | **Excel** |
-|----|----|----|----|
-| Datamodellering og spørringer i PostgreSQL, filtrering, aggregering, joins og analyse av relasjonelle datasett. | Datamodellering (stjerneskjema), DAX-målinger, tidsintelligens, KPI-design, interaktive dashboards og rapportstruktur. | Datahåndtering (dplyr, tidyr), visualisering (ggplot2), statistisk modellering (ANOVA, regresjon, mixed effects-modeller). | Power Query, pivottabeller og strukturerte analyser. |
-
-------------------------------------------------------------------------
-
-### **Nøkkelkompetanse**
-
--   Datarensing og kvalitetskontroll
-
--   Statistisk modellering og inferens
-
--   KPI-utvikling og marginanalyse
-
--   Visualisering og innsiktsformidling
-
--   Beslutningsstøtte og forretningsforståelse
-
--   Prosjektledelse og tverrfaglig samarbeid
-
-------------------------------------------------------------------------
-
-### **Sertifiseringer \| Kurs**
-
-**Data Analyst in Power BI – DataCamp (02.2025)**
-
--   DAX, datamodellering, KPI-rapportering, trendanalyse og datavisualisering.
-
-**Data Analyst Associate – DataCamp (02.2025)**
-
--    SQL, eksplorativ analyse (EDA), statistisk testing og innsiktskommunikasjon.
+|------------------------------------|------------------------------------|
+| 📧 [Send meg en e-post](mailto:lmtingelstad@outlook.com?subject=Henvendelse%20fra%20portef%C3%B8lje) | 🔗 [LinkedIn](https://www.linkedin.com/in/lars-martin-tingelstad-657940113/) |

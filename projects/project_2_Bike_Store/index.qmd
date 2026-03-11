@@ -1,30 +1,70 @@
 ---
-title: "Bike Store – End-to-end analyse med SQL og Power BI"
-subtitle: "Et komplett analyseprosjekt som viser hvordan salgsdata kan struktureres, modelleres og visualiseres for å forklare hva som driver omsetning og vekst på tvers av butikker, produkter og tid."
+title: "Bike Store – Analyse av salgsdrivere"
+subtitle: "SQL og Power BI analyse av hva som driver omsetning, vekst og margin"
 format:
   html:
     toc: true
     lightbox: true
 ---
 
-Denne delen dokumenterer hvordan rådata er kvalitetssikret og strukturert til et analyseklart datavarehus. All forretningslogikk er håndtert i SQL for å sikre konsistens, gjenbrukbarhet og en ryddig semantisk modell i Power BI.
+
+
+## Problemstilling
+
+Ledelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen.
+
+Sentrale spørsmål var:
+
+-   Hvilke produkter og kategorier driver omsetningen?
+-   Hvordan utvikler salget seg over tid?
+-   Hvor konsentrert er omsetningen på tvers av butikker og produkter?
+
+Målet med analysen var å strukturere rådata til et analyseklart datagrunnlag og utvikle et dashboard som forklarer drivere bak omsetning og vekst.
+
+---
+
+## Executive summary
+
+- Salgsanalysen viser sterk vekst (**+42 % YoY**), men omsetningen er konsentrert i et begrenset antall produkter og butikker.
+- Datamodellen ble strukturert som et stjerneskjema i SQL og brukt som semantisk lag for Power BI.
+- Dashboardet gjør det mulig å identifisere drivere bak salgsvekst og gir grunnlag for beslutninger knyttet til sortiment, lager og salg.
+
+---
+
+## Analyseprosess
+
+Prosjektet ble gjennomført i tre steg:
+
+1.  Datarydding og strukturering i SQL\
+2.  Datamodellering (stjerneskjema)\
+3.  Analyse og visualisering i Power BI
+
+Pipeline:
+
+**Rådata → SQL datamodell → Power BI analyse → beslutningsstøtte**
+
+---
 
 # Data preparation \| SQL
 
-### Datakvalitet & forståelse
+### Datakvalitet og struktur
 
-Før modellering ble datasettet gjennomgått for å avdekke strukturelle og forretningsmessige avvik.
+Før modellering ble datasettet gjennomgått for å sikre konsistent datagrunnlag.
 
-Fokuset var å sikre at nøkkelrelasjoner og verdier var konsistente og egnet for analyse:
+Kontroller inkluderte:
 
--   Verifisering av radantall per tabell
--   Kontroll av NULL-verdier i primær- og fremmednøkler
--   Sjekk for duplikater
--   Validering av relasjoner mellom ordre, produkter og butikker
+-   verifisering av radantall per tabell\
+-   kontroll av NULL-verdier i primær- og fremmednøkler\
+-   identifisering av duplikater\
+-   validering av relasjoner mellom ordre, produkter og butikker
 
-### Bygge dimensjonstabeller
+Dette sikrer at analysene i Power BI bygger på konsistente og pålitelige data.
 
-Dimensjonstabellene er bygget for å støtte et stjerneskjema, der hver dimensjon representerer én forretningsentitet med tydelig ansvar og lav redundans.
+---
+
+### Datamodellering – dimensjonstabeller
+
+Datastrukturen ble modellert som et **stjerneskjema**, der dimensjonstabeller beskriver forretningsentiteter og faktatabellen inneholder transaksjoner.
 
 <details>
 
@@ -114,7 +154,7 @@ JOIN order_items oi USING (order_id);
 
 </details>
 
-### Analyse-views (for aggregering og ytelse)
+**Analyse-views**. For å forenkle analyse i Power BI ble aggregerte views opprettet i SQL.
 
 <details>
 
@@ -141,6 +181,8 @@ ORDER BY store_name, year, month;
 
 </details>
 
+---
+
 # Data visualisering \| Power BI
 
 SQL-modellen fungerer som et semantisk lag for Power BI.
@@ -153,10 +195,68 @@ SQL-modellen fungerer som et semantisk lag for Power BI.
 
 </details>
 
-### Overview
+---
 
-![](bilder/dashboard.png)
+## Dashboard – oversikt over salgsutvikling
 
-Dashboardet viser at salgsveksten i Bike Store er sterk (+42,0 % YoY), men samtidig tydelig konsentrert.
+![](bilder/dashboard.png){fig-align="center"}
 
-En begrenset andel produkter og én hovedbutikk står for størstedelen av omsetningen, noe som indikerer både høy avhengighet og potensial for sortiments- og lageroptimalisering.
+Dashboardet er designet for å gi en rask oversikt over:
+
+- utvikling i omsetning over tid  
+- hvilke produkter og kategorier som driver salget  
+- hvordan omsetningen fordeler seg mellom butikker  
+
+Visualiseringen gjør det mulig å identifisere både vekstmønstre og konsentrasjon i salget.
+
+---
+
+## Hvordan dashboardet brukes
+
+Dashboardet er strukturert rundt tre analyser:
+
+**1. Salgsutvikling over tid**
+
+Visualiserer månedlig utvikling i omsetning og gjør det mulig å identifisere sesongmønstre og vekstperioder.
+
+**2. Produkt- og kategorianalyse**
+
+Viser hvilke produkter og kategorier som står for størstedelen av omsetningen.
+
+Dette gjør det mulig å identifisere:
+
+- topprodukter  
+- konsentrasjonsrisiko  
+- potensial for sortimentsoptimalisering  
+
+**3. Butikkanalyse**
+
+Sammenligner omsetning mellom butikker for å identifisere geografiske forskjeller i salgsytelse.
+
+---
+
+## Innsikt fra analysen
+
+Analysen viser at salgsveksten i Bike Store er sterk (**+42 % YoY**), men samtidig tydelig konsentrert.
+
+Viktige funn:
+
+- en liten andel produkter driver en stor del av omsetningen  
+- én hovedbutikk står for en betydelig andel av salget  
+- veksten er i stor grad volumdrevet  
+
+Dette indikerer både høy avhengighet av enkelte produkter og potensial for optimalisering av sortiment og lagerstrategi.
+
+## Hva denne casen demonstrerer
+
+-   SQL datamodellering
+
+-   Design av stjerneskjema
+
+-   Datarydding og kvalitetssikring
+
+-   KPI-design i Power BI
+
+-   Analyse av forretningsdrivere
+
+-   Visualisering av innsikt for beslutningsstøtte

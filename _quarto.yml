@@ -4,26 +4,31 @@ project:
 
 
 website:
-  title: "Lars Martin Tingelstad, PhD" 
+  title: "Lars Tingelstad, Data & Analytics" 
   navbar:
     left:
       - href: index.qmd
         text: Home
-      - href: projects/project_3_strava/
-        text: Project - Strava
-      - href: projects/project_2_Bike_Store/
-        text: Prosjet - Bike Store
       - href: projects/project_1_salg_lønnsomhetsanalyse/
-        text: Prosjekt - Lønnsomhetsanalyse
+        text: 💰 Prosjekt - Profitability Analysis
+      - href: projects/project_2_Bike_Store/
+        text: 📊 Prosjekt - Sales Analytics
+      - href: projects/project_3_strava/
+        text: 🚴 Prosjekt - Strava Analytics Pipeline
+
+    right:
+      - icon: linkedin
+        href: https://www.linkedin.com/in/lars-martin-tingelstad-657940113/
 
 
 format:
   html:
-    theme:
-      - lux
-      - brand
-    css: styles.css
-    toc: true
+    theme: cosmo
+    code-copy: true
+    code-overflow: wrap
+    highlight-style: github
+    grid:
+      body-width: 1100px
 
 editor: visual
 
