@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Bike Store – End-to-end analyse med SQL og Power BI – Lars Martin Tingelstad, PhD</title>
+<title>Bike Store – Analyse av salgsdrivere – Lars Tingelstad, Data &amp; Analytics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,10 +72,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-43a498ee2f929a5d3b049c805ab68679.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-2172dfad2ead41b8e00b4b46d6197b37.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -108,7 +108,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -119,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">Lars Martin Tingelstad, PhD</span>
+    <span class="navbar-title">Lars Tingelstad, Data &amp; Analytics</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -133,16 +132,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../projects/project_3_strava/"> 
-<span class="menu-text">Project - Strava</span></a>
+    <a class="nav-link" href="../../projects/project_1_salg_lønnsomhetsanalyse/"> 
+<span class="menu-text">💰 Prosjekt - Profitability Analysis</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../projects/project_2_Bike_Store/"> 
-<span class="menu-text">Prosjet - Bike Store</span></a>
+<span class="menu-text">📊 Prosjekt - Sales Analytics</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../projects/project_1_salg_lønnsomhetsanalyse/"> 
-<span class="menu-text">Prosjekt - Lønnsomhetsanalyse</span></a>
+    <a class="nav-link" href="../../projects/project_3_strava/"> 
+<span class="menu-text">🚴 Prosjekt - Strava Analytics Pipeline</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/lars-martin-tingelstad-657940113/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -160,15 +166,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#data-preparation-sql" id="toc-data-preparation-sql" class="nav-link active" data-scroll-target="#data-preparation-sql">Data preparation | SQL</a>
+  <li><a href="#problemstilling" id="toc-problemstilling" class="nav-link active" data-scroll-target="#problemstilling">Problemstilling</a></li>
+  <li><a href="#executive-summary" id="toc-executive-summary" class="nav-link" data-scroll-target="#executive-summary">Executive summary</a></li>
+  <li><a href="#analyseprosess" id="toc-analyseprosess" class="nav-link" data-scroll-target="#analyseprosess">Analyseprosess</a></li>
+  <li><a href="#data-preparation-sql" id="toc-data-preparation-sql" class="nav-link" data-scroll-target="#data-preparation-sql">Data preparation | SQL</a>
   <ul class="collapse">
-  <li><a href="#datakvalitet-forståelse" id="toc-datakvalitet-forståelse" class="nav-link" data-scroll-target="#datakvalitet-forståelse">Datakvalitet &amp; forståelse</a></li>
-  <li><a href="#bygge-dimensjonstabeller" id="toc-bygge-dimensjonstabeller" class="nav-link" data-scroll-target="#bygge-dimensjonstabeller">Bygge dimensjonstabeller</a></li>
-  <li><a href="#analyse-views-for-aggregering-og-ytelse" id="toc-analyse-views-for-aggregering-og-ytelse" class="nav-link" data-scroll-target="#analyse-views-for-aggregering-og-ytelse">Analyse-views (for aggregering og ytelse)</a></li>
+  <li><a href="#datakvalitet-og-struktur" id="toc-datakvalitet-og-struktur" class="nav-link" data-scroll-target="#datakvalitet-og-struktur">Datakvalitet og struktur</a></li>
+  <li><a href="#datamodellering-dimensjonstabeller" id="toc-datamodellering-dimensjonstabeller" class="nav-link" data-scroll-target="#datamodellering-dimensjonstabeller">Datamodellering – dimensjonstabeller</a></li>
   </ul></li>
   <li><a href="#data-visualisering-power-bi" id="toc-data-visualisering-power-bi" class="nav-link" data-scroll-target="#data-visualisering-power-bi">Data visualisering | Power BI</a>
   <ul class="collapse">
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#dashboard-oversikt-over-salgsutvikling" id="toc-dashboard-oversikt-over-salgsutvikling" class="nav-link" data-scroll-target="#dashboard-oversikt-over-salgsutvikling">Dashboard – oversikt over salgsutvikling</a></li>
+  <li><a href="#hvordan-dashboardet-brukes" id="toc-hvordan-dashboardet-brukes" class="nav-link" data-scroll-target="#hvordan-dashboardet-brukes">Hvordan dashboardet brukes</a></li>
+  <li><a href="#innsikt-fra-analysen" id="toc-innsikt-fra-analysen" class="nav-link" data-scroll-target="#innsikt-fra-analysen">Innsikt fra analysen</a></li>
+  <li><a href="#hva-denne-casen-demonstrerer" id="toc-hva-denne-casen-demonstrerer" class="nav-link" data-scroll-target="#hva-denne-casen-demonstrerer">Hva denne casen demonstrerer</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -178,8 +189,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Bike Store – End-to-end analyse med SQL og Power BI</h1>
-<p class="subtitle lead">Et komplett analyseprosjekt som viser hvordan salgsdata kan struktureres, modelleres og visualiseres for å forklare hva som driver omsetning og vekst på tvers av butikker, produkter og tid.</p>
+<h1 class="title">Bike Store – Analyse av salgsdrivere</h1>
+<p class="subtitle lead">SQL og Power BI analyse av hva som driver omsetning, vekst og margin</p>
 </div>
 
 
@@ -196,23 +207,62 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Denne delen dokumenterer hvordan rådata er kvalitetssikret og strukturert til et analyseklart datavarehus. All forretningslogikk er håndtert i SQL for å sikre konsistens, gjenbrukbarhet og en ryddig semantisk modell i Power BI.</p>
+<section id="problemstilling" class="level2">
+<h2 class="anchored" data-anchor-id="problemstilling">Problemstilling</h2>
+<p>Ledelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen.</p>
+<p>Sentrale spørsmål var:</p>
+<ul>
+<li>Hvilke produkter og kategorier driver omsetningen?</li>
+<li>Hvordan utvikler salget seg over tid?</li>
+<li>Hvor konsentrert er omsetningen på tvers av butikker og produkter?</li>
+</ul>
+<p>Målet med analysen var å strukturere rådata til et analyseklart datagrunnlag og utvikle et dashboard som forklarer drivere bak omsetning og vekst.</p>
+<hr>
+</section>
+<section id="executive-summary" class="level2">
+<h2 class="anchored" data-anchor-id="executive-summary">Executive summary</h2>
+<ul>
+<li>Salgsanalysen viser sterk vekst (<strong>+42 % YoY</strong>), men omsetningen er konsentrert i et begrenset antall produkter og butikker.</li>
+<li>Datamodellen ble strukturert som et stjerneskjema i SQL og brukt som semantisk lag for Power BI.</li>
+<li>Dashboardet gjør det mulig å identifisere drivere bak salgsvekst og gir grunnlag for beslutninger knyttet til sortiment, lager og salg.</li>
+</ul>
+<hr>
+</section>
+<section id="analyseprosess" class="level2">
+<h2 class="anchored" data-anchor-id="analyseprosess">Analyseprosess</h2>
+<p>Prosjektet ble gjennomført i tre steg:</p>
+<ol type="1">
+<li>Datarydding og strukturering i SQL<br>
+</li>
+<li>Datamodellering (stjerneskjema)<br>
+</li>
+<li>Analyse og visualisering i Power BI</li>
+</ol>
+<p>Pipeline:</p>
+<p><strong>Rådata → SQL datamodell → Power BI analyse → beslutningsstøtte</strong></p>
+<hr>
+</section>
 <section id="data-preparation-sql" class="level1">
 <h1>Data preparation | SQL</h1>
-<section id="datakvalitet-forståelse" class="level3">
-<h3 class="anchored" data-anchor-id="datakvalitet-forståelse">Datakvalitet &amp; forståelse</h3>
-<p>Før modellering ble datasettet gjennomgått for å avdekke strukturelle og forretningsmessige avvik.</p>
-<p>Fokuset var å sikre at nøkkelrelasjoner og verdier var konsistente og egnet for analyse:</p>
+<section id="datakvalitet-og-struktur" class="level3">
+<h3 class="anchored" data-anchor-id="datakvalitet-og-struktur">Datakvalitet og struktur</h3>
+<p>Før modellering ble datasettet gjennomgått for å sikre konsistent datagrunnlag.</p>
+<p>Kontroller inkluderte:</p>
 <ul>
-<li>Verifisering av radantall per tabell</li>
-<li>Kontroll av NULL-verdier i primær- og fremmednøkler</li>
-<li>Sjekk for duplikater</li>
-<li>Validering av relasjoner mellom ordre, produkter og butikker</li>
+<li>verifisering av radantall per tabell<br>
+</li>
+<li>kontroll av NULL-verdier i primær- og fremmednøkler<br>
+</li>
+<li>identifisering av duplikater<br>
+</li>
+<li>validering av relasjoner mellom ordre, produkter og butikker</li>
 </ul>
+<p>Dette sikrer at analysene i Power BI bygger på konsistente og pålitelige data.</p>
+<hr>
 </section>
-<section id="bygge-dimensjonstabeller" class="level3">
-<h3 class="anchored" data-anchor-id="bygge-dimensjonstabeller">Bygge dimensjonstabeller</h3>
-<p>Dimensjonstabellene er bygget for å støtte et stjerneskjema, der hver dimensjon representerer én forretningsentitet med tydelig ansvar og lav redundans.</p>
+<section id="datamodellering-dimensjonstabeller" class="level3">
+<h3 class="anchored" data-anchor-id="datamodellering-dimensjonstabeller">Datamodellering – dimensjonstabeller</h3>
+<p>Datastrukturen ble modellert som et <strong>stjerneskjema</strong>, der dimensjonstabeller beskriver forretningsentiteter og faktatabellen inneholder transaksjoner.</p>
 <details>
 <summary>
 Dimensjonstabeller
@@ -291,9 +341,7 @@ Faktatabell
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> orders o</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> order_items oi <span class="kw">USING</span> (order_id);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-</section>
-<section id="analyse-views-for-aggregering-og-ytelse" class="level3">
-<h3 class="anchored" data-anchor-id="analyse-views-for-aggregering-og-ytelse">Analyse-views (for aggregering og ytelse)</h3>
+<p><strong>Analyse-views</strong>. For å forenkle analyse i Power BI ble aggregerte views opprettet i SQL.</p>
 <details>
 <summary>
 SQL analyser
@@ -315,6 +363,7 @@ SQL output
 </summary>
 <p><a href="bilder/sql_output.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="bilder/sql_output.png" class="img-fluid"></a></p>
 </details>
+<hr>
 </section>
 </section>
 <section id="data-visualisering-power-bi" class="level1">
@@ -326,11 +375,67 @@ Datamodell
 </summary>
 <p><a href="bilder/datamodell_v2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="bilder/datamodell_v2.png" class="img-fluid"></a></p>
 </details>
-<section id="overview" class="level3">
-<h3 class="anchored" data-anchor-id="overview">Overview</h3>
-<p><a href="bilder/dashboard.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="bilder/dashboard.png" class="img-fluid"></a></p>
-<p>Dashboardet viser at salgsveksten i Bike Store er sterk (+42,0 % YoY), men samtidig tydelig konsentrert.</p>
-<p>En begrenset andel produkter og én hovedbutikk står for størstedelen av omsetningen, noe som indikerer både høy avhengighet og potensial for sortiments- og lageroptimalisering.</p>
+<hr>
+<section id="dashboard-oversikt-over-salgsutvikling" class="level2">
+<h2 class="anchored" data-anchor-id="dashboard-oversikt-over-salgsutvikling">Dashboard – oversikt over salgsutvikling</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="bilder/dashboard.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="bilder/dashboard.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
+</figure>
+</div>
+<p>Dashboardet er designet for å gi en rask oversikt over:</p>
+<ul>
+<li>utvikling i omsetning over tid<br>
+</li>
+<li>hvilke produkter og kategorier som driver salget<br>
+</li>
+<li>hvordan omsetningen fordeler seg mellom butikker</li>
+</ul>
+<p>Visualiseringen gjør det mulig å identifisere både vekstmønstre og konsentrasjon i salget.</p>
+<hr>
+</section>
+<section id="hvordan-dashboardet-brukes" class="level2">
+<h2 class="anchored" data-anchor-id="hvordan-dashboardet-brukes">Hvordan dashboardet brukes</h2>
+<p>Dashboardet er strukturert rundt tre analyser:</p>
+<p><strong>1. Salgsutvikling over tid</strong></p>
+<p>Visualiserer månedlig utvikling i omsetning og gjør det mulig å identifisere sesongmønstre og vekstperioder.</p>
+<p><strong>2. Produkt- og kategorianalyse</strong></p>
+<p>Viser hvilke produkter og kategorier som står for størstedelen av omsetningen.</p>
+<p>Dette gjør det mulig å identifisere:</p>
+<ul>
+<li>topprodukter<br>
+</li>
+<li>konsentrasjonsrisiko<br>
+</li>
+<li>potensial for sortimentsoptimalisering</li>
+</ul>
+<p><strong>3. Butikkanalyse</strong></p>
+<p>Sammenligner omsetning mellom butikker for å identifisere geografiske forskjeller i salgsytelse.</p>
+<hr>
+</section>
+<section id="innsikt-fra-analysen" class="level2">
+<h2 class="anchored" data-anchor-id="innsikt-fra-analysen">Innsikt fra analysen</h2>
+<p>Analysen viser at salgsveksten i Bike Store er sterk (<strong>+42 % YoY</strong>), men samtidig tydelig konsentrert.</p>
+<p>Viktige funn:</p>
+<ul>
+<li>en liten andel produkter driver en stor del av omsetningen<br>
+</li>
+<li>én hovedbutikk står for en betydelig andel av salget<br>
+</li>
+<li>veksten er i stor grad volumdrevet</li>
+</ul>
+<p>Dette indikerer både høy avhengighet av enkelte produkter og potensial for optimalisering av sortiment og lagerstrategi.</p>
+</section>
+<section id="hva-denne-casen-demonstrerer" class="level2">
+<h2 class="anchored" data-anchor-id="hva-denne-casen-demonstrerer">Hva denne casen demonstrerer</h2>
+<ul>
+<li><p>SQL datamodellering</p></li>
+<li><p>Design av stjerneskjema</p></li>
+<li><p>Datarydding og kvalitetssikring</p></li>
+<li><p>KPI-design i Power BI</p></li>
+<li><p>Analyse av forretningsdrivere</p></li>
+<li><p>Visualisering av innsikt for beslutningsstøtte</p></li>
+</ul>
 
 
 </section>
