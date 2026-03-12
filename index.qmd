@@ -33,7 +33,7 @@ Typisk arbeidsflyt i analyseprosjekter:
 ### Teknologi
 
 | **SQL / Databaser** | **Power BI** | **R / Analyse** | **Excel / Databehandling** |
-|------------------|------------------|------------------|------------------|
+|----|----|----|----|
 | Datamodellering i PostgreSQL, joins, aggregering, analyse av relasjonelle datasett. | Datamodellering (stjerneskjema), DAX-målinger, tidsintelligens, KPI-design og dashboards. | Datahåndtering (dplyr, tidyr), visualisering (ggplot2), statistisk modellering (ANOVA, regresjon, mixed models). | Power Query, pivottabeller og strukturert analyse av datasett. |
 
 ### Kjernekompetanse
@@ -91,7 +91,7 @@ KPI-design
 ::: {.g-col-4 .project-card}
 🚴 **Strava Data Pipeline**
 
-End-to-end pipeline for treningsdata. \
+End-to-end pipeline for treningsdata.\
 Strava API → R → PostgreSQL → Power BI
 
 **Teknologi**
@@ -107,5 +107,5 @@ Power BI
 ### Kontakt
 
 |  |  |
-|------------------------------------|------------------------------------|
+|----|----|
 | 📧 [Send meg en e-post](mailto:lmtingelstad@outlook.com?subject=Henvendelse%20fra%20portef%C3%B8lje) | 🔗 [LinkedIn](https://www.linkedin.com/in/lars-martin-tingelstad-657940113/) |
