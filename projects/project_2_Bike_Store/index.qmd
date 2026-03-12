@@ -9,7 +9,7 @@ format:
 
 
 
-## Problemstilling
+## Problemstilling 
 
 Ledelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen.
 
