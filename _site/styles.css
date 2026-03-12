@@ -1,0 +1,61 @@
+/* css styles */
+
+body {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 2.4rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+}
+
+.navbar {
+  font-size: 1.1rem;
+}
+
+p {
+  max-width: 850px;
+}
+
+pre, code {
+  font-size: 0.95rem;
+}
+
+figcaption {
+  font-style: italic;
+}
+
+strong {
+  font-weight: 700;
+  color: #000;
+}
+
+
+.project-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: white;
+  transition: transform 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+}
+
+.project-card h3 {
+  margin-top: 0;
+}
+
+.project-card a {
+  font-weight: 500;
+}

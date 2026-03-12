@@ -8,8 +8,6 @@
 .Rproj.user/
 
 # Quarto output (bygges automatisk)
-_site/
-*.html
 
 # Ekskluder prosjektmappe
 projects/project_cause/

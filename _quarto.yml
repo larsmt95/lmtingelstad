@@ -24,6 +24,7 @@ website:
 format:
   html:
     theme: cosmo
+    css: styles.css
     code-copy: true
     code-overflow: wrap
     highlight-style: github

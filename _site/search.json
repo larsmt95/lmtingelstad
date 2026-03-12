@@ -1,0 +1,387 @@
+[
+  {
+    "objectID": "projects/project_phd_paper3/index.html",
+    "href": "projects/project_phd_paper3/index.html",
+    "title": "Longitudinal development in physical performance in adolescent team sport athletes",
+    "section": "",
+    "text": "Bakgrunn\nVil du se mer eller diskutere prosjektet?\n📧 Send meg en e-post\n🔗 LinkedIn"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html",
+    "href": "projects/project_3_strava/index.html",
+    "title": "Strava Analytics Pipeline",
+    "section": "",
+    "text": "Treningsdata fra apper og manuelle logger lagres ofte i separate systemer og i ulike formater. Dette gjør det vanskelig å analysere treningsbelastning, utvikling over tid og prestasjonsmønstre.\nMålet med prosjektet var å bygge en automatisert pipeline som:\n\nhenter aktivitetsdata fra Strava API\nstrukturerer data i en database\nmodellerer datasettet for analyse\nvisualiserer innsikt i Power BI"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#datakilder",
+    "href": "projects/project_3_strava/index.html#datakilder",
+    "title": "Strava Analytics Pipeline",
+    "section": "Datakilder",
+    "text": "Datakilder\nStrava API\n\naktivitetsdata\nmetadata som type økt, varighet, distanse, hastighet og puls\n\nTreningsdagbok styrketrening\n\ndato\nøvelse\nbelastning\nvolum"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#datainnhenting",
+    "href": "projects/project_3_strava/index.html#datainnhenting",
+    "title": "Strava – treningsanalyse",
+    "section": "Datainnhenting",
+    "text": "Datainnhenting\n\nOAuth-autentisering\nHenting av aktiviteter via API\nPeriodisk refresh\n… data fra andre venner"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#datamodellering",
+    "href": "projects/project_3_strava/index.html#datamodellering",
+    "title": "Strava – treningsanalyse",
+    "section": "Datamodellering",
+    "text": "Datamodellering\n\nFaktatabell: aktiviteter fra strava og treningsdagbok styrke\nDatodimensjon\nAktivitetstype\n\n\n\n\nDatamodell for treningsdata fra Strava og treningsdagbok fra google sheet (facts_styrke)"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#analyse-og-innsikt",
+    "href": "projects/project_3_strava/index.html#analyse-og-innsikt",
+    "title": "Strava – treningsanalyse",
+    "section": "Analyse og innsikt",
+    "text": "Analyse og innsikt\n\nDashboard utøver\n\n\n\nOversikt over treningsvolum, trender, utvikling og prestasjon på utøvernivå.\n\n\nDette dashboardet muliggjør direkte sammenligning av treningsmengde, intensitetsfordeling og prestasjon mellom utøvere innen valgt år. Målet er å identifisere forskjeller i treningsprofil og fysisk kapasitet.\n\n\n📊 Treningsvolum\nLik totalmengde betyr ikke lik belastningsprofil. Konsistens over uker er en viktigere indikator på robusthet enn enkelttopper.\n\n\n📈 Treningsmønster per uke\nStabil progresjon kan indikere bedre periodisering. Store topper kan gi rask fremgang – men også økt skaderisiko.\n\n\n⚡ Power Curve\nUtøverne har ulike fysiologiske profiler. Dashboardet synliggjør styrker og svakheter på tvers av energisystemer.\n\n\nSammenligning utøver\n\n\n\nSammenligning av treningsvolum, intensitet og prestasjon (power curve) mellom utøvere i et gitt år.\n\n\nIndividuell oversikt over treningsutvikling, aktivitetsfordeling og prestasjon – med fokus på progresjon og belastningskontroll.\n\n\nTreningspreferanser\n\n\n\nMine treningspreferanser\n\n\nEn tydelig preferanse mot å trene på ettermiddag, etter jobb, men tidligere på formiddagen i helg. Stabil døgnpreferanse over flere år, med midlertidig forskyvning mot morgenøkter i 2018.\n\n\nBeste prestasjoner\n\n\n\nMine beste prestasjoner\n\n\n\n\nTreningsvolum over tid\n\nI 2025 var det en særlig nedgang på slutten av året.\n\n\nOversikt over styrkeøkter\n\n\n\nOversikt over styrkeøkter\n\n\n\nØverst til venstre: Jevn økning i benkpress med liten endring i total volum pr økt\nØverst til venstre: Triceps, pull ups og benk de mest vanlige øvelsene for overkropp, mens leg curl, hip abduction og tåhev for underkropp (preget av kneproblematikk siste årene)\nNederst til venstre: Variasjon i unike øvelser per måned siste året. Ok variasjon her.\nNederst til høyre: Andel overkropp vs underkropp. Never skip leg day, heh."
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#datarydding-og-modellering-power-bi",
+    "href": "projects/project_3_strava/index.html#datarydding-og-modellering-power-bi",
+    "title": "Strava Analytics Pipeline",
+    "section": "Datarydding og modellering (Power BI)",
+    "text": "Datarydding og modellering (Power BI)\n\nUtgangspunkt\nRådata bestod av:\n\nStrava-aktiviteter\ntreningsdagbok i bredt format\n\nUtfordringer:\n\ninkonsistente øktnavn\nbredt datasett som ikke egnet seg for analyse\nreps og belastning lagret i samme celle\n\n\n\n\nDatarydding i Power Query\nHovedsteg:\n\nStandardisere kolonnenavn og datatyper\nTransformere treningsdagbok fra bredt til langt format\nStandardisere øktnavn\nFjerne tomme og ugyldige rader\nKombinere årstabeller til én faktatabell\n\n\n\n\nRyddetrinn (Power Query): Kroppsdel\n\nKroppsdel =\n  VAR x = UPPER ( 'facts_styrke'[Økt] )\n  RETURN\n  SWITCH (\n    TRUE (),\n    CONTAINSSTRING(x, \"UB\") || CONTAINSSTRING (x, \"UPPER\") || CONTAINSSTRING (x,          \"OVER\"),\n    \"Overkropp\",\n    CONTAINSSTRING (x, \"LB\" ) || CONTAINSSTRING (x, \"BEIN\" ) || CONTAINSSTRING (x,        \"LOWER\") || CONTAINSSTRING (x, \"REHAB\"),\n    \"Underkropp\",\n    \"Ukjent\"\n)\n\n\n\nResultat etter datarydding\n\nén konsistent faktatabell for styrketrening\nseparate dimensjoner for dato og aktivitet\ndatagrunnlag egnet for DAX og tidsserieanalyse\n\n\nEksempler (Power Query)\n\n\nStrava-data\n\n\n\n\nDatarydding Strava\n\n\n\n\n\nStyrkefil 2024 | Før rydding\n\n\n\n\nStyrkefil 2024 pre\n\n\n\n\n\nStyrkefil 2024 | Etter rydding\n\n\n\n\nStyrkefil 2024 post\n\n\n\n\n\n\nDAX-mål (eksempler)\n\n\nSession LY\n\nSessions LY =\nCALCULATE (\n    [Sessions],\n    SAMEPERIODLASTYEAR ( 'Dim_date'[Date] )\n) \n\n\n\nMost Frequent Training Day\n\nMost Frequent Training Day = \nVAR DayCounts =\n    SUMMARIZE(\n        'Dim_Date',\n        'Dim_Date'[ukedag],\n        \"Sessions\", CALCULATE(COUNT('facts_strava'[type]))\n    )\nVAR TopDay =\n    TOPN(1, DayCounts, [Sessions], DESC)\nRETURN\n    MAXX(TopDay, 'Dim_Date'[ukedag])\n\n\n\nPersonal best (duration)\n\nPB Duration (sec) = \nCALCULATE(\n    MIN('facts_strava'[moving_time]),\n    FILTER(\n        ALL('facts_strava'),\n        'facts_strava'[Run Distance Category]\n            = SELECTEDVALUE('facts_strava'[Run Distance Category])\n        && 'facts_strava'[type] = \"Run\"\n    )\n)\n\n\n\nTopp 3 løp\n\nPallen = \nVAR ThisTime =\n    SELECTEDVALUE('facts_strava'[moving_time])\nRETURN\nRANKX(\n    ALLSELECTED('facts_strava'),\n    'facts_strava'[moving_time],\n    ThisTime,\n    ASC,\n    DENSE\n)"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#datainnhenting-strava-api-r",
+    "href": "projects/project_3_strava/index.html#datainnhenting-strava-api-r",
+    "title": "Strava Analytics Pipeline",
+    "section": "Datainnhenting – Strava API (R)",
+    "text": "Datainnhenting – Strava API (R)\nStrava-data ble hentet via Strava REST API med OAuth-autentisering.\nData hentes i R og lagres i PostgreSQL før analyse i Power BI.\n\n1️⃣ Autentisering (OAuth)\nTilgangstoken hentes via Strava sin OAuth-flyt.\nSensitiv informasjon håndteres via miljøvariabler.\n\n\nR – Autentisering mot Strava API\n\nlibrary(httr) \nlibrary(jsonlite)  \n\nres &lt;- POST(\"https://www.strava.com/oauth/token\",   \n        body = list(client_id = Sys.getenv(\"STRAVA_CLIENT_ID\"), \n        client_secret = Sys.getenv(\"STRAVA_CLIENT_SECRET\"),\n        code = Sys.getenv(\"STRAVA_AUTH_CODE\"),\n        grant_type = \"authorization_code\"),\n        encode = \"form\")\n        \ntokens &lt;- content(res, \"parsed\") access_token &lt;- tokens$access_token \n\n\n\n2️⃣ Hente aktiviteter\n\n\nR – Nedlasting av Strava-aktiviteter\n\nlibrary(dplyr)  \n\nget_activities &lt;- function(page, token) {   \n  GET(\"https://www.strava.com/api/v3/athlete/activities\",\n  query = list(per_page = 200, page = page), \n  add_headers(Authorization = paste(\"Bearer\", token))\n  ) \n  }  \n  \nall_activities &lt;- list() \npage &lt;- 1  \n\nrepeat {\n  res  &lt;- get_activities(page, access_token)\n  data &lt;- fromJSON(content(res, \"text\"), flatten = TRUE) \n  \n  if (nrow(data) == 0) break  \n  \n  all_activities[[page]] &lt;- data   \n  page &lt;- page + 1 \n}  \n\nactivities &lt;- bind_rows(all_activities) \n\n\n\n3️⃣ Klargjøring av data (API → analyse)\nNested JSON-felter flates ut og reduseres til analyse­relevante kolonner.\n\n\nR – Klargjøring av aktivitetsdata\n\nactivities_sql &lt;- activities %&gt;%   select(\n  activity_id = id,\n  name,\n  type,\n  start_date,\n  distance,\n  moving_time,\n  elapsed_time,\n  total_elevation_gain,\n  average_speed,\n  max_speed,\n  average_watts,\n  max_watts,\n  average_heartrate,\n  max_heartrate,\n  location_city,\n  location_country,\n  athlete.id\n  ) \n\n\n\n4️⃣ Lagring i PostgreSQL\nData lagres i en dedikert database for videre bruk i Power BI.\n\n\nR – Lagring i PostgreSQL\n\nlibrary(DBI) \nlibrary(RPostgres)\n\ncon &lt;- dbConnect(\n  Postgres(),\n  dbname = \"strava\",\n  host = \"xxx\",\n  port = xxx,\n  user = Sys.getenv(\"PG_USER\"),\n  password = Sys.getenv(\"PG_PASSWORD\")\n  )  \n  \ndbWriteTable(\n  con,\n  name = Id(schema = \"public\", table = \"activities\"),\n  value = activities_sql,\n  overwrite = TRUE\n) \n\n\n\n\n5️⃣ Verifisering\nEnkel validering sikrer at data er korrekt lastet.\nSELECT COUNT(*) FROM public.activities;\n\n\nHva denne casen demonstrerer\n\nAPI-integrasjon\nautomatisert datainnhenting\ndatabase-lagring i PostgreSQL\ndatamodellering (stjerneskjema)\nanalyse og visualisering i Power BI\nutvikling av end-to-end data pipeline"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#begrensninger",
+    "href": "projects/project_3_strava/index.html#begrensninger",
+    "title": "Strava Analytics Pipeline",
+    "section": "Begrensninger",
+    "text": "Begrensninger\n\nFravær av subjektive belastningsmål begrenser total belastningsmodellering (RPE, HRV)\nAvhengig av Strava-datakvalitet"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#videre-arbeid",
+    "href": "projects/project_3_strava/index.html#videre-arbeid",
+    "title": "Strava – treningsanalyse",
+    "section": "Videre arbeid",
+    "text": "Videre arbeid\n\nKombinere med subjektive data\nAutomatisert refresh\nPrediktive modeller for belastning\n\nVil du se mer eller diskutere prosjektet?\n📧 Send meg en e-post\n🔗 LinkedIn"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Lars Tingelstad. PhD",
+    "section": "",
+    "text": "Jeg hjelper organisasjoner med å strukturere data, analysere utvikling og bygge dashboards som gir bedre beslutningsgrunnlag.\nJeg arbeider gjennom hele analyseprosessen – fra datainnhenting og datamodellering til analyse, visualisering og innsiktsformidling. Arbeidet mitt kombinerer statistisk metode, datamodellering og tydelig visualisering for å gjøre komplekse data forståelige og handlingsrettede.\nMin erfaring inkluderer analyse av komplekse og longitudinelle datasett, utvikling av KPI-rammeverk og bygging av beslutningsstøttende dashboards i Power BI.\n\n\nAnalyseprosess\nTypisk arbeidsflyt i analyseprosjekter:\nDatakilder → Datainnhenting → Datamodellering → Analyse → Visualisering → Beslutningsstøtte\n\nDatainnhenting fra API, databaser og filer\n\nDatarydding og strukturering\n\nDatamodellering (stjerneskjema)\n\nAnalyse i SQL, R og DAX\n\nVisualisering i Power BI\n\nInnsiktsformidling til beslutningstakere\n\n\n\n\nTeknologi\n\n\n\n\n\n\n\n\n\nSQL / Databaser\nPower BI\nR / Analyse\nExcel / Databehandling\n\n\n\n\nDatamodellering i PostgreSQL, joins, aggregering, analyse av relasjonelle datasett.\nDatamodellering (stjerneskjema), DAX-målinger, tidsintelligens, KPI-design og dashboards.\nDatahåndtering (dplyr, tidyr), visualisering (ggplot2), statistisk modellering (ANOVA, regresjon, mixed models).\nPower Query, pivottabeller og strukturert analyse av datasett.\n\n\n\n\n\nKjernekompetanse\n\nDatainnhenting, datarensing og kvalitetskontroll\n\nDatamodellering og analyse av relasjonelle datasett\n\nStatistisk analyse og tidsserieanalyse\n\nKPI-design og resultatoppfølging\n\nVisualisering og innsiktsformidling\n\nBeslutningsstøtte for operative og strategiske beslutninger\n\n\n\n\nSertifiseringer | Kurs\nData Analyst in Power BI – DataCamp (02.2025)\nDAX, datamodellering, KPI-rapportering, trendanalyse og datavisualisering.\nData Analyst Associate – DataCamp (02.2025)\nSQL, eksplorativ analyse (EDA), statistisk testing og innsiktskommunikasjon.\n\n\n\nProsjekter\n\n\n📊 Sales Analytics\nAnalyse av salgsdrivere i Bike Store ved bruk av SQL og Power BI.\nTeknologi\nSQL\nPower BI\nDatamodellering\nSe prosjekt →\n\n\n💰 Profitability Analysis\nAnalyse av hvordan rabatter, fraktstrategi og volum påvirker margin.\nTeknologi\nPower BI\nDAX\nKPI-design\nSe prosjekt →\n\n\n🚴 Strava Data Pipeline\nEnd-to-end pipeline for treningsdata.\nStrava API → R → PostgreSQL → Power BI\nTeknologi\nR\nPostgreSQL\nPower BI\nSe prosjekt →\n\n\n\n\nKontakt\n\n\n\n📧 Send meg en e-post\n🔗 LinkedIn"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Lars Tingelstad",
+    "section": "",
+    "text": "Jeg er dataanalytiker med doktorgrad og solid erfaring innen datamodellering, statistisk analyse og dashboardutvikling. Jeg jobber strukturert fra datainnhenting og kvalitetskontroll til modellering, visualisering og operativ beslutningsstøtte.\nMin styrke ligger i å kombinere metodisk presisjon med evnen til å omsette komplekse analyser til tydelige og handlingsrettede anbefalinger. Jeg har erfaring med store longitudinelle datasett, KPI-design og utvikling av beslutningsstøttende rapporter i Power BI.\n\nKontakt\n\n\n\n📧 Send meg en e-post\n🔗 LinkedIn\n\n\n\n\n\nTeknisk kompetanse\n\n\n\n\n\n\n\n\n\nSQL\nPower BI\nR\nExcel\n\n\n\n\nDatamodellering og spørringer i PostgreSQL, filtrering, aggregering, joins og analyse av relasjonelle datasett.\nDatamodellering (stjerneskjema), DAX-målinger, tidsintelligens, KPI-design, interaktive dashboards og rapportstruktur.\nDatahåndtering (dplyr, tidyr), visualisering (ggplot2), statistisk modellering (ANOVA, regresjon, mixed effects-modeller).\nPower Query, pivottabeller og strukturerte analyser.\n\n\n\nSQL\n\nDatamodellering og spørringer i PostgreSQL, filtrering, aggregering, joins og analyse av relasjonelle datasett.\n\nPower BI\n\nDatamodellering (stjerneskjema), DAX-målinger, tidsintelligens, KPI-design, interaktive dashboards og rapportstruktur.\n\nR\n\nDatahåndtering (dplyr, tidyr), visualisering (ggplot2), statistisk modellering (ANOVA, regresjon, mixed effects-modeller).\n\nExcel\n\nPower Query, pivottabeller og strukturerte analyser.\n\n\n\n\nNøkkelkompetanse\n\nDatarensing og kvalitetskontroll\nStatistisk modellering og inferens\nKPI-utvikling og marginanalyse\nVisualisering og innsiktsformidling\nBeslutningsstøtte og forretningsforståelse\nProsjektledelse og tverrfaglig samarbeid\n\n\n\n\nSertifiseringer | Kurs\nData Analyst in Power BI – DataCamp (02.2025)\n\nDAX, datamodellering, KPI-rapportering, trendanalyse og datavisualisering.\n\nData Analyst Associate – DataCamp (02.2025)\n\nSQL, eksplorativ analyse (EDA), statistisk testing og innsiktskommunikasjon."
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html",
+    "href": "projects/project_2_Bike_Store/index.html",
+    "title": "Bike Store – Analyse av salgsdrivere",
+    "section": "",
+    "text": "Ledelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen.\nSentrale spørsmål var:\n\nHvilke produkter og kategorier driver omsetningen?\nHvordan utvikler salget seg over tid?\nHvor konsentrert er omsetningen på tvers av butikker og produkter?\n\nMålet med analysen var å strukturere rådata til et analyseklart datagrunnlag og utvikle et dashboard som forklarer drivere bak omsetning og vekst."
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html",
+    "href": "projects/project_3_strava/strava_powerbi.html",
+    "title": "Analyse av treningsdata",
+    "section": "",
+    "text": "Dette prosjektet bruker egne treningsdata fra Strava for å analysere treningsbelastning, utvikling over tid og mønstre i treningspreferanser. Formålet er å demonstrere ferdigheter innen datainnhenting, datamodellering og visualisering i Power BI."
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#datakilder",
+    "href": "projects/project_3_strava/strava_powerbi.html#datakilder",
+    "title": "Analyse av treningsdata",
+    "section": "Datakilder",
+    "text": "Datakilder\n\nStrava API (personlige aktivitetsdata)\n\nMetadata: type økt, varighet, distanse, hastighet, tid\n\nTreningsdagbok styrketrening\n\nMetadata: dato, belastning, volum, øvelse"
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#datainnhenting",
+    "href": "projects/project_3_strava/strava_powerbi.html#datainnhenting",
+    "title": "Analyse av treningsdata",
+    "section": "Datainnhenting",
+    "text": "Datainnhenting\n\nOAuth-autentisering\nHenting av aktiviteter via API\nPeriodisk refresh\n… data fra andre venner"
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#datamodellering",
+    "href": "projects/project_3_strava/strava_powerbi.html#datamodellering",
+    "title": "Analyse av treningsdata",
+    "section": "Datamodellering",
+    "text": "Datamodellering\n\nFaktatabell: aktiviteter fra strava og treningsdagbok styrke\nDatodimensjon\nAktivitetstype\n\n\n\n\nDatamodell for egne treningsdata"
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#analyse-og-innsikt",
+    "href": "projects/project_3_strava/strava_powerbi.html#analyse-og-innsikt",
+    "title": "Analyse av treningsdata",
+    "section": "Analyse og innsikt",
+    "text": "Analyse og innsikt\n\nTreningspreferanser\n\n\n\nMine treningspreferanser\n\n\nEn tydelig preferanse mot å trene på ettermiddag, etter jobb, men tidligere på formiddagen i helg. Ingen klar trend i endring med tiden, bortsett fra en preferanse for tidlig trening i 2018.\n\n\nBeste prestasjoner\n\n\n\nMine beste prestasjoner\n\n\n\n\nTreningsvolum over tid\n\nEn, dessverre nedgang i total treningstid siden 2021. Og enda verre for løping. Veldig godt år i 2019.\n\nI 2025 var det en særlig nedgang på slutten av året.\n\n\nOversikt over styrkeøkter\n\n\nØverst til venstre: Jevn økning i benkpress med liten endring i total volum pr økt\nØverst til venstre: Triceps, pull ups og benk de mest vanlige øvelsene for overkropp, mens leg curl, hip abduction og tåhev for underkropp (preget av kneproblematikk siste årene)\nNederst til venstre: Variasjon i unike øvelser per måned siste året. Ok variasjon her.\nNederst til høyre: Andel overkropp vs underkropp. Never skip leg day, heh."
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#datarydding-og-modellering-power-bi",
+    "href": "projects/project_3_strava/strava_powerbi.html#datarydding-og-modellering-power-bi",
+    "title": "Analyse av treningsdata",
+    "section": "Data­rydding og modellering (Power BI)",
+    "text": "Data­rydding og modellering (Power BI)\n\nUtgangspunkt (rådata)\nRådata bestod av:\n\nStrava-aktiviteter\nTreningsdagbok i bredt format (kolonner med uke, belastning og reps, økt + øvelse i rader)\n\nInkonsekvente øktnavn og øvelesesnavn, bredt format som ikke kunne analyseres, reps/load i samme celle\n\n\n\n\nRyddetrinn (Power Query)\nDataryddingen ble gjort fullt ut i Power Query, med fokus på reproduserbarhet.\nHovedsteg:\n\nStandardiserte kolonnenavn og datatyper\nSplittet og normaliserte treningsdagbok (bred → lang)\nRenset øktnavn og samlet varianter (UB1, Upper body, Overkropp → Overkropp)\n\n\n\nRyddetrinn (Power Query): Kroppsdel\n\nKroppsdel =\nVAR x = UPPER ( 'facts_styrke'[Økt] )\nRETURN\nSWITCH (\n    TRUE (),\n    CONTAINSSTRING ( x, \"UB\" ) || CONTAINSSTRING ( x, \"UPPER\" ) || CONTAINSSTRING ( x, \"OVER\" ),\n        \"Overkropp\",\n    CONTAINSSTRING ( x, \"LB\" ) || CONTAINSSTRING ( x, \"BEIN\" ) || CONTAINSSTRING ( x, \"LOWER\" ) || CONTAINSSTRING ( x, \"REHAB\" ),\n        \"Underkropp\",\n    \"Ukjent\"\n)\n\n\nFjernet tomme og ugyldige rader\nKombinerte årstabeller til én faktatabell\n\n\n\nEtter (modellklar struktur)\nResultatet er:\n\nÉn konsistent faktatabell for styrketrening\nSeparate dimensjoner for dato og aktivitet\nKlar separasjon mellom over- og underkropp\nDatagrunnlag egnet for DAX og tidsserieanalyse\n\n\n\n\nDatarydding Strava\n\n\n\n\n\nStyrkefil 2024 pre\n\n\n\n\n\nStyrkefil 2024 post\n\n\n\n\nDAX-mål\n\n\nDAX- Session LY\n\nSessions LY =\nCALCULATE (\n    [Sessions],\n    SAMEPERIODLASTYEAR ( 'Dim_date'[Date] )\n) \n\n\ntreningsvolum\nrullerende gjennomsnitt\nsesongaggregater\nInteraktive slicere og drill-down"
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#datainnhenting-strava-api-r",
+    "href": "projects/project_3_strava/strava_powerbi.html#datainnhenting-strava-api-r",
+    "title": "Analyse av treningsdata",
+    "section": "Datainnhenting – Strava API (R)",
+    "text": "Datainnhenting – Strava API (R)\nStrava-data ble hentet via Strava REST API, autentisert med OAuth 2.0.\nLøsningen er bygget i R og lagrer data direkte i PostgreSQL for videre bruk i Power BI.\n\n1️⃣ Autentisering (OAuth)\nTilgangstoken hentes via Strava sin OAuth-flyt.\nSensitiv informasjon håndteres via miljøvariabler.\n\n\nR – Autentisering mot Strava API\n\nlibrary(httr) \nlibrary(jsonlite)  \n\nres &lt;- POST(\"https://www.strava.com/oauth/token\",   \n        body = list(client_id = Sys.getenv(\"STRAVA_CLIENT_ID\"), \n        client_secret = Sys.getenv(\"STRAVA_CLIENT_SECRET\"),\n        code = Sys.getenv(\"STRAVA_AUTH_CODE\"),\n        grant_type = \"authorization_code\"),\n        encode = \"form\")\n        \ntokens &lt;- content(res, \"parsed\") access_token &lt;- tokens$access_token \n\n\n\n2️⃣ Henting av aktivitetsdata (paginert)\nAlle aktiviteter hentes sidevis (200 per kall) til alle sider er lest.\n\n\nR – Nedlasting av Strava-aktiviteter\n\nlibrary(dplyr)  \n\nget_activities &lt;- function(page, token) {   \n  GET(\"https://www.strava.com/api/v3/athlete/activities\",\n  query = list(per_page = 200, page = page), \n  add_headers(Authorization = paste(\"Bearer\", token))\n  ) \n  }  \n  \nall_activities &lt;- list() \npage &lt;- 1  \n\nrepeat {\n  res  &lt;- get_activities(page, access_token)\n  data &lt;- fromJSON(content(res, \"text\"), flatten = TRUE) \n  \n  if (nrow(data) == 0) break  \n  \n  all_activities[[page]] &lt;- data   \n  page &lt;- page + 1 \n}  \n\nactivities &lt;- bind_rows(all_activities) \n\n\n\n3️⃣ Klargjøring av data (API → analyse)\nNested JSON-felter flates ut og reduseres til analyse­relevante kolonner.\n\n\nR – Klargjøring av aktivitetsdata\n\nactivities_sql &lt;- activities %&gt;%   select(\n  activity_id = id,\n  name,\n  type,\n  start_date,\n  distance,\n  moving_time,\n  elapsed_time,\n  total_elevation_gain,\n  average_speed,\n  max_speed,\n  average_watts,\n  max_watts,\n  average_heartrate,\n  max_heartrate,\n  location_city,\n  location_country,\n  athlete.id\n  ) \n\n\n\n4️⃣ Lagring i PostgreSQL\nData lagres i en dedikert database for videre bruk i Power BI.\n\n\nR – Lagring i PostgreSQL\n\nlibrary(DBI) \nlibrary(RPostgres)\n\ncon &lt;- dbConnect(\n  Postgres(),\n  dbname = \"strava\",\n  host = \"localhost\",\n  port = 5432,\n  user = Sys.getenv(\"PG_USER\"),\n  password = Sys.getenv(\"PG_PASSWORD\")\n  )  \n  \ndbWriteTable(\n  con,\n  name = Id(schema = \"public\", table = \"activities\"),\n  value = activities_sql,\n  overwrite = TRUE\n) \n\n\n\n5️⃣ Verifisering\nEnkel validering sikrer at data er korrekt lastet.\nSELECT COUNT(*) FROM public.activities;"
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#begrensninger",
+    "href": "projects/project_3_strava/strava_powerbi.html#begrensninger",
+    "title": "Analyse av treningsdata",
+    "section": "Begrensninger",
+    "text": "Begrensninger\n\nKun egne data (ikke generaliserbart)\nMangler eksterne belastningsmål (RPE, HRV)\nAvhengig av Strava-datakvalitet"
+  },
+  {
+    "objectID": "projects/project_3_strava/strava_powerbi.html#videre-arbeid",
+    "href": "projects/project_3_strava/strava_powerbi.html#videre-arbeid",
+    "title": "Analyse av treningsdata",
+    "section": "Videre arbeid",
+    "text": "Videre arbeid\n\nKombinere med subjektive data\nAutomatisert refresh\nPrediktive modeller for belastning"
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "",
+    "text": "I dette prosjektet utviklet jeg en helhetlig Power BI-rapport for å analysere omsetning, lønnsomhet og drivere bak marginutvikling. Gjennom strukturert KPI-design, DAX-beregninger og interaktiv drilldown identifiserte jeg hvordan fraktstrategi og rabatter påvirker profitabilitet – og hvor tiltak bør settes inn for å forbedre lønnsomheten."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#formål-med-prosjektet",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#formål-med-prosjektet",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Formål med prosjektet",
+    "text": "Formål med prosjektet\nMålet var å utvikle et beslutningsstøttende dashboard som:\n\nGir rask oversikt over finansiell utvikling (YoY)\nAvdekker drivere bak resultatene (segment, kategori, region, by)\nKombinerer operativ og strategisk innsikt\nEr visuelt strukturert for ledelsesbruk"
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#datamodell-og-teknisk-oppsett",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#datamodell-og-teknisk-oppsett",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Datamodell og teknisk oppsett",
+    "text": "Datamodell og teknisk oppsett\n\n\nDatamodell\n\n\n\n\nFaktatabell: Sales-transaksjoner\nDimensjoner: Dato, Kategori, Segment, Lokasjon\nRelasjoner strukturert som stjerneskjema\n\nEksempler på DAX-mål:\n\nTotal Sales\nSales LY\nSales % vs LY\nProfit Margin\nAvg Order Value\nDynamiske KPI-farger (conditional formatting)\nDynamisk Top/Bottom 10"
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#executive-summary",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#executive-summary",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Executive Summary",
+    "text": "Executive Summary\n\n\nInnsikt fra dashboardet:\nVolumvekst driver omsetning, men margin forbedres ikke proporsjonalt grunnet kostnadsvekst og lavere gjennomsnittlig ordreverdi.\n\nOmsetning: +20 %\nProfit: +14 %\nKostnad: +21 % → marginpress\nOrder volume: +28 %"
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#market-drilldown",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#market-drilldown",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Market & Drilldown",
+    "text": "Market & Drilldown\n\n\nOverordnet utvikling\n🔎 Volumvekst driver omsetning, men fallende AOV og sterk kostnadsvekst indikerer marginpress.\n🔎 Omsetningen er konsentrert i få stater. Avhengighet av toppmarkedene øker eksponering mot regionale svingninger.\n🔎 Omsetning korrelerer ikke lineært med lønnsomhet. Noen markeder bidrar lite til bunnlinjen relativt til volum."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#shipping-mode-regional-margin-analysis",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#shipping-mode-regional-margin-analysis",
+    "title": "Financial Performance & Profitability Analysis",
+    "section": "",
+    "text": "First Class høyest total margin (~14 %)\nSame Day generelt lønnsom\n\nMen: Same Day i South gir -8,4 % margin\n\nTeknologi i South-region trekker ned\n\n\n\n\nFraktmåte er ikke problemet globalt – den er regionalt sensitiv."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#discount-margin-breakdown",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#discount-margin-breakdown",
+    "title": "Financial Performance & Profitability Analysis",
+    "section": "",
+    "text": "Profit margin uten rabatt: 29,5 %\nMed rabatt: -2,9 %\nMargin delta: -32 %\n\n\n\n\n\n0–10 % rabatt → margin robust\n\n\n\n11–20 % → svekkes\n\n\n\n21–30 % → kollaps\n\n\n\n30 %+ → kraftig negativ\n\nLønnsomhetsknekkpunkt -&gt; 21–30 % rabatt."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#profit-per-unit-vs-discount",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#profit-per-unit-vs-discount",
+    "title": "Financial Performance & Profitability Analysis",
+    "section": "",
+    "text": "Scatter-analysen viser:\n\nFallende enhetsmargin ved økende rabatt\nHøye rabatter kompenseres ikke av volum\nTapet skyldes prisstrategi, ikke etterspørselssvikt\n\n\n\nSegment- og kategorianalyse viser:\n\nTechnology og Furniture mest utsatt\nFlere segmenter går fra ~30 % margin til negativ\nRabatt driver lønnsomhetstap på tvers av segmenter"
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#strategisk-tolkning",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#strategisk-tolkning",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Strategisk tolkning",
+    "text": "Strategisk tolkning\n\nVekst er volumdrevet, ikke prisdrevet.\nMarginoptimalisering bør skje på delstatsnivå.\nRessursallokering bør vurderes mot lønnsomhetsbidrag, ikke kun omsetning."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#fraktmetode-og-regional-marginanalyse",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#fraktmetode-og-regional-marginanalyse",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Fraktmetode og regional marginanalyse",
+    "text": "Fraktmetode og regional marginanalyse\n\n\nHovedfunn\n\nFirst Class høyest total margin (~14 %)\nSame Day generelt lønnsom\n\nMen: Same Day i South gir -8,4 % margin\n\nTeknologi i South-region trekker ned\n\n\n\nViktig innsikt\nFraktmåte er ikke problemet globalt – den er regionalt sensitiv."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#rabatt--og-marginanalyse",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#rabatt--og-marginanalyse",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Rabatt- og marginanalyse",
+    "text": "Rabatt- og marginanalyse\n\n\nKPIer\n\nProfit margin uten rabatt: 29,5 %\nMed rabatt: -2,9 %\nMargin delta: -32 %\n\n\n\nIdentifisering av knekkpunkt\n\n0–10 % rabatt → margin robust\n\n\n\n11–20 % → svekkes\n\n\n\n21–30 % → kollaps\n\n\n\n30 %+ → kraftig negativ\n\nLønnsomhetsknekkpunkt -&gt; 21–30 % rabatt."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#resultat-per-enhet-vs.-rabatt",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#resultat-per-enhet-vs.-rabatt",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Resultat per enhet vs. rabatt",
+    "text": "Resultat per enhet vs. rabatt\nScatter-analysen viser:\n\nFallende enhetsmargin ved økende rabatt\nHøye rabatter kompenseres ikke av volum\nTapet skyldes prisstrategi, ikke etterspørselssvikt\n\n\nHvem rammes hardest?\nSegment- og kategorianalyse viser:\n\nTechnology og Furniture mest utsatt\nFlere segmenter går fra ~30 % margin til negativ\nRabatt driver lønnsomhetstap på tvers av segmenter"
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html#problemstilling",
+    "href": "projects/project_2_Bike_Store/index.html#problemstilling",
+    "title": "Bike Store – Analyse av salgsdrivere",
+    "section": "",
+    "text": "Ledelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen.\nSentrale spørsmål var:\n\nHvilke produkter og kategorier driver omsetningen?\nHvordan utvikler salget seg over tid?\nHvor konsentrert er omsetningen på tvers av butikker og produkter?\n\nMålet med analysen var å strukturere rådata til et analyseklart datagrunnlag og utvikle et dashboard som forklarer drivere bak omsetning og vekst."
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html#analyseprosess",
+    "href": "projects/project_2_Bike_Store/index.html#analyseprosess",
+    "title": "Bike Store – Analyse av salgsdrivere",
+    "section": "Analyseprosess",
+    "text": "Analyseprosess\nProsjektet ble gjennomført i tre steg:\n\nDatarydding og strukturering i SQL\n\nDatamodellering (stjerneskjema)\n\nAnalyse og visualisering i Power BI\n\nPipeline:\nRådata → SQL datamodell → Power BI analyse → beslutningsstøtte"
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html#målet-med-analysen-var-å-strukturere-rådata-til-et-analyseklart-datagrunnlag-og-utvikle-et-dashboard-som-forklarer-drivere-bak-omsetning-og-vekst.",
+    "href": "projects/project_2_Bike_Store/index.html#målet-med-analysen-var-å-strukturere-rådata-til-et-analyseklart-datagrunnlag-og-utvikle-et-dashboard-som-forklarer-drivere-bak-omsetning-og-vekst.",
+    "title": "Bike Store – Analyse av salgsdrivere",
+    "section": "Målet med analysen var å strukturere rådata til et analyseklart datagrunnlag og utvikle et dashboard som forklarer drivere bak omsetning og vekst.",
+    "text": "Målet med analysen var å strukturere rådata til et analyseklart datagrunnlag og utvikle et dashboard som forklarer drivere bak omsetning og vekst."
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html#executive-summary",
+    "href": "projects/project_2_Bike_Store/index.html#executive-summary",
+    "title": "Bike Store – Analyse av salgsdrivere",
+    "section": "Executive summary",
+    "text": "Executive summary\n\nSalgsanalysen viser sterk vekst (+42 % YoY), men omsetningen er konsentrert i et begrenset antall produkter og butikker.\nDatamodellen ble strukturert som et stjerneskjema i SQL og brukt som semantisk lag for Power BI.\nDashboardet gjør det mulig å identifisere drivere bak salgsvekst og gir grunnlag for beslutninger knyttet til sortiment, lager og salg."
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html#innsikt-fra-analysen",
+    "href": "projects/project_2_Bike_Store/index.html#innsikt-fra-analysen",
+    "title": "Bike Store – Analyse av salgsdrivere",
+    "section": "Innsikt fra analysen",
+    "text": "Innsikt fra analysen\nAnalysen viser at salgsveksten i Bike Store er sterk (+42 % YoY), men samtidig tydelig konsentrert.\nViktige funn:\n\nen liten andel produkter driver en stor del av omsetningen\n\nén hovedbutikk står for en betydelig andel av salget\n\nveksten er i stor grad volumdrevet\n\nDette indikerer både høy avhengighet av enkelte produkter og potensial for optimalisering av sortiment og lagerstrategi."
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html#hva-denne-casen-demonstrerer",
+    "href": "projects/project_2_Bike_Store/index.html#hva-denne-casen-demonstrerer",
+    "title": "Bike Store – Analyse av salgsdrivere",
+    "section": "Hva denne casen demonstrerer",
+    "text": "Hva denne casen demonstrerer\n\nSQL datamodellering\nDesign av stjerneskjema\nDatarydding og kvalitetssikring\nKPI-design i Power BI\nAnalyse av forretningsdrivere\nVisualisering av innsikt for beslutningsstøtte"
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html#dashboard-oversikt-over-salgsutvikling",
+    "href": "projects/project_2_Bike_Store/index.html#dashboard-oversikt-over-salgsutvikling",
+    "title": "Bike Store – Analyse av salgsdrivere",
+    "section": "Dashboard – oversikt over salgsutvikling",
+    "text": "Dashboard – oversikt over salgsutvikling\n\n\n\n\n\nDashboardet er designet for å gi en rask oversikt over:\n\nutvikling i omsetning over tid\n\nhvilke produkter og kategorier som driver salget\n\nhvordan omsetningen fordeler seg mellom butikker\n\nVisualiseringen gjør det mulig å identifisere både vekstmønstre og konsentrasjon i salget."
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html#hvordan-dashboardet-brukes",
+    "href": "projects/project_2_Bike_Store/index.html#hvordan-dashboardet-brukes",
+    "title": "Bike Store – Analyse av salgsdrivere",
+    "section": "Hvordan dashboardet brukes",
+    "text": "Hvordan dashboardet brukes\nDashboardet er strukturert rundt tre analyser:\n1. Salgsutvikling over tid\nVisualiserer månedlig utvikling i omsetning og gjør det mulig å identifisere sesongmønstre og vekstperioder.\n2. Produkt- og kategorianalyse\nViser hvilke produkter og kategorier som står for størstedelen av omsetningen.\nDette gjør det mulig å identifisere:\n\ntopprodukter\n\nkonsentrasjonsrisiko\n\npotensial for sortimentsoptimalisering\n\n3. Butikkanalyse\nSammenligner omsetning mellom butikker for å identifisere geografiske forskjeller i salgsytelse."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#problemstilling",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#problemstilling",
+    "title": "Analyse av lønnsomhetsdrivere",
+    "section": "",
+    "text": "Virksomheten opplevde sterk salgsvekst, men marginutviklingen fulgte ikke samme trend.\nSentrale spørsmål var:\n\nHva driver lønnsomheten i virksomheten?\nHvilken effekt har rabatter på margin?\nHvordan påvirker fraktstrategi lønnsomheten på tvers av regioner?\n\nMålet med prosjektet var å utvikle et dashboard som gjør det mulig å identifisere drivere bak lønnsomhet og gi grunnlag for bedre pris- og logistikkbeslutninger."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#analyseprosess",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#analyseprosess",
+    "title": "Analyse av lønnsomhetsdrivere",
+    "section": "Analyseprosess",
+    "text": "Analyseprosess\nProsjektet ble gjennomført i tre steg:\n\nDatamodellering og KPI-design\n\nAnalyse av lønnsomhetsdrivere\n\nVisualisering i Power BI\n\nPipeline:\nTransaksjonsdata → datamodell → KPI-analyse → dashboard"
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#executive-dashboard",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#executive-dashboard",
+    "title": "Analyse av lønnsomhetsdrivere",
+    "section": "Executive dashboard",
+    "text": "Executive dashboard\n\nDashboardet gir en samlet oversikt over:\n\nutvikling i omsetning og profit\n\nvolum- og kostnadsdrivere\n\nutvikling i gjennomsnittlig ordreverdi\n\n\nOverordnet innsikt\nVolumvekst driver omsetningen, men margin forbedres ikke proporsjonalt.\n\nOmsetning: +20 %\n\nProfit: +14 %\n\nKostnader: +21 %\n\nDette skaper tydelig marginpress."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#market-og-regional-analyse",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#market-og-regional-analyse",
+    "title": "Analyse av lønnsomhetsdrivere",
+    "section": "Market og regional analyse",
+    "text": "Market og regional analyse\n\nAnalysen viser betydelige forskjeller i lønnsomhet mellom regioner.\n\nViktige funn\n\nOmsetningen er konsentrert i et fåtall markeder\n\nNoen regioner bidrar lite til lønnsomhet relativt til volum\n\nHøy eksponering mot toppmarkedene øker risikoen for regional nedgang"
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#fraktstrategi-og-margin",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#fraktstrategi-og-margin",
+    "title": "Analyse av lønnsomhetsdrivere",
+    "section": "Fraktstrategi og margin",
+    "text": "Fraktstrategi og margin\n\nFraktmetoder påvirker lønnsomheten ulikt på tvers av regioner.\n\nHovedfunn\n\nFirst Class gir høyest total margin (~14 %)\n\nSame Day er generelt lønnsom\n\nMen:\n\nSame Day i South-region gir -8,4 % margin\n\nDette viser at fraktstrategi må differensieres regionalt."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#rabattanalyse",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#rabattanalyse",
+    "title": "Analyse av lønnsomhetsdrivere",
+    "section": "Rabattanalyse",
+    "text": "Rabattanalyse\n\nRabatter har en tydelig effekt på lønnsomhet.\n\nKPIer\n\nMargin uten rabatt: 29,5 %\n\nMargin med rabatt: -2,9 %\n\n\n\nIdentifisering av knekkpunkt\n\n0–10 % rabatt → margin robust\n\n11–20 % → margin svekkes\n\n21–30 % → margin kollapser\n\nKritisk rabattnivå: 20 %"
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#resultat-per-enhet-vs-rabatt",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#resultat-per-enhet-vs-rabatt",
+    "title": "Analyse av lønnsomhetsdrivere",
+    "section": "Resultat per enhet vs rabatt",
+    "text": "Resultat per enhet vs rabatt\nScatter-analysen viser:\n\nenhetsmargin faller ved økende rabatt\n\nhøye rabatter kompenseres ikke av volum\n\nlønnsomhetstap skyldes prisstrategi, ikke etterspørsel\n\n\nMest utsatte segmenter\n\nTechnology\n\nFurniture\n\nFlere segmenter går fra ~30 % margin til negativ ved høye rabatter."
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#problemstilling",
+    "href": "projects/project_3_strava/index.html#problemstilling",
+    "title": "Strava Analytics Pipeline",
+    "section": "",
+    "text": "Treningsdata fra apper og manuelle logger lagres ofte i separate systemer og i ulike formater. Dette gjør det vanskelig å analysere treningsbelastning, utvikling over tid og prestasjonsmønstre.\nMålet med prosjektet var å bygge en automatisert pipeline som:\n\nhenter aktivitetsdata fra Strava API\nstrukturerer data i en database\nmodellerer datasettet for analyse\nvisualiserer innsikt i Power BI"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#executive-summary",
+    "href": "projects/project_3_strava/index.html#executive-summary",
+    "title": "Strava Analytics Pipeline",
+    "section": "Executive summary",
+    "text": "Executive summary\n\nBygget en automatisert data pipeline (Strava API → R → PostgreSQL → Power BI)\n\nStrukturert treningsdata i et stjerneskjema for analyse\n\nUtviklet dashboards for analyse av treningsbelastning, prestasjon og treningsmønster\n\nProsjektet demonstrerer en komplett analysepipeline fra datainnhenting til visualisering."
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#data-pipeline",
+    "href": "projects/project_3_strava/index.html#data-pipeline",
+    "title": "Strava Analytics Pipeline",
+    "section": "Data pipeline",
+    "text": "Data pipeline\nArkitektur for løsningen:\nStrava API → Datainnhenting (R) → Databasenivå (PostgreSQL) → Datamodell (Star schema) → Analyse (DAX / Power BI)\nPipeline gjør det mulig å:\n\nautomatisere datainnhenting\nlagre historiske treningsdata\nanalysere utvikling over tid"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#datamodell",
+    "href": "projects/project_3_strava/index.html#datamodell",
+    "title": "Strava Analytics Pipeline",
+    "section": "Datamodell",
+    "text": "Datamodell\nDatasettet ble strukturert som et stjerneskjema.\nFaktatabeller\n\naktiviteter fra Strava\nstyrketreningsøkter fra treningsdagbok\n\nDimensjoner\n\ndato\naktivitetstype\nutøver\n\n\n\n\nDatamodell"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#analyse-og-visualisering",
+    "href": "projects/project_3_strava/index.html#analyse-og-visualisering",
+    "title": "Strava Analytics Pipeline",
+    "section": "Analyse og visualisering",
+    "text": "Analyse og visualisering\n\nUtøver-dashboard\n\n\n\nUtøver dashboard\n\n\nDashboardet gir oversikt over:\n\ntreningsvolum over tid\nintensitetsfordeling\nprestasjonsutvikling\n\n\n\nInnsikt\n\nStabil treningsmengde over tid er en bedre indikator på robusthet enn enkeltuker med høyt volum\nUtøvere har tydelig ulike fysiologiske profiler i power curve\nTreningspreferanser viser en tydelig døgnrytme i treningsmønster\n\n\n\n\nSammenligning av utøvere\n\n\n\nSammenligning\n\n\nDette dashboardet gjør det mulig å sammenligne:\n\ntreningsvolum\nintensitetsprofil\nprestasjon\n\npå tvers av utøvere innen valgt periode.\n\n\n\nTreningspreferanser\n\n\n\nTreningspreferanser\n\n\nAnalysen viser en tydelig preferanse for trening på ettermiddag etter arbeidstid, med tidligere økter i helgene.\n\n\n\nBeste prestasjoner\n\n\n\nBeste prestasjoner\n\n\n\n\n\nTreningsvolum over tid\n\n\n\nTreningsvolum\n\n\nAnalysen viser perioder med stabil treningsmengde og enkelte faser med lavere aktivitetsnivå.\n\n\n\nOversikt over styrkeøkter\n\n\n\nStyrkedata\n\n\n\nJevn progresjon i benkpress\nOverkroppsøvelser som benkpress, pull ups og triceps dominerer treningen\nUnderkroppsøvelser påvirket av tidligere kneproblematikk\nVariasjon i øvelsesutvalg gjennom året"
+  },
+  {
+    "objectID": "index.html#prosjekter",
+    "href": "index.html#prosjekter",
+    "title": "Lars Tingelstad. PhD",
+    "section": "Prosjekter",
+    "text": "Prosjekter\n\n\nSales Analytics📊\nAnalyse av salgsdrivere i Bike Store ved bruk av SQL og Power BI.\nTeknologi\nSQL\nPower BI\nDatamodellering\nSe prosjekt →\n\n\nProfitability Analysis💰\nAnalyse av hvordan rabatter, fraktstrategi og volum påvirker margin.\nTeknologi\nPower BI\nDAX\nKPI-design\nSe prosjekt →\n\n\nStrava Data Pipeline🚴\nEnd-to-end pipeline for treningsdata.\nStrava API → R → PostgreSQL → Power BI\nTeknologi\nR\nPostgreSQL\nPower BI\nSe prosjekt →\n\n\n\n\nKontakt\n\n\n\n📧 Send meg en e-post\n🔗 LinkedIn"
+  }
+]
