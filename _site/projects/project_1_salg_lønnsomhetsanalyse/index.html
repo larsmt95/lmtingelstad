@@ -71,8 +71,11 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=DM+Mono:wght@400;500&amp;family=Syne:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
 
 
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -128,35 +131,16 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">Innhold</h2>
    
-  <ul>
-  <li><a href="#formål-med-prosjektet" id="toc-formål-med-prosjektet" class="nav-link active" data-scroll-target="#formål-med-prosjektet">Formål med prosjektet</a></li>
+  <ul class="collapse">
+  <li><a href="#formål" id="toc-formål" class="nav-link active" data-scroll-target="#formål">Formål</a></li>
   <li><a href="#datamodell-og-teknisk-oppsett" id="toc-datamodell-og-teknisk-oppsett" class="nav-link" data-scroll-target="#datamodell-og-teknisk-oppsett">Datamodell og teknisk oppsett</a></li>
-  <li><a href="#executive-summary" id="toc-executive-summary" class="nav-link" data-scroll-target="#executive-summary">Executive Summary</a>
-  <ul class="collapse">
-  <li><a href="#innsikt-fra-dashboardet" id="toc-innsikt-fra-dashboardet" class="nav-link" data-scroll-target="#innsikt-fra-dashboardet">Innsikt fra dashboardet:</a></li>
-  </ul></li>
-  <li><a href="#market-drilldown" id="toc-market-drilldown" class="nav-link" data-scroll-target="#market-drilldown">Market &amp; Drilldown</a>
-  <ul class="collapse">
-  <li><a href="#overordnet-utvikling" id="toc-overordnet-utvikling" class="nav-link" data-scroll-target="#overordnet-utvikling">Overordnet utvikling</a></li>
-  </ul></li>
-  <li><a href="#strategisk-tolkning" id="toc-strategisk-tolkning" class="nav-link" data-scroll-target="#strategisk-tolkning">Strategisk tolkning</a></li>
-  <li><a href="#fraktmetode-og-regional-marginanalyse" id="toc-fraktmetode-og-regional-marginanalyse" class="nav-link" data-scroll-target="#fraktmetode-og-regional-marginanalyse">Fraktmetode og regional marginanalyse</a>
-  <ul class="collapse">
-  <li><a href="#hovedfunn" id="toc-hovedfunn" class="nav-link" data-scroll-target="#hovedfunn">Hovedfunn</a></li>
-  <li><a href="#viktig-innsikt" id="toc-viktig-innsikt" class="nav-link" data-scroll-target="#viktig-innsikt">Viktig innsikt</a></li>
-  </ul></li>
-  <li><a href="#rabatt--og-marginanalyse" id="toc-rabatt--og-marginanalyse" class="nav-link" data-scroll-target="#rabatt--og-marginanalyse">Rabatt- og marginanalyse</a>
-  <ul class="collapse">
-  <li><a href="#kpier" id="toc-kpier" class="nav-link" data-scroll-target="#kpier">KPIer</a></li>
-  <li><a href="#identifisering-av-knekkpunkt" id="toc-identifisering-av-knekkpunkt" class="nav-link" data-scroll-target="#identifisering-av-knekkpunkt">Identifisering av knekkpunkt</a></li>
-  </ul></li>
-  <li><a href="#resultat-per-enhet-vs.-rabatt" id="toc-resultat-per-enhet-vs.-rabatt" class="nav-link" data-scroll-target="#resultat-per-enhet-vs.-rabatt">Resultat per enhet vs.&nbsp;rabatt</a>
-  <ul class="collapse">
-  <li><a href="#hvem-rammes-hardest" id="toc-hvem-rammes-hardest" class="nav-link" data-scroll-target="#hvem-rammes-hardest">Hvem rammes hardest?</a></li>
-  </ul></li>
-  <li><a href="#konklusjon" id="toc-konklusjon" class="nav-link" data-scroll-target="#konklusjon">Konklusjon</a></li>
+  <li><a href="#executive-summary" id="toc-executive-summary" class="nav-link" data-scroll-target="#executive-summary">Executive Summary</a></li>
+  <li><a href="#markedsanalyse-og-regional-drilldown" id="toc-markedsanalyse-og-regional-drilldown" class="nav-link" data-scroll-target="#markedsanalyse-og-regional-drilldown">Markedsanalyse og regional drilldown</a></li>
+  <li><a href="#fraktmetode-og-regional-marginanalyse" id="toc-fraktmetode-og-regional-marginanalyse" class="nav-link" data-scroll-target="#fraktmetode-og-regional-marginanalyse">Fraktmetode og regional marginanalyse</a></li>
+  <li><a href="#rabatt--og-marginanalyse" id="toc-rabatt--og-marginanalyse" class="nav-link" data-scroll-target="#rabatt--og-marginanalyse">Rabatt- og marginanalyse</a></li>
+  <li><a href="#anbefalinger" id="toc-anbefalinger" class="nav-link" data-scroll-target="#anbefalinger">Anbefalinger</a></li>
   <li><a href="#hva-denne-casen-demonstrerer" id="toc-hva-denne-casen-demonstrerer" class="nav-link" data-scroll-target="#hva-denne-casen-demonstrerer">Hva denne casen demonstrerer</a></li>
   </ul>
 </nav>
@@ -167,6 +151,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Finansiell innsikt for strategiske beslutninger</h1>
+<p class="subtitle lead">Power BI · DAX · Lønnsomhetsanalyse</p>
 </div>
 
 
@@ -183,157 +168,287 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>I dette prosjektet utviklet jeg en helhetlig Power BI-rapport for å analysere omsetning, lønnsomhet og drivere bak marginutvikling. Gjennom strukturert KPI-design, DAX-beregninger og interaktiv drilldown identifiserte jeg hvordan fraktstrategi og rabatter påvirker profitabilitet – og hvor tiltak bør settes inn for å forbedre lønnsomheten.</p>
-<section id="formål-med-prosjektet" class="level2">
-<h2 class="anchored" data-anchor-id="formål-med-prosjektet">Formål med prosjektet</h2>
-<p>Målet var å utvikle et beslutningsstøttende dashboard som:</p>
-<ul>
-<li><p>Gir rask oversikt over finansiell utvikling (YoY)</p></li>
-<li><p>Avdekker drivere bak resultatene (segment, kategori, region, by)</p></li>
-<li><p>Kombinerer operativ og strategisk innsikt</p></li>
-<li><p>Er visuelt strukturert for ledelsesbruk</p></li>
-</ul>
+<div class="project-hero">
+  <div class="hero-eyebrow">Power BI · Lønnsomhetsanalyse</div>
+  <h1 class="hero-title">Finansiell innsikt for<br><em>strategiske beslutninger</em></h1>
+  <p class="hero-sub">Et beslutningsstøttende dashboard som avdekker hvordan rabattstrategi og fraktmetode driver marginkollaps — og hvor ledelsen bør sette inn tiltak.</p>
+
+  <div class="tag-row">
+    <span class="ptag bi">Power BI</span>
+    <span class="ptag bi">DAX</span>
+    <span class="ptag">Stjernemodell</span>
+    <span class="ptag">Tidsintelligens</span>
+    <span class="ptag">Lønnsomhetsanalyse</span>
+    <span class="ptag">Visual storytelling</span>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">+20<span class="stat-accent">%</span></div>
+    <div class="stat-label">Omsetningsvekst YoY</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">+21<span class="stat-accent">%</span></div>
+    <div class="stat-label">Kostnadsvekst YoY</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">21<span class="stat-accent">%</span></div>
+    <div class="stat-label">Rabattknekkpunkt</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">−32<span class="stat-accent">pp</span></div>
+    <div class="stat-label">Margindelta med rabatt</div>
+  </div>
+</div>
+<section id="formål" class="level2">
+<h2 class="anchored" data-anchor-id="formål">Formål</h2>
+<p>Målet var å utvikle et beslutningsstøttende dashboard som gir ledelsen rask oversikt over finansiell utvikling, avdekker hva som faktisk driver resultatene — og peker på hvor tiltak bør settes inn. Dashboardet er strukturert for å bevege seg fra overordnet lønnsomhet ned til kategori-, segment- og regionsnivå.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Hovedfunn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Lønnsomhetsutfordringen er <strong>rabattdrevet, ikke volumdrevet</strong>. Veksten er sterk, men marginen svekkes systematisk fordi rabatter over 20 % ikke kompenseres av økt volum — og fordi fraktkostnadene vokser raskere enn omsetningen.</p>
+</div>
+</div>
+<div class="findings-grid">
+  <div class="finding-card">
+    <div class="finding-idx">Funn 01</div>
+    <div class="finding-headline">Vekst uten proporsjonal marginforbedring</div>
+    <div class="finding-body">Omsetning opp 20 %, profit opp 14 % — men kostnad opp 21 % og ordrevolumet opp 28 %. Veksten er real, men marginen tynnes ut.</div>
+    <span class="finding-metric" style="color:#16a34a">+20% / +14%</span>
+  </div>
+  <div class="finding-card">
+    <div class="finding-idx">Funn 02</div>
+    <div class="finding-headline">Rabatter over 21 % utløser marginkollaps</div>
+    <div class="finding-body">Margin uten rabatt er 29,5 %. Med rabatt faller den til −2,9 %. Knekkpunktet er identifisert mellom 21–30 % rabatt — etter dette kollapser lønnsomheten.</div>
+    <span class="finding-metric">−32pp</span> 
+  </div>
+  <div class="finding-card">
+    <div class="finding-idx">Funn 03</div>
+    <div class="finding-headline">Fraktstrategi er regionalt sensitiv</div>
+    <div class="finding-body">Same Day er globalt lønnsom, men gir −8,4 % margin i South-regionen. Fraktmetode alene er ikke problemet — kombinasjonen med region avgjør.</div>
+    <span class="finding-metric">
+  <span style="color:#16a34a">14%</span> /
+  <span style="color:#dc2626">−8%</span>
+</span>
+  </div>
+</div>
+<hr>
 </section>
 <section id="datamodell-og-teknisk-oppsett" class="level2">
 <h2 class="anchored" data-anchor-id="datamodell-og-teknisk-oppsett">Datamodell og teknisk oppsett</h2>
-<details>
-<summary>
-Datamodell
-</summary>
-<p><a href="images/clipboard-422633206.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/clipboard-422633206.png" class="img-fluid"></a></p>
-</details>
-<ul>
-<li><p>Faktatabell: Sales-transaksjoner</p></li>
-<li><p>Dimensjoner: Dato, Kategori, Segment, Lokasjon</p></li>
-<li><p>Relasjoner strukturert som stjerneskjema</p></li>
-</ul>
-<p><strong>Eksempler på DAX-mål:</strong></p>
-<ul>
-<li><p>Total Sales</p></li>
-<li><p>Sales LY</p></li>
-<li><p>Sales % vs LY</p></li>
-<li><p>Profit Margin</p></li>
-<li><p>Avg Order Value</p></li>
-<li><p>Dynamiske KPI-farger (conditional formatting)</p></li>
-<li><p>Dynamisk Top/Bottom 10</p></li>
-</ul>
+<p>Rapporten er bygget på et <strong>stjerneskjema</strong> i Power BI med én sentral faktatabell og fire dimensjonstabeller. Strukturen gir effektiv filtrering på tvers av tid, geografi, kategori og kundetype.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Datamodell — klikk for å se
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><a href="../..\projects/project_1_salg_lønnsomhetsanalyse/bilder/datamodell.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../..\projects/project_1_salg_lønnsomhetsanalyse/bilder/datamodell.png" class="img-fluid"></a></p>
+</div>
+</div>
+</div>
+<p>Faktatabel inneholder salgstransaksjoner med pris, rabatt, kostnad og fraktmetode. Dimensjonene dekker dato (med tidsintelligens), produktkategori, kundesegment og lokasjon (by, stat, region).</p>
+<p><strong>Sentrale DAX-mål som er bygget:</strong></p>
+<div class="rec-grid" style="margin-top:16px">
+  <div class="rec-card">
+    <div class="rec-icon">📐</div>
+    <div>
+      <div class="rec-title">Tidsintelligens</div>
+      <div class="rec-body">Total Sales · Sales LY · Sales % vs LY — muliggjør YoY-sammenligning uten manuell datofiltrering.</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-icon">📉</div>
+    <div>
+      <div class="rec-title">Lønnsomhet</div>
+      <div class="rec-body">Profit Margin · Avg Order Value · Margin delta ved rabatt — koblet mot segment og region.</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-icon">🎨</div>
+    <div>
+      <div class="rec-title">Dynamisk formatering</div>
+      <div class="rec-body">KPI-farger endres automatisk basert på måloppnåelse — grønt over terskel, rødt under.</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-icon">🏆</div>
+    <div>
+      <div class="rec-title">Dynamisk rangering</div>
+      <div class="rec-body">Top/Bottom 10-analyse per segment, kategori og marked — brukerstyrt via parameter.</div>
+    </div>
+  </div>
+</div>
+<hr>
 </section>
 <section id="executive-summary" class="level2">
 <h2 class="anchored" data-anchor-id="executive-summary">Executive Summary</h2>
-<p><a href="images/clipboard-151602034.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/clipboard-151602034.png" class="img-fluid"></a></p>
-<section id="innsikt-fra-dashboardet" class="level3">
-<h3 class="anchored" data-anchor-id="innsikt-fra-dashboardet">Innsikt fra dashboardet:</h3>
-<p>Volumvekst driver omsetning, men margin forbedres ikke proporsjonalt grunnet kostnadsvekst og lavere gjennomsnittlig ordreverdi.</p>
-<ul>
-<li><p>Omsetning: +20 %</p></li>
-<li><p>Profit: +14 %</p></li>
-<li><p>Kostnad: +21 % → marginpress</p></li>
-<li><p>Order volume: +28 %</p></li>
-</ul>
+<p><a href="../..\projects/project_1_salg_lønnsomhetsanalyse/bilder/summary dash.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="../..\projects/project_1_salg_lønnsomhetsanalyse/bilder/summary dash.png" class="img-fluid"></a></p>
+<p>Volumvekst driver omsetningen, men marginutviklingen følger ikke med. Kostnadsveksten på 21 % overstiger omsetningsveksten på 20 %, og gjennomsnittlig ordreverdi faller — noe som indikerer at veksten delvis er rabattdrevet og lavmarginaldrevet.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Tolkning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Selskapet vokser, men veksten er ikke lønnsom nok. AOV-fallet kombinert med kostnadsvekst er et varselsignal om at prisstrategi og rabattbruk bør gjennomgås systematisk.</p>
+</div>
+</div>
+<hr>
 </section>
-</section>
-<section id="market-drilldown" class="level2">
-<h2 class="anchored" data-anchor-id="market-drilldown">Market &amp; Drilldown</h2>
-<p><a href="bilder/market dash.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="bilder/market dash.png" class="img-fluid"></a></p>
-<section id="overordnet-utvikling" class="level3">
-<h3 class="anchored" data-anchor-id="overordnet-utvikling">Overordnet utvikling</h3>
-<p>🔎 Volumvekst driver omsetning, men fallende AOV og sterk kostnadsvekst indikerer marginpress.</p>
-<p>🔎 Omsetningen er konsentrert i få stater. Avhengighet av toppmarkedene øker eksponering mot regionale svingninger.</p>
-<p>🔎 Omsetning korrelerer ikke lineært med lønnsomhet. Noen markeder bidrar lite til bunnlinjen relativt til volum.</p>
-</section>
-</section>
-<section id="strategisk-tolkning" class="level2">
-<h2 class="anchored" data-anchor-id="strategisk-tolkning">Strategisk tolkning</h2>
-<ul>
-<li><p>Vekst er volumdrevet, ikke prisdrevet.</p></li>
-<li><p>Marginoptimalisering bør skje på delstatsnivå.</p></li>
-<li><p>Ressursallokering bør vurderes mot lønnsomhetsbidrag, ikke kun omsetning.</p></li>
-</ul>
+<section id="markedsanalyse-og-regional-drilldown" class="level2">
+<h2 class="anchored" data-anchor-id="markedsanalyse-og-regional-drilldown">Markedsanalyse og regional drilldown</h2>
+<p><a href="../..\projects/project_1_salg_lønnsomhetsanalyse/bilder/market dash.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="../..\projects/project_1_salg_lønnsomhetsanalyse/bilder/market dash.png" class="img-fluid"></a></p>
+<p>Omsetningen er konsentrert i et fåtall stater, noe som gir eksponering mot regionale svingninger. Viktigere: omsetning og lønnsomhet korrelerer ikke lineært på markedsnivå. Noen høyvolumsmarkeder bidrar lite til bunnlinjen relativt til volum — og bør vurderes for ressursreallokering.</p>
+<hr>
 </section>
 <section id="fraktmetode-og-regional-marginanalyse" class="level2">
 <h2 class="anchored" data-anchor-id="fraktmetode-og-regional-marginanalyse">Fraktmetode og regional marginanalyse</h2>
-<p><a href="bilder/levering og margin.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="bilder/levering og margin.png" class="img-fluid"></a></p>
-<section id="hovedfunn" class="level3">
-<h3 class="anchored" data-anchor-id="hovedfunn">Hovedfunn</h3>
-<ul>
-<li><p>First Class høyest total margin (~14 %)</p></li>
-<li><p>Same Day generelt lønnsom</p>
-<ul>
-<li>Men: Same Day i South gir -8,4 % margin</li>
-</ul></li>
-<li><p>Teknologi i South-region trekker ned</p></li>
-</ul>
-</section>
-<section id="viktig-innsikt" class="level3">
-<h3 class="anchored" data-anchor-id="viktig-innsikt">Viktig innsikt</h3>
-<p>Fraktmåte er ikke problemet globalt – den er regionalt sensitiv.</p>
-</section>
+<p><a href="../..\projects/project_1_salg_lønnsomhetsanalyse/bilder/levering og margin.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="../..\projects/project_1_salg_lønnsomhetsanalyse/bilder/levering og margin.png" class="img-fluid"></a></p>
+<p>Analysen avdekker at fraktstrategi ikke er et globalt problem — det er et regionalt sensitivt problem. First Class leverer den høyeste totalmarginen (~14 %), mens Same Day er lønnsom i de fleste regioner, men gir −8,4 % margin i South.</p>
+<p>Teknologikategorien i South-regionen er den sterkeste enkeltdriveren av negativt resultat og bør prioriteres for tiltak.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Anbefaling
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fraktstrategi bør differensieres per region — ikke optimeres globalt. En global Same Day-strategi vil gi positiv totalmargin, men skjule et vesentlig tap i én region.</p>
+</div>
+</div>
+<hr>
 </section>
 <section id="rabatt--og-marginanalyse" class="level2">
 <h2 class="anchored" data-anchor-id="rabatt--og-marginanalyse">Rabatt- og marginanalyse</h2>
-<p><a href="bilder/rabatt &amp; volum.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="bilder/rabatt &amp; volum.png" class="img-fluid"></a></p>
-<section id="kpier" class="level3">
-<h3 class="anchored" data-anchor-id="kpier">KPIer</h3>
-<ul>
-<li><p>Profit margin uten rabatt: 29,5 %</p></li>
-<li><p>Med rabatt: -2,9 %</p></li>
-<li><p>Margin delta: -32 %</p></li>
-</ul>
+<p><a href="../..\projects/project_1_salg_lønnsomhetsanalyse/bilder/rabatt &amp; volum.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="../..\projects/project_1_salg_lønnsomhetsanalyse/bilder/rabatt &amp; volum.png" class="img-fluid"></a></p>
+<p>Dette er den mest kritiske delen av analysen. Profit margin uten rabatt er <strong>29,5 %</strong>. Med rabatt faller den til <strong>−2,9 %</strong> — et fall på 32 prosentpoeng. Scatter-analysen bekrefter at enhetsmargin faller konsistent ved stigende rabatt, og at høye rabatter ikke kompenseres av volumvekst.</p>
+<p>Knekkpunktet er kvantifisert:</p>
+<table class="scenario-tbl caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">Rabattnivå</th>
+<th data-quarto-table-cell-role="th">Margineffekt</th>
+<th data-quarto-table-cell-role="th">Vurdering</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0–10 %</td>
+<td>Robust</td>
+<td><div class="sbar-wrap">
+<div class="sbar" style="width:160px;background:#16a34a">
+
+</div>
+<span>Akseptabelt</span>
+</div></td>
+</tr>
+<tr class="even">
+<td>11–20 %</td>
+<td>Svekkes</td>
+<td><div class="sbar-wrap">
+<div class="sbar" style="width:100px;background:var(--p-blue)">
+
+</div>
+<span>Overvåk</span>
+</div></td>
+</tr>
+<tr class="odd">
+<td>21–30 %</td>
+<td>Kollaps</td>
+<td><div class="sbar-wrap">
+<div class="sbar" style="width:60px;background:var(--p-accent)">
+
+</div>
+<span>Unngå</span>
+</div></td>
+</tr>
+<tr class="even">
+<td>30 %+</td>
+<td>Kraftig negativ</td>
+<td><div class="sbar-wrap">
+<div class="sbar" style="width:30px;background:#7f1d1d">
+
+</div>
+<span>Stopp</span>
+</div></td>
+</tr>
+</tbody>
+</table>
+<p>Technology og Furniture er hardest rammet. Flere segmenter går fra ~30 % margin til negativ — tapet skyldes prisstrategi, ikke etterspørselssvikt.</p>
+<hr>
 </section>
-<section id="identifisering-av-knekkpunkt" class="level3">
-<h3 class="anchored" data-anchor-id="identifisering-av-knekkpunkt">Identifisering av knekkpunkt</h3>
-<ul>
-<li>0–10 % rabatt → margin robust</li>
-</ul>
-<!-- -->
-<ul>
-<li>11–20 % → svekkes</li>
-</ul>
-<!-- -->
-<ul>
-<li>21–30 % → kollaps</li>
-</ul>
-<!-- -->
-<ul>
-<li>30 %+ → kraftig negativ</li>
-</ul>
-<p><strong>Lønnsomhetsknekkpunkt -&gt; 21–30 % rabatt</strong>.</p>
+<section id="anbefalinger" class="level2">
+<h2 class="anchored" data-anchor-id="anbefalinger">Anbefalinger</h2>
+<div class="rec-grid">
+  <div class="rec-card">
+    <div class="rec-icon">🚫</div>
+    <div>
+      <div class="rec-title">Begrens rabatter over 20 %</div>
+      <div class="rec-body">Rabatter over knekkpunktet bør kun tillates med dokumentert volumgevinst som overstiger margintapet. Ingen kategorier er immune — Technology og Furniture er mest eksponerte.</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-icon">🗺️</div>
+    <div>
+      <div class="rec-title">Differentier fraktstrategi regionalt</div>
+      <div class="rec-body">Same Day i South og Teknologi i South bør gjennomgås umiddelbart. En region-spesifikk fraktstrategi kan gi vesentlig marginforbedring uten å påvirke totalvolumet.</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-icon">📊</div>
+    <div>
+      <div class="rec-title">Realloker ressurser mot lønnsomme markeder</div>
+      <div class="rec-body">Salgs- og markedsressurser bør vurderes mot lønnsomhetsbidrag, ikke kun omsetning. Høyvolumsmarkeder med lav margin bør analyseres for om de forsvarer investeringen.</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-icon">📈</div>
+    <div>
+      <div class="rec-title">Overvåk AOV som ledende indikator</div>
+      <div class="rec-body">Fallende gjennomsnittlig ordreverdi er et tidlig varseltegn på rabattpress. AOV bør inngå i månedlig KPI-rapportering som separat styringsmetrikk for prisdisiplin.</div>
+    </div>
+  </div>
+</div>
+<hr>
 </section>
-</section>
-<section id="resultat-per-enhet-vs.-rabatt" class="level2">
-<h2 class="anchored" data-anchor-id="resultat-per-enhet-vs.-rabatt">Resultat per enhet vs.&nbsp;rabatt</h2>
-<p>Scatter-analysen viser:</p>
-<ul>
-<li><p>Fallende enhetsmargin ved økende rabatt</p></li>
-<li><p>Høye rabatter kompenseres ikke av volum</p></li>
-<li><p>Tapet skyldes prisstrategi, ikke etterspørselssvikt</p></li>
-</ul>
-<section id="hvem-rammes-hardest" class="level3">
-<h3 class="anchored" data-anchor-id="hvem-rammes-hardest">Hvem rammes hardest?</h3>
-<p>Segment- og kategorianalyse viser:</p>
-<ul>
-<li><p>Technology og Furniture mest utsatt</p></li>
-<li><p>Flere segmenter går fra ~30 % margin til negativ</p></li>
-<li><p>Rabatt driver lønnsomhetstap på tvers av segmenter</p></li>
-</ul>
-</section>
-</section>
-<section id="konklusjon" class="level1">
-<h1>Konklusjon</h1>
-<p>Analysen viser at lønnsomhetsutfordringen primært er rabattdrevet, ikke volumdrevet.</p>
-<p>Rabatter over 20 % bør begrenses eller knyttes til dokumentert volumgevinst.</p>
-<p>Fraktstrategi bør differensieres regionalt.</p>
-</section>
-<section id="hva-denne-casen-demonstrerer" class="level1">
-<h1>Hva denne casen demonstrerer</h1>
-<ul>
-<li><p>Strukturert KPI-design</p></li>
-<li><p>DAX for tidsintelligens</p></li>
-<li><p>Dynamisk rangering (Top/Bottom 10)</p></li>
-<li><p>Forretningsforståelse</p></li>
-<li><p>Visual storytelling</p></li>
-<li><p>Evne til å oversette tall til innsikt</p></li>
-</ul>
+<section id="hva-denne-casen-demonstrerer" class="level2">
+<h2 class="anchored" data-anchor-id="hva-denne-casen-demonstrerer">Hva denne casen demonstrerer</h2>
+<div class="tech-row">
+  <div class="tech-pill"><span>💡</span> Power BI</div>
+  <div class="tech-pill"><span>📐</span> DAX · Tidsintelligens</div>
+  <div class="tech-pill"><span>🏆</span> Dynamisk Top/Bottom 10</div>
+  <div class="tech-pill"><span>🗄️</span> Stjernemodell</div>
+  <div class="tech-pill"><span>📖</span> Visual storytelling</div>
+  <div class="tech-pill"><span>🎯</span> Forretningsforståelse</div>
+</div>
+<p>Prosjektet viser ikke bare teknisk Power BI-kompetanse — det demonstrerer evnen til å oversette komplekse datamønstre til konkrete, prioriterte anbefalinger med direkte forretningsverdi.</p>
 
 
 </section>

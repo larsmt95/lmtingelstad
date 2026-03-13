@@ -11,7 +11,7 @@
     "href": "projects/project_3_strava/index.html",
     "title": "Strava Analytics Pipeline",
     "section": "",
-    "text": "Treningsdata fra apper og manuelle logger lagres ofte i separate systemer og i ulike formater. Dette gjør det vanskelig å analysere treningsbelastning, utvikling over tid og prestasjonsmønstre.\nMålet med prosjektet var å bygge en automatisert pipeline som:\n\nhenter aktivitetsdata fra Strava API\nstrukturerer data i en database\nmodellerer datasettet for analyse\nvisualiserer innsikt i Power BI"
+    "text": "End-to-end datapipeline · Treningsanalyse\n  \n  En automatisert datapipeline som henter treningsdata fra Strava API, lagrer det i PostgreSQL og analyserer treningsbelastning, prestasjon og treningsmønster i Power BI.\n  \n    R\n    PostgreSQL\n    Power BI\n    DAX\n    API-integrasjon\n    OAuth\n    Stjernemodell\n    Tidsserieanalyse"
   },
   {
     "objectID": "projects/project_3_strava/index.html#datakilder",
@@ -52,8 +52,8 @@
     "objectID": "projects/project_3_strava/index.html#datainnhenting-strava-api-r",
     "href": "projects/project_3_strava/index.html#datainnhenting-strava-api-r",
     "title": "Strava Analytics Pipeline",
-    "section": "Datainnhenting – Strava API (R)",
-    "text": "Datainnhenting – Strava API (R)\nStrava-data ble hentet via Strava REST API med OAuth-autentisering.\nData hentes i R og lagres i PostgreSQL før analyse i Power BI.\n\n1️⃣ Autentisering (OAuth)\nTilgangstoken hentes via Strava sin OAuth-flyt.\nSensitiv informasjon håndteres via miljøvariabler.\n\n\nR – Autentisering mot Strava API\n\nlibrary(httr) \nlibrary(jsonlite)  \n\nres &lt;- POST(\"https://www.strava.com/oauth/token\",   \n        body = list(client_id = Sys.getenv(\"STRAVA_CLIENT_ID\"), \n        client_secret = Sys.getenv(\"STRAVA_CLIENT_SECRET\"),\n        code = Sys.getenv(\"STRAVA_AUTH_CODE\"),\n        grant_type = \"authorization_code\"),\n        encode = \"form\")\n        \ntokens &lt;- content(res, \"parsed\") access_token &lt;- tokens$access_token \n\n\n\n2️⃣ Hente aktiviteter\n\n\nR – Nedlasting av Strava-aktiviteter\n\nlibrary(dplyr)  \n\nget_activities &lt;- function(page, token) {   \n  GET(\"https://www.strava.com/api/v3/athlete/activities\",\n  query = list(per_page = 200, page = page), \n  add_headers(Authorization = paste(\"Bearer\", token))\n  ) \n  }  \n  \nall_activities &lt;- list() \npage &lt;- 1  \n\nrepeat {\n  res  &lt;- get_activities(page, access_token)\n  data &lt;- fromJSON(content(res, \"text\"), flatten = TRUE) \n  \n  if (nrow(data) == 0) break  \n  \n  all_activities[[page]] &lt;- data   \n  page &lt;- page + 1 \n}  \n\nactivities &lt;- bind_rows(all_activities) \n\n\n\n3️⃣ Klargjøring av data (API → analyse)\nNested JSON-felter flates ut og reduseres til analyse­relevante kolonner.\n\n\nR – Klargjøring av aktivitetsdata\n\nactivities_sql &lt;- activities %&gt;%   select(\n  activity_id = id,\n  name,\n  type,\n  start_date,\n  distance,\n  moving_time,\n  elapsed_time,\n  total_elevation_gain,\n  average_speed,\n  max_speed,\n  average_watts,\n  max_watts,\n  average_heartrate,\n  max_heartrate,\n  location_city,\n  location_country,\n  athlete.id\n  ) \n\n\n\n4️⃣ Lagring i PostgreSQL\nData lagres i en dedikert database for videre bruk i Power BI.\n\n\nR – Lagring i PostgreSQL\n\nlibrary(DBI) \nlibrary(RPostgres)\n\ncon &lt;- dbConnect(\n  Postgres(),\n  dbname = \"strava\",\n  host = \"xxx\",\n  port = xxx,\n  user = Sys.getenv(\"PG_USER\"),\n  password = Sys.getenv(\"PG_PASSWORD\")\n  )  \n  \ndbWriteTable(\n  con,\n  name = Id(schema = \"public\", table = \"activities\"),\n  value = activities_sql,\n  overwrite = TRUE\n) \n\n\n\n\n5️⃣ Verifisering\nEnkel validering sikrer at data er korrekt lastet.\nSELECT COUNT(*) FROM public.activities;\n\n\nHva denne casen demonstrerer\n\nAPI-integrasjon\nautomatisert datainnhenting\ndatabase-lagring i PostgreSQL\ndatamodellering (stjerneskjema)\nanalyse og visualisering i Power BI\nutvikling av end-to-end data pipeline"
+    "section": "Datainnhenting — Strava API (R)",
+    "text": "Datainnhenting — Strava API (R)\nStrava-data hentes via REST API med OAuth 2.0-autentisering. Sensitiv informasjon håndteres via miljøvariabler — ingen credentials i koden.\n\nAutentisering (OAuth)\n\n\nkode\n\nlibrary(httr)\nlibrary(jsonlite)\n\n# Tilgangstoken via Strava OAuth-flyt\nres &lt;- POST(\"https://www.strava.com/oauth/token\",\n  body = list(\n    client_id     = Sys.getenv(\"STRAVA_CLIENT_ID\"),\n    client_secret = Sys.getenv(\"STRAVA_CLIENT_SECRET\"),\n    code          = Sys.getenv(\"STRAVA_AUTH_CODE\"),\n    grant_type    = \"authorization_code\"\n  ),\n  encode = \"form\"\n)\n\ntokens       &lt;- content(res, \"parsed\")\naccess_token &lt;- tokens$access_token\n\n\n\nPaginert aktivitetshenting\nAPI-et leverer maks 200 aktiviteter per side. Løkken henter alle sider automatisk til ingen flere resultater returneres.\n\n\nkode\n\nlibrary(dplyr)\n\nget_activities &lt;- function(page, token) {\n  GET(\n    \"https://www.strava.com/api/v3/athlete/activities\",\n    query = list(per_page = 200, page = page),\n    add_headers(Authorization = paste(\"Bearer\", token))\n  )\n}\n\nall_activities &lt;- list()\npage &lt;- 1\n\nrepeat {\n  res  &lt;- get_activities(page, access_token)\n  data &lt;- fromJSON(content(res, \"text\"), flatten = TRUE)\n\n  if (nrow(data) == 0) break\n\n  all_activities[[page]] &lt;- data\n  page &lt;- page + 1\n}\n\nactivities &lt;- bind_rows(all_activities)\n\n\n\nKlargjøring og kolonnevalg\nNested JSON-felter flates ut, og datasettet reduseres til analyserelvante kolonner før lagring.\n\n\nkode\n\nactivities_sql &lt;- activities %&gt;%\n  select(\n    activity_id          = id,\n    name,\n    type,\n    start_date,\n    distance,\n    moving_time,\n    elapsed_time,\n    total_elevation_gain,\n    average_speed,\n    max_speed,\n    average_watts,\n    max_watts,\n    average_heartrate,\n    max_heartrate,\n    location_city,\n    location_country,\n    athlete_id           = athlete.id\n  )\n\n\n\nLagring i PostgreSQL\n\n\nkode\n\nlibrary(DBI)\nlibrary(RPostgres)\n\ncon &lt;- dbConnect(\n  Postgres(),\n  dbname   = \"strava\",\n  host     = Sys.getenv(\"PG_HOST\"),\n  port     = as.integer(Sys.getenv(\"PG_PORT\")),\n  user     = Sys.getenv(\"PG_USER\"),\n  password = Sys.getenv(\"PG_PASSWORD\")\n)\n\ndbWriteTable(\n  con,\n  name  = Id(schema = \"public\", table = \"activities\"),\n  value = activities_sql,\n  overwrite = TRUE\n)\n\nEnkel validering etter lagring:\nSELECT COUNT(*) FROM public.activities;"
   },
   {
     "objectID": "projects/project_3_strava/index.html#begrensninger",
@@ -86,9 +86,9 @@
   {
     "objectID": "projects/project_2_Bike_Store/index.html",
     "href": "projects/project_2_Bike_Store/index.html",
-    "title": "Bike Store – Analyse av salgsdrivere",
+    "title": "Bike Store Sales Analytics",
     "section": "",
-    "text": "Ledelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen.\nSentrale spørsmål var:\n\nHvilke produkter og kategorier driver omsetningen?\nHvordan utvikler salget seg over tid?\nHvor konsentrert er omsetningen på tvers av butikker og produkter?\n\nMålet med analysen var å strukturere rådata til et analyseklart datagrunnlag og utvikle et dashboard som forklarer drivere bak omsetning og vekst."
+    "text": "SQL · Power BI · Salgsvekstanalyse\n  \n  Strukturert rådata til et analyseklart stjerneskjema — og et dashboard som avdekker konsentrasjonsrisiko, vekstmønstre og salgsdrivere på tvers av produkter og butikker.\n  \n    SQL\n    PostgreSQL\n    Power BI\n    Stjernemodell\n    KPI-design\n    Salgsvekstanalyse"
   },
   {
     "objectID": "projects/project_3_strava/strava_powerbi.html",
@@ -158,7 +158,7 @@
     "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html",
     "title": "Finansiell innsikt for strategiske beslutninger",
     "section": "",
-    "text": "I dette prosjektet utviklet jeg en helhetlig Power BI-rapport for å analysere omsetning, lønnsomhet og drivere bak marginutvikling. Gjennom strukturert KPI-design, DAX-beregninger og interaktiv drilldown identifiserte jeg hvordan fraktstrategi og rabatter påvirker profitabilitet – og hvor tiltak bør settes inn for å forbedre lønnsomheten."
+    "text": "Power BI · Lønnsomhetsanalyse\n  \n  Et beslutningsstøttende dashboard som avdekker hvordan rabattstrategi og fraktmetode driver marginkollaps — og hvor ledelsen bør sette inn tiltak.\n\n  \n    Power BI\n    DAX\n    Stjernemodell\n    Tidsintelligens\n    Lønnsomhetsanalyse\n    Visual storytelling"
   },
   {
     "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#formål-med-prosjektet",
@@ -172,14 +172,14 @@
     "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#datamodell-og-teknisk-oppsett",
     "title": "Finansiell innsikt for strategiske beslutninger",
     "section": "Datamodell og teknisk oppsett",
-    "text": "Datamodell og teknisk oppsett\n\n\nDatamodell\n\n\n\n\nFaktatabell: Sales-transaksjoner\nDimensjoner: Dato, Kategori, Segment, Lokasjon\nRelasjoner strukturert som stjerneskjema\n\nEksempler på DAX-mål:\n\nTotal Sales\nSales LY\nSales % vs LY\nProfit Margin\nAvg Order Value\nDynamiske KPI-farger (conditional formatting)\nDynamisk Top/Bottom 10"
+    "text": "Datamodell og teknisk oppsett\nRapporten er bygget på et stjerneskjema i Power BI med én sentral faktatabell og fire dimensjonstabeller. Strukturen gir effektiv filtrering på tvers av tid, geografi, kategori og kundetype.\n\n\n\n\n\n\nNoteDatamodell — klikk for å se\n\n\n\n\n\n\n\n\n\nFaktatabel inneholder salgstransaksjoner med pris, rabatt, kostnad og fraktmetode. Dimensjonene dekker dato (med tidsintelligens), produktkategori, kundesegment og lokasjon (by, stat, region).\nSentrale DAX-mål som er bygget:\n\n  \n    📐\n    \n      Tidsintelligens\n      Total Sales · Sales LY · Sales % vs LY — muliggjør YoY-sammenligning uten manuell datofiltrering.\n    \n  \n  \n    📉\n    \n      Lønnsomhet\n      Profit Margin · Avg Order Value · Margin delta ved rabatt — koblet mot segment og region.\n    \n  \n  \n    🎨\n    \n      Dynamisk formatering\n      KPI-farger endres automatisk basert på måloppnåelse — grønt over terskel, rødt under.\n    \n  \n  \n    🏆\n    \n      Dynamisk rangering\n      Top/Bottom 10-analyse per segment, kategori og marked — brukerstyrt via parameter."
   },
   {
     "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#executive-summary",
     "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#executive-summary",
     "title": "Finansiell innsikt for strategiske beslutninger",
     "section": "Executive Summary",
-    "text": "Executive Summary\n\n\nInnsikt fra dashboardet:\nVolumvekst driver omsetning, men margin forbedres ikke proporsjonalt grunnet kostnadsvekst og lavere gjennomsnittlig ordreverdi.\n\nOmsetning: +20 %\nProfit: +14 %\nKostnad: +21 % → marginpress\nOrder volume: +28 %"
+    "text": "Executive Summary\n\nVolumvekst driver omsetningen, men marginutviklingen følger ikke med. Kostnadsveksten på 21 % overstiger omsetningsveksten på 20 %, og gjennomsnittlig ordreverdi faller — noe som indikerer at veksten delvis er rabattdrevet og lavmarginaldrevet.\n\n\n\n\n\n\nNoteTolkning\n\n\n\nSelskapet vokser, men veksten er ikke lønnsom nok. AOV-fallet kombinert med kostnadsvekst er et varselsignal om at prisstrategi og rabattbruk bør gjennomgås systematisk."
   },
   {
     "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#market-drilldown",
@@ -221,14 +221,14 @@
     "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#fraktmetode-og-regional-marginanalyse",
     "title": "Finansiell innsikt for strategiske beslutninger",
     "section": "Fraktmetode og regional marginanalyse",
-    "text": "Fraktmetode og regional marginanalyse\n\n\nHovedfunn\n\nFirst Class høyest total margin (~14 %)\nSame Day generelt lønnsom\n\nMen: Same Day i South gir -8,4 % margin\n\nTeknologi i South-region trekker ned\n\n\n\nViktig innsikt\nFraktmåte er ikke problemet globalt – den er regionalt sensitiv."
+    "text": "Fraktmetode og regional marginanalyse\n\nAnalysen avdekker at fraktstrategi ikke er et globalt problem — det er et regionalt sensitivt problem. First Class leverer den høyeste totalmarginen (~14 %), mens Same Day er lønnsom i de fleste regioner, men gir −8,4 % margin i South.\nTeknologikategorien i South-regionen er den sterkeste enkeltdriveren av negativt resultat og bør prioriteres for tiltak.\n\n\n\n\n\n\nTipAnbefaling\n\n\n\nFraktstrategi bør differensieres per region — ikke optimeres globalt. En global Same Day-strategi vil gi positiv totalmargin, men skjule et vesentlig tap i én region."
   },
   {
     "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#rabatt--og-marginanalyse",
     "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#rabatt--og-marginanalyse",
     "title": "Finansiell innsikt for strategiske beslutninger",
     "section": "Rabatt- og marginanalyse",
-    "text": "Rabatt- og marginanalyse\n\n\nKPIer\n\nProfit margin uten rabatt: 29,5 %\nMed rabatt: -2,9 %\nMargin delta: -32 %\n\n\n\nIdentifisering av knekkpunkt\n\n0–10 % rabatt → margin robust\n\n\n\n11–20 % → svekkes\n\n\n\n21–30 % → kollaps\n\n\n\n30 %+ → kraftig negativ\n\nLønnsomhetsknekkpunkt -&gt; 21–30 % rabatt."
+    "text": "Rabatt- og marginanalyse\n\nDette er den mest kritiske delen av analysen. Profit margin uten rabatt er 29,5 %. Med rabatt faller den til −2,9 % — et fall på 32 prosentpoeng. Scatter-analysen bekrefter at enhetsmargin faller konsistent ved stigende rabatt, og at høye rabatter ikke kompenseres av volumvekst.\nKnekkpunktet er kvantifisert:\n\n\n\n\n\n\n\n\nRabattnivå\nMargineffekt\nVurdering\n\n\n\n\n0–10 %\nRobust\n\n\n\n\nAkseptabelt\n\n\n\n11–20 %\nSvekkes\n\n\n\n\nOvervåk\n\n\n\n21–30 %\nKollaps\n\n\n\n\nUnngå\n\n\n\n30 %+\nKraftig negativ\n\n\n\n\nStopp\n\n\n\n\nTechnology og Furniture er hardest rammet. Flere segmenter går fra ~30 % margin til negativ — tapet skyldes prisstrategi, ikke etterspørselssvikt."
   },
   {
     "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#resultat-per-enhet-vs.-rabatt",
@@ -240,16 +240,16 @@
   {
     "objectID": "projects/project_2_Bike_Store/index.html#problemstilling",
     "href": "projects/project_2_Bike_Store/index.html#problemstilling",
-    "title": "Bike Store – Analyse av salgsdrivere",
-    "section": "",
-    "text": "Ledelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen.\nSentrale spørsmål var:\n\nHvilke produkter og kategorier driver omsetningen?\nHvordan utvikler salget seg over tid?\nHvor konsentrert er omsetningen på tvers av butikker og produkter?\n\nMålet med analysen var å strukturere rådata til et analyseklart datagrunnlag og utvikle et dashboard som forklarer drivere bak omsetning og vekst."
+    "title": "Bike Store Sales Analytics",
+    "section": "Problemstilling",
+    "text": "Problemstilling\nLedelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen. Omsetningen vokste, men det var uklart hvilke produkter og butikker som sto for veksten — og om veksten var bredt forankret eller konsentrert i et fåtall enheter.\n\n\n\n\n\n\nImportantHovedfunn\n\n\n\nSalgsveksten er sterk (+42 % YoY), men tydelig konsentrert. En liten andel produkter driver en stor del av omsetningen, og én butikk står for en uforholdsmessig stor andel av salget. Veksten er primært volumdrevet — ikke prisdrevet.\n\n\n\n  \n    Funn 01\n    Sterk vekst, men smal base\n    +42 % YoY er imponerende, men omsetningen er konsentrert i et begrenset antall produkter. Dette innebærer konsentrasjonsrisiko mot sortimentsendringer og leverandørproblemer.\n    +42% YoY\n  \n  \n    Funn 02\n    Én butikk dominerer\n    Én hovedbutikk står for en betydelig andel av totalomsetningen. Geografisk konsentrasjon begrenser vekstpotensialet og øker risikoen ved lokale markedsendringer.\n    Geo-risiko\n  \n  \n    Funn 03\n    Volumdrevet, ikke prisdrevet\n    Veksten forklares primært av økt salgsvolum. Det er rom for å vurdere prissetting og sortimentsoptimalisering for å forbedre marginen uten å ofre volum.\n    Volum ↑"
   },
   {
     "objectID": "projects/project_2_Bike_Store/index.html#analyseprosess",
     "href": "projects/project_2_Bike_Store/index.html#analyseprosess",
-    "title": "Bike Store – Analyse av salgsdrivere",
+    "title": "Bike Store Sales Analytics",
     "section": "Analyseprosess",
-    "text": "Analyseprosess\nProsjektet ble gjennomført i tre steg:\n\nDatarydding og strukturering i SQL\n\nDatamodellering (stjerneskjema)\n\nAnalyse og visualisering i Power BI\n\nPipeline:\nRådata → SQL datamodell → Power BI analyse → beslutningsstøtte"
+    "text": "Analyseprosess\nProsjektet fulgte en tredelt prosess: datakvalitetskontroll i SQL, modellering som stjerneskjema, og analyse i Power BI.\n\n  🔍DatakvalitetNULL · duplikat · relasjoner\n  →\n  🗄️SQL-modellDimensjoner · faktatabell\n  →\n  📊Power BIDashboard · innsikt\n  →\n  🎯AnbefalingerSortiment · geografi"
   },
   {
     "objectID": "projects/project_2_Bike_Store/index.html#målet-med-analysen-var-å-strukturere-rådata-til-et-analyseklart-datagrunnlag-og-utvikle-et-dashboard-som-forklarer-drivere-bak-omsetning-og-vekst.",
@@ -346,8 +346,8 @@
     "objectID": "projects/project_3_strava/index.html#problemstilling",
     "href": "projects/project_3_strava/index.html#problemstilling",
     "title": "Strava Analytics Pipeline",
-    "section": "",
-    "text": "Treningsdata fra apper og manuelle logger lagres ofte i separate systemer og i ulike formater. Dette gjør det vanskelig å analysere treningsbelastning, utvikling over tid og prestasjonsmønstre.\nMålet med prosjektet var å bygge en automatisert pipeline som:\n\nhenter aktivitetsdata fra Strava API\nstrukturerer data i en database\nmodellerer datasettet for analyse\nvisualiserer innsikt i Power BI"
+    "section": "Problemstilling",
+    "text": "Problemstilling\nTreningsdata fra apper og manuelle logger lagres i separate systemer og i ulike formater. Dette gjør det vanskelig å analysere treningsbelastning, utvikling over tid og prestasjonsmønstre på tvers av aktivitetstyper og perioder.\n\n\n\n\n\n\nImportantProsjektmål\n\n\n\nBygge en automatisert end-to-end pipeline som henter aktivitetsdata fra Strava API, strukturerer det i en analyseklar database, og visualiserer treningsinnsikt i Power BI — uten manuelle eksporttrinn.\n\n\n\n  \n    Funn 01\n    Stabilitet er viktigere enn toppuker\n    Stabil treningsmengde over tid er en bedre indikator på robusthet enn enkeltuker med høyt volum. Periodene med lavere aktivitet følger tydelige sesongmønstre.\n    Stabilitet\n  \n  \n    Funn 02\n    Tydelig døgnrytme i treningstid\n    Klar preferanse for trening på ettermiddag etter arbeidstid på hverdager, med tidligere øktstart i helgene. Mønsteret er konsistent på tvers av hele analyseperioden.\n  \n  \n    Funn 03\n    Overkropp dominerer styrketreningen\n    Benkpress, pull ups og triceps utgjør majoriteten av styrkeøktene. Underkroppsøvelser er påvirket av tidligere kneproblematikk og er underrepresentert relativt til treningsvolum."
   },
   {
     "objectID": "projects/project_3_strava/index.html#executive-summary",
@@ -368,14 +368,14 @@
     "href": "projects/project_3_strava/index.html#datamodell",
     "title": "Strava Analytics Pipeline",
     "section": "Datamodell",
-    "text": "Datamodell\nDatasettet ble strukturert som et stjerneskjema.\nFaktatabeller\n\naktiviteter fra Strava\nstyrketreningsøkter fra treningsdagbok\n\nDimensjoner\n\ndato\naktivitetstype\nutøver\n\n\n\n\nDatamodell"
+    "text": "Datamodell\nDatasettet ble strukturert som et stjerneskjema med to faktatabeller — én for Strava-aktiviteter og én for styrkeøkter — koblet mot felles dato- og aktivitetsdimensjon.\n\n\n\nDatamodell"
   },
   {
     "objectID": "projects/project_3_strava/index.html#analyse-og-visualisering",
     "href": "projects/project_3_strava/index.html#analyse-og-visualisering",
     "title": "Strava Analytics Pipeline",
     "section": "Analyse og visualisering",
-    "text": "Analyse og visualisering\n\nUtøver-dashboard\n\n\n\nUtøver dashboard\n\n\nDashboardet gir oversikt over:\n\ntreningsvolum over tid\nintensitetsfordeling\nprestasjonsutvikling\n\n\n\nInnsikt\n\nStabil treningsmengde over tid er en bedre indikator på robusthet enn enkeltuker med høyt volum\nUtøvere har tydelig ulike fysiologiske profiler i power curve\nTreningspreferanser viser en tydelig døgnrytme i treningsmønster\n\n\n\n\nSammenligning av utøvere\n\n\n\nSammenligning\n\n\nDette dashboardet gjør det mulig å sammenligne:\n\ntreningsvolum\nintensitetsprofil\nprestasjon\n\npå tvers av utøvere innen valgt periode.\n\n\n\nTreningspreferanser\n\n\n\nTreningspreferanser\n\n\nAnalysen viser en tydelig preferanse for trening på ettermiddag etter arbeidstid, med tidligere økter i helgene.\n\n\n\nBeste prestasjoner\n\n\n\nBeste prestasjoner\n\n\n\n\n\nTreningsvolum over tid\n\n\n\nTreningsvolum\n\n\nAnalysen viser perioder med stabil treningsmengde og enkelte faser med lavere aktivitetsnivå.\n\n\n\nOversikt over styrkeøkter\n\n\n\nStyrkedata\n\n\n\nJevn progresjon i benkpress\nOverkroppsøvelser som benkpress, pull ups og triceps dominerer treningen\nUnderkroppsøvelser påvirket av tidligere kneproblematikk\nVariasjon i øvelsesutvalg gjennom året"
+    "text": "Analyse og visualisering\n\nUtøver-dashboard\n\n\n\nUtøver dashboard\n\n\nDashboardet gir oversikt over treningsvolum over tid, intensitetsfordeling og prestasjonsutvikling — med mulighet for å filtrere på periode og aktivitetstype.\n\n\nSammenligning av utøvere\n\n\n\nSammenligning\n\n\nSammenligningsdashboardet gjør det mulig å analysere treningsvolum, intensitetsprofil og prestasjon på tvers av utøvere innen en valgt periode.\n\n\nTreningspreferanser\n\n\n\nTreningspreferanser\n\n\nAnalysen avdekker en tydelig preferanse for trening på ettermiddag etter arbeidstid på hverdager, med tidligere øktstart i helgene.\n\n\nBeste prestasjoner\n\n\n\nBeste prestasjoner\n\n\n\n\nTreningsvolum over tid\n\n\n\nTreningsvolum\n\n\nAnalysen viser perioder med stabil treningsmengde og enkelte faser med lavere aktivitetsnivå — korrelert med kjente belastningsperioder utenfor trening.\n\n\nStyrkedashboard\n\n\n\nStyrkedata\n\n\nStyrkedashboardet viser jevn progresjon i benkpress over analyseperioden, dominans av overkroppsøvelser og underrepresentasjon av underkropp knyttet til tidligere kneproblematikk."
   },
   {
     "objectID": "index.html#prosjekter",
@@ -383,5 +383,712 @@
     "title": "Lars Tingelstad. PhD",
     "section": "Prosjekter",
     "text": "Prosjekter\n\n\nSales Analytics📊\nAnalyse av salgsdrivere i Bike Store ved bruk av SQL og Power BI.\nTeknologi\nSQL\nPower BI\nDatamodellering\nSe prosjekt →\n\n\nProfitability Analysis💰\nAnalyse av hvordan rabatter, fraktstrategi og volum påvirker margin.\nTeknologi\nPower BI\nDAX\nKPI-design\nSe prosjekt →\n\n\nStrava Data Pipeline🚴\nEnd-to-end pipeline for treningsdata.\nStrava API → R → PostgreSQL → Power BI\nTeknologi\nR\nPostgreSQL\nPower BI\nSe prosjekt →\n\n\n\n\nKontakt\n\n\n\n📧 Send meg en e-post\n🔗 LinkedIn"
+  },
+  {
+    "objectID": "projects/project_4_final/index.html",
+    "href": "projects/project_4_final/index.html",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "",
+    "text": "Verktøy: SQL · Python · Power BI\nDatasett: ~100k ordre\nMetoder: prediktiv modellering, forecasting, scenarioanalyse"
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#data-sources",
+    "href": "projects/project_4_final/index.html#data-sources",
+    "title": "Commercial Performance & Revenue Optimization – Olist E-Commerce Case",
+    "section": "Data Sources",
+    "text": "Data Sources\nThe analysis uses transactional marketplace data including:\n\nOrders\nOrder items\nPayments\nReviews\nCustomers\nProducts\nSellers\nGeolocation"
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#data-modelling",
+    "href": "projects/project_4_final/index.html#data-modelling",
+    "title": "Commercial Performance & Revenue Optimization – Olist E-Commerce Case",
+    "section": "Data Modelling",
+    "text": "Data Modelling\nThe database was structured as a star schema.\nFact tables\n\nOrders\nOrder items\nPayments\n\nDimension tables\n\nCustomers\nProducts\nSellers\nGeography\nProduct categories\n\nEksempel transformasjon\n\n```sql\nCREATE TABLE fact_orders_v3 AS\nSELECT *,\ntotal_price + total_freight AS total_order_value,\n(order_delivered_customer_date::date\n- order_purchase_timestamp::date) AS delivery_time_days,\n(order_delivered_customer_date::date\n- order_estimated_delivery_date::date) AS delay_days\nFROM fact_orders_v2\nWHERE order_status = ‘delivered’;\n\nFeature tables were built using SQL transformations and aggregation."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#average-order-value",
+    "href": "projects/project_4_final/index.html#average-order-value",
+    "title": "Commercial Performance & Revenue Optimization – Olist E-Commerce Case",
+    "section": "Average Order Value",
+    "text": "Average Order Value\n\nAverage order value shows a moderate upward trend, indicating increasing basket size."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#monthly-revenue",
+    "href": "projects/project_4_final/index.html#monthly-revenue",
+    "title": "Commercial Performance & Revenue Optimization – Olist E-Commerce Case",
+    "section": "Monthly Revenue",
+    "text": "Monthly Revenue\n\nRevenue shows strong structural growth, driven primarily by increasing order volume.\nA linear trend model estimates revenue growth of approximately:\n+54,000 per month"
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#delivery-performance",
+    "href": "projects/project_4_final/index.html#delivery-performance",
+    "title": "Commercial Performance & Revenue Optimization – Olist E-Commerce Case",
+    "section": "Delivery Performance",
+    "text": "Delivery Performance\n\nDelivery delays fluctuate across months, with spikes that may correspond to operational bottlenecks."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#customer-satisfaction",
+    "href": "projects/project_4_final/index.html#customer-satisfaction",
+    "title": "Commercial Performance & Revenue Optimization – Olist E-Commerce Case",
+    "section": "Customer Satisfaction",
+    "text": "Customer Satisfaction\n\nLow ratings vary significantly across months and appear to increase during periods with higher delivery delays."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#interaction-delay-order-value",
+    "href": "projects/project_4_final/index.html#interaction-delay-order-value",
+    "title": "Commercial Performance & Revenue Optimization – Olist E-Commerce Case",
+    "section": "Interaction: Delay × Order Value",
+    "text": "Interaction: Delay × Order Value\n\nThe effect of delivery delays is similar across order value levels, suggesting operational improvements benefit all customers equally."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#example-sql-transformation",
+    "href": "projects/project_4_final/index.html#example-sql-transformation",
+    "title": "Commercial Performance & Revenue Optimization – Olist E-Commerce Case",
+    "section": "Example SQL Transformation",
+    "text": "Example SQL Transformation\nCREATE TABLE fact_orders_v3 AS\nSELECT *,\n       total_price + total_freight AS total_order_value,\n       (order_delivered_customer_date::date \n        - order_purchase_timestamp::date) AS delivery_time_days,\n       (order_delivered_customer_date::date \n        - order_estimated_delivery_date::date) AS delay_days\nFROM fact_orders_v2\nWHERE order_status = 'delivered';\nLogistic Regression Model (Python)\nX = df[['delay_days','total_order_value']]\nX = sm.add_constant(X)\n\nmodel_delay = sm.Logit(y, X).fit()\nForecast Model\nmodel_trend_season = sm.OLS(\n    monthly_kpis[\"total_revenue\"],\n    X\n).fit()\nTools Used - PostgreSQL – data modelling and transformations - Python (Pandas, Statsmodels) – statistical modelling - Matplotlib / Seaborn – visualization - Power BI – dashboard design - Quarto – reproducible analytical reporting\n\nDette prosjektet viser:\n✔ SQL datamodellering ✔ Feature engineering ✔ Prediktiv modellering ✔ Forecasting ✔ Scenarioanalyse ✔ Business recommendations"
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#viktigste-funn",
+    "href": "projects/project_4_final/index.html#viktigste-funn",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Viktigste funn",
+    "text": "Viktigste funn\n1. Leveringsforsinkelser er den viktigste driveren for lav kundevurdering\nEn forsinket ordre øker sannsynligheten for lav rating fra omtrent 9 % til 59 %.\n2. Omsetningen vokser stabilt\nTrendmodell estimerer en økning på omtrent 54 000 per måned.\n3. Operasjonelle forbedringer kan redusere kostnader\nEn reduksjon i forsinkelser på 5 % kan forhindre omtrent 322 forsinkede ordre."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#beslutningsspørsmål",
+    "href": "projects/project_4_final/index.html#beslutningsspørsmål",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Beslutningsspørsmål",
+    "text": "Beslutningsspørsmål\nHvordan kan Olist øke lønnsomheten gjennom:\n\nbedre leveranseprestasjon\nøkt kundeverdi\nmer presis prognose for fremtidig omsetning"
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#faktatabeller",
+    "href": "projects/project_4_final/index.html#faktatabeller",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Faktatabeller",
+    "text": "Faktatabeller\n\norders\norder_items\npayments"
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#dimensjonstabeller",
+    "href": "projects/project_4_final/index.html#dimensjonstabeller",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Dimensjonstabeller",
+    "text": "Dimensjonstabeller\n\ncustomers\nproducts\nsellers\ngeolocation\nproduct_categories\n\nDette gjør det mulig å analysere både operasjonell ytelse og kommersiell utvikling."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#eksempel-på-sql-transformasjon",
+    "href": "projects/project_4_final/index.html#eksempel-på-sql-transformasjon",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Eksempel på SQL-transformasjon",
+    "text": "Eksempel på SQL-transformasjon\nCREATE TABLE fact_orders_v3 AS\nSELECT *,\n       total_price + total_freight AS total_order_value,\n       (order_delivered_customer_date::date \n        - order_purchase_timestamp::date) AS delivery_time_days,\n       (order_delivered_customer_date::date \n        - order_estimated_delivery_date::date) AS delay_days\nFROM fact_orders_v2\nWHERE order_status = 'delivered';"
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#feature-engineering",
+    "href": "projects/project_4_final/index.html#feature-engineering",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Feature engineering",
+    "text": "Feature engineering\nFor å analysere driverne bak kundetilfredshet og omsetning ble flere analytiske variabler konstruert.\n\nOrdre-nivå\n\ntotal_order_value\ndelivery_time_days\ndelay_flag\ndelay_days\nreview_score\n\n\n\nKunde-nivå\n\nrepeat_customer_flag\ncustomer_order_number\n\n\n\nProduktkategori\nProduktkategorier ble aggregert til makrokategorier:\n\nelectronics_tech\nhome_furniture\nfashion\nbeauty_health\nsports_leisure\nbooks_media\n\nDette gjør analysen mer robust og enklere å tolke."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#analyse-operasjonell-ytelse",
+    "href": "projects/project_4_final/index.html#analyse-operasjonell-ytelse",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Analyse – operasjonell ytelse",
+    "text": "Analyse – operasjonell ytelse\n\nGjennomsnittlig ordreverdi\n\n\n\nEndring i AOV over tid\n\n\nGjennomsnittlig ordreverdi viser en svak oppadgående trend.\n\n\nOmsetning per måned\n\n\n\nUtvikling i omsetning per måned\n\n\nOmsetningen vokser betydelig gjennom analyseperioden.\nEn lineær trendmodell estimerer en økning på omtrent 54 000 per måned.\n\n\nLeveringsforsinkelser\n\n\n\nVariasjon i leveringsforsinkelser\n\n\nForsinkelser varierer mellom måneder og kan indikere kapasitetsproblemer i logistikk. Særlig økning ble observert i Q1 i 2018.\n\n\nLav kundevurdering\n\n\n\nUtvikling i lav kundevurdering over tid\n\n\nPerioder med høyere forsinkelser sammenfaller med økt andel lave kundevurderinger."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#prediktiv-analyse",
+    "href": "projects/project_4_final/index.html#prediktiv-analyse",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Prediktiv analyse",
+    "text": "Prediktiv analyse\nEn logistisk regresjonsmodell ble brukt for å estimere sannsynligheten for lav kundevurdering.\n\nForklaringsvariabler\n\ndelay_days\ntotal_order_value\nproduktkategori"
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#prognose",
+    "href": "projects/project_4_final/index.html#prognose",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Prognose",
+    "text": "Prognose\nModellen forklarer omtrent 95 % av variasjonen i historisk omsetning.\nPrognosen indikerer fortsatt vekst i månedlig omsetning."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#scenarioanalyse",
+    "href": "projects/project_4_final/index.html#scenarioanalyse",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Scenarioanalyse",
+    "text": "Scenarioanalyse\nEffekten av redusert leveringsforsinkelse ble simulert.\n\n\n\n\n\n\n\n\nReduksjon i forsinkelser\nUnngåtte forsinkede ordre\nKostnadsbesparelse\n\n\n\n\n2 %\n129\n339\n\n\n5 %\n322\n847\n\n\n8 %\n515\n1355\n\n\n\nSelv små forbedringer i leveringspresisjon kan gi målbare besparelser."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#anbefalinger",
+    "href": "projects/project_4_final/index.html#anbefalinger",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Anbefalinger",
+    "text": "Anbefalinger\n\nReduser leveringsforsinkelser\nLeveringsforsinkelser er den viktigste driveren for lav kundetilfredshet.\nDette bør være første prioritet operasjonelt.\n\n\nEtabler KPI-overvåkning\nFølgende KPIer bør overvåkes løpende:\n\nomsetning\ndelay rate\nkundevurderinger\n\nDette kan implementeres i et BI-dashboard.\n\n\nPrioriter utsatte kategorier\nNoen produktkategorier har høyere risiko for lav rating og bør analyseres nærmere."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#begrensninger",
+    "href": "projects/project_4_final/index.html#begrensninger",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Begrensninger",
+    "text": "Begrensninger\nAnalysen har noen begrensninger:\n\nmanglende kostnadsdata gjør full marginanalyse vanskelig\nhistoriske data dekker kun perioden 2016–2018\nkundelojalitet kunne vært modellert mer eksplisitt"
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#teknologi",
+    "href": "projects/project_4_final/index.html#teknologi",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Teknologi",
+    "text": "Teknologi\nProsjektet er gjennomført med:\n\nPostgreSQL – datamodellering og transformasjon\nPython (Pandas, Statsmodels) – statistisk modellering\nMatplotlib / Seaborn – visualisering\nPower BI – dashboard design\nQuarto\n\n\n\nDette prosjektet viser:\n✔ SQL datamodellering\n✔ Feature engineering\n✔ Prediktiv modellering\n✔ Forecasting\n✔ Scenarioanalyse\n✔ Business recommendations"
+  },
+  {
+    "objectID": "projects/project_4_final/olist-prosjekt.html",
+    "href": "projects/project_4_final/olist-prosjekt.html",
+    "title": "Olist E-Commerce",
+    "section": "",
+    "text": "Kommersielt analyseprosjekt\n  \n  Analyse av ~100 000 ordre i den brasilianske e-commerce plattformen Olist — med fokus på leveringsprestasjon, omsetningsprognoser og operasjonell risiko.\n\n  \n    PostgreSQL\n    Python\n    Statsmodels\n    Pandas\n    Power BI\n    Logistisk regresjon\n    Tidsserieanalyse\n    Scenarioanalyse\n    Feature Engineering"
+  },
+  {
+    "objectID": "projects/project_4_final/olist-prosjekt.html#executive-summary",
+    "href": "projects/project_4_final/olist-prosjekt.html#executive-summary",
+    "title": "Olist E-Commerce",
+    "section": "Executive Summary",
+    "text": "Executive Summary\nDette prosjektet analyserer kommersiell ytelse i den brasilianske e-commerce plattformen Olist. Målet er å identifisere hvilke faktorer som påvirker kundetilfredshet, omsetning og operasjonell risiko, og oversette analysen til konkrete forretningsanbefalinger.\nAnalysen kombinerer SQL-datamodellering, statistisk modellering i Python, tidsserieanalyse og scenarioanalyse.\n\n\n\n\n\n\nImportantNøkkelfunn\n\n\n\nLeveringsforsinkelser er den enkelt sterkeste prediktoren for lav kundevurdering — og en faktor operasjonell ledelse direkte kan påvirke. En forsinket ordre øker sannsynligheten for lav rating fra 9 % til 59 %.\n\n\n\n  \n    Funn 01\n    Forsinkelse nær seksdobler risikoen\n    En forsinket ordre øker sannsynligheten for lav kundevurdering fra 9 % til 59 % — en effekt som holder seg stabil på tvers av produktkategorier og ordreverdier.\n    +50pp\n  \n  \n    Funn 02\n    Stabil omsetningsvekst med R² på 95 %\n    Trendmodell med sesong estimerer en månedlig økning på ~54 000. Modellen forklarer nær all historisk variasjon og gir et solid grunnlag for budsjettplanlegging.\n    +54k/mnd\n  \n  \n    Funn 03\n    5 % reduksjon = 322 færre forsinkelser\n    Scenarioanalysen viser at selv marginale forbedringer i logistikk gir direkte, målbar effekt på kundeopplevelse og fraktkostnad.\n    322 ordre"
+  },
+  {
+    "objectID": "projects/project_4_final/olist-prosjekt.html#forretningskontekst",
+    "href": "projects/project_4_final/olist-prosjekt.html#forretningskontekst",
+    "title": "Olist E-Commerce",
+    "section": "Forretningskontekst",
+    "text": "Forretningskontekst\nOlist er en brasiliansk markedsplass som kobler selgere og kunder via én felles plattform. Selskapet opplever varierende leveringsprestasjon, stigende ordrevolum og usikkerhet rundt fremtidig omsetning.\nBeslutningsspørsmål: Hva driver kundetilfredshet, og hva kan ledelsen gjøre med det?\nDatasettet inneholder omtrent 100 000 ordre med informasjon om ordre, produkter, betalinger, anmeldelser og leveringsdatoer."
+  },
+  {
+    "objectID": "projects/project_4_final/olist-prosjekt.html#data-og-datamodell",
+    "href": "projects/project_4_final/olist-prosjekt.html#data-og-datamodell",
+    "title": "Olist E-Commerce",
+    "section": "Data og datamodell",
+    "text": "Data og datamodell\nDatabasen ble strukturert som en stjernemodell i PostgreSQL — med en sentral faktatabell omgitt av dimensjonstabeller. Dette muliggjorde effektive joins på tvers av ordre, kunder, produkter og geografi.\n\n  \n    Dimensjonstabeller\n    \n      dim_customers\n      customer_id PK · customer_unique_id · customer_state\n    \n    \n      dim_products\n      product_id PK · product_category_name · product_weight_g\n    \n    \n      dim_sellers\n      seller_id PK · seller_city · seller_state\n    \n    \n      dim_category\n      category_macro · 8 makrokategorier\n    \n    \n      vw_reviews_clean\n      DISTINCT ON review_id · 814 duplikater håndtert\n    \n  \n\n  \n    ⚡ Faktatabell\n    fact_orders_v5\n    \n      order_id PK\n      customer_id FK\n      total_order_value\n      delivery_time_days\n      delay_days · delay_flag\n      avg_review_score\n      low_rating_flag\n      repeat_customer_flag\n      category_macro\n      order_month\n    \n  \n\n\nSQL — Faktatabell med feature engineering\nRådata fra åtte tabeller ble transformert til én analyseklar faktatabell gjennom iterative CTE-baserte builds. Under er kjernetransformasjonen:\n-- Aggreger order_items til ordre-nivå og beregn forsinkelse\nCREATE TABLE fact_orders_v3 AS\nWITH order_items_agg AS (\n    SELECT\n        order_id,\n        SUM(price)        AS total_price,\n        SUM(freight_value) AS total_freight,\n        COUNT(order_item_id) AS item_count\n    FROM dim_order_items\n    GROUP BY order_id\n),\n\nreviews_agg AS (\n    SELECT order_id,\n           AVG(review_score) AS avg_review_score\n    FROM vw_reviews_clean        -- deduped view (814 duplikater fjernet)\n    GROUP BY order_id\n)\n\nSELECT *,\n    total_price + total_freight                               AS total_order_value,\n    (order_delivered_customer_date::date\n        - order_purchase_timestamp::date)                     AS delivery_time_days,\n    (order_delivered_customer_date::date\n        - order_estimated_delivery_date::date)                AS delay_days,\n    (order_delivered_customer_date::date\n        &gt; order_estimated_delivery_date::date)::int           AS delay_flag\nFROM fact_orders_v2\nWHERE order_status = 'delivered'\n  AND order_delivered_customer_date &gt;= order_purchase_timestamp;\n\n\nSQL — Feature engineering\n-- Atferdsvariabler og rating-flagg\nCREATE TABLE fact_orders_v4 AS\nSELECT *,\n    CASE WHEN avg_review_score &lt;= 2 THEN 1 ELSE 0 END AS low_rating_flag,\n    CASE WHEN avg_review_score &gt;= 4 THEN 1 ELSE 0 END AS high_rating_flag,\n    CASE WHEN customer_order_number &gt; 1 THEN 1 ELSE 0 END AS repeat_customer_flag,\n    EXTRACT(month FROM order_purchase_timestamp)       AS order_month\nFROM (\n    SELECT *,\n        ROW_NUMBER() OVER (\n            PARTITION BY customer_id\n            ORDER BY order_purchase_timestamp\n        ) AS customer_order_number   -- Ordrenummer i rekken per kunde\n    FROM fact_orders_v3\n) sub;\n\n\nSQL — Makrokategorier\n-- Aggreger 70+ kategorier til 8 meningsfulle makrogrupper\nCREATE TABLE dim_category AS\nSELECT\n    product_category_name,\n    product_category_name_english,\n    CASE\n        WHEN product_category_name_english IN (\n            'computers','computers_accessories','electronics',\n            'telephony','tablets_printing_image','consoles_games',\n            'audio','fixed_telephony'\n        ) THEN 'electronics_tech'\n\n        WHEN product_category_name_english IN (\n            'fashion_male_clothing','fashion_female_clothing',\n            'fashion_shoes','fashion_bags_accessories',\n            'watches_gifts'\n        ) THEN 'fashion'\n\n        WHEN product_category_name_english IN (\n            'furniture_decor','furniture_living_room',\n            'housewares','home_appliances','bed_bath_table'\n        ) THEN 'home_furniture'\n\n        WHEN product_category_name_english IN (\n            'health_beauty','perfumery','diapers_and_hygiene'\n        ) THEN 'beauty_health'\n\n        WHEN product_category_name_english IN (\n            'sports_leisure','toys','cool_stuff','musical_instruments'\n        ) THEN 'sports_leisure'\n\n        WHEN product_category_name_english IN (\n            'books_general_interest','books_technical',\n            'books_imported','dvds_blu_ray','music'\n        ) THEN 'books_media'\n\n        ELSE 'other'\n    END AS category_macro\nFROM dim_product_category;"
+  },
+  {
+    "objectID": "projects/project_4_final/olist-prosjekt.html#prediktiv-analyse",
+    "href": "projects/project_4_final/olist-prosjekt.html#prediktiv-analyse",
+    "title": "Olist E-Commerce",
+    "section": "Prediktiv analyse",
+    "text": "Prediktiv analyse\n\nLogistisk regresjon: Forsinkelse → Lav kundevurdering\nEn logistisk regresjonsmodell ble brukt for å estimere sannsynligheten for lav kundevurdering (≤ 2 stjerner), med delay_days, total_order_value og category_macro som forklaringsvariabler.\nimport statsmodels.api as sm\nimport numpy as np\n\n# Forklaringsvariabler\nX = df[['delay_days', 'total_order_value']]\nX = sm.add_constant(X)\ny = df['low_rating_flag']\n\nmodel_delay = sm.Logit(y, X).fit()\nprint(model_delay.summary())\n\n# Odds ratios — effekt i multiplikator\nnp.exp(model_delay.params)\n\n# Predikert sannsynlighet: 0, 5 og 10 dagers forsinkelse\nnew_data = pd.DataFrame({\n    'delay_days': [0, 5, 10],\n    'total_order_value': df['total_order_value'].mean()\n})\nnew_data = sm.add_constant(new_data, has_constant='add')\npred = model_delay.predict(new_data)\n\n# Resultat:\n# P(lav rating | ingen forsinkelse)       ≈ 0.09\n# P(lav rating | 10 dagers forsinkelse)   ≈ 0.59\n\n\n\n\n\n\nNoteModelltolkning\n\n\n\ndelay_days-koeffisienten tilsvarer en odds ratio på ~1.3 per dag — altså øker oddsene for lav rating med ~30 % for hver dag over estimert leveringstid. Effekten er robust på tvers av produktkategorier og ordrestørrelser.\n\n\n\n\nModell med makrokategorier\n# Modell inkludert kategori som forklaringsvariabel\nX_macro = pd.get_dummies(\n    df[['delay_flag', 'total_order_value', 'category_macro']],\n    drop_first=True\n)\nX_macro = sm.add_constant(X_macro).astype(float)\n\nmodel_macro = sm.Logit(y, X_macro).fit()\nprint(model_macro.summary())\nnp.exp(model_macro.params)"
+  },
+  {
+    "objectID": "projects/project_4_final/olist-prosjekt.html#tidsserieanalyse-og-prognose",
+    "href": "projects/project_4_final/olist-prosjekt.html#tidsserieanalyse-og-prognose",
+    "title": "Olist E-Commerce",
+    "section": "Tidsserieanalyse og prognose",
+    "text": "Tidsserieanalyse og prognose\n\nOperasjonelle KPIer over tid\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nimport statsmodels.api as sm\n\nsns.set_theme(style=\"white\")\nplt.rcParams[\"figure.figsize\"] = (12, 6)\n\n# Hent månedlige KPIer fra PostgreSQL\nmonthly_kpis = pd.read_sql(\n    \"SELECT * FROM public.monthly_kpis\", engine\n)\n\n# AOV-trend\naov[\"time_index\"] = range(len(aov))\nX = sm.add_constant(aov[\"time_index\"])\nmodel = sm.OLS(aov[\"aov\"], X).fit()\naov[\"trend\"] = model.predict(X)\n\n\n\nGjennomsnittlig ordreverdi over tid\n\n\n\n\n\nMånedlig omsetning med trend\n\n\n\n\n\nMånedlig forsinkelsesrate\n\n\n\n\n\nAndel lave kundevurderinger over tid\n\n\n\n\nOmsetningsprognose: Trend + sesong\n# Trend + sesong (månedsdummyer)\nmonthly_kpis[\"time_index\"] = range(1, len(monthly_kpis) + 1)\nmonthly_kpis[\"month\"] = monthly_kpis[\"year_month\"].dt.month.astype(\"category\")\n\nX = pd.get_dummies(\n    monthly_kpis[[\"time_index\", \"month\"]],\n    drop_first=True, dtype=float\n)\nX = sm.add_constant(X)\n\nmodel_trend_season = sm.OLS(\n    monthly_kpis[\"total_revenue\"], X\n).fit()\n\nprint(f\"R² = {model_trend_season.rsquared:.3f}\")       # → 0.953\nprint(f\"AIC trend-only:   {model_trend.aic:.1f}\")\nprint(f\"AIC trend+season: {model_trend_season.aic:.1f}\")\n\n# 12-måneders prognose med 95 % prediksjonsintervall\nfuture_pred = model_trend_season.get_prediction(future_X)\nfuture_ci   = future_pred.summary_frame(alpha=0.05)\n\n\n\nRevenue Forecast med 95 % prediksjonsintervall\n\n\n\n\n\n\n\n\nTipModellvalg — AIC-sammenligning\n\n\n\nTrend + sesong-modellen slår ren trendmodell på AIC, noe som bekrefter at sesongmønsteret er reelt og bør inkluderes i prognoser."
+  },
+  {
+    "objectID": "projects/project_4_final/olist-prosjekt.html#scenarioanalyse",
+    "href": "projects/project_4_final/olist-prosjekt.html#scenarioanalyse",
+    "title": "Olist E-Commerce",
+    "section": "Scenarioanalyse",
+    "text": "Scenarioanalyse\nEffekten av redusert leveringsforsinkelse ble simulert basert på observert fraktkostnadsdifferanse mellom forsinkede og ikke-forsinkede ordre (≈ 2,63 enheter per ordre).\nbaseline_delay_rate = fact_orders[\"delay_flag\"].mean()\ntotal_orders        = len(fact_orders)\nextra_cost_per_delay = freight_delay - freight_no_delay  # ≈ 2.63\n\nscenarios = [0.02, 0.05, 0.08]\nresults   = []\n\nfor reduction in scenarios:\n    new_delay_rate  = baseline_delay_rate * (1 - reduction)\n    avoided_delays  = total_orders * (baseline_delay_rate - new_delay_rate)\n    cost_savings    = avoided_delays * extra_cost_per_delay\n\n    results.append({\n        \"Reduksjon %\":               reduction * 100,\n        \"Unngåtte forsinkede ordre\": round(avoided_delays),\n        \"Fraktkostnadsbesparelse\":   round(cost_savings)\n    })\n\nscenario_table = pd.DataFrame(results)\n\n\n\n\n\n\n\n\n\nReduksjon i forsinkelser\nUnngåtte forsinkede ordre\nKostnadsbesparelse\nRelativ effekt\n\n\n\n\n2 %\n129\n339\n\n\n\n\nLav\n\n\n\n5 %\n322\n847\n\n\n\n\nModerat\n\n\n\n8 %\n515\n1 355\n\n\n\n\nHøy"
+  },
+  {
+    "objectID": "projects/project_4_final/olist-prosjekt.html#anbefalinger",
+    "href": "projects/project_4_final/olist-prosjekt.html#anbefalinger",
+    "title": "Olist E-Commerce",
+    "section": "Anbefalinger",
+    "text": "Anbefalinger\n\n  \n    🚚\n    \n      Prioriter leveringspresisjon operasjonelt\n      Forsinkelser er den klart sterkeste driveren for lav kundevurdering. Selv 5 % reduksjon forhindrer over 300 negative kundeopplevelser — og bør være første prioritet.\n    \n  \n  \n    📊\n    \n      Implementer løpende KPI-overvåkning\n      Månedlig delay rate, low rating rate og omsetning bør visualiseres i Power BI slik at avvik identifiseres raskt — ikke i etterkant.\n    \n  \n  \n    🎯\n    \n      Kategorisegmentering for risikovurdering\n      Noen produktkategorier viser systematisk høyere forsinkelsesrate. En kategori-spesifikk analyse kan identifisere hvilke selgere og ruter som driver mesteparten av problemene.\n    \n  \n  \n    📈\n    \n      Bruk prognosemodellen aktivt i budsjett\n      OLS-modellen med trend og sesong forklarer 95 % av omsetningsvariasjon og gir solide 12-måneders prognoser med konfidensintervall — et direkte styringsverktøy for CFO."
+  },
+  {
+    "objectID": "projects/project_4_final/olist-prosjekt.html#begrensninger",
+    "href": "projects/project_4_final/olist-prosjekt.html#begrensninger",
+    "title": "Olist E-Commerce",
+    "section": "Begrensninger",
+    "text": "Begrensninger\n\n\n\n\n\n\nWarningMetoderefleksjon\n\n\n\n\nAnalysen er begrenset til perioden 2016–2018\nManglende kostnadsdata gjør full marginanalyse vanskelig\nKundelojalitet ble modellert som binær flagg — mer granulær CLV-analyse ville vært neste steg\nEkstern validering av prognosen er ikke gjennomført"
+  },
+  {
+    "objectID": "projects/project_4_final/olist-prosjekt.html#teknologi",
+    "href": "projects/project_4_final/olist-prosjekt.html#teknologi",
+    "title": "Olist E-Commerce",
+    "section": "Teknologi",
+    "text": "Teknologi\n\n  🐘 PostgreSQL\n  🐍 Python 3\n  📦 Pandas\n  📐 Statsmodels\n  📊 Matplotlib · Seaborn\n  💡 Power BI\n  📝 Quarto"
+  },
+  {
+    "objectID": "projects/project_4_final/powerbi-prosjekt.html",
+    "href": "projects/project_4_final/powerbi-prosjekt.html",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "",
+    "text": "Power BI · Lønnsomhetsanalyse\n  \n  Et beslutningsstøttende dashboard som avdekker hvordan rabattstrategi og fraktmetode driver marginkollaps — og hvor ledelsen bør sette inn tiltak.\n\n  \n    Power BI\n    DAX\n    Stjernemodell\n    Tidsintelligens\n    Lønnsomhetsanalyse\n    Visual storytelling"
+  },
+  {
+    "objectID": "projects/project_4_final/powerbi-prosjekt.html#formål",
+    "href": "projects/project_4_final/powerbi-prosjekt.html#formål",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Formål",
+    "text": "Formål\nMålet var å utvikle et beslutningsstøttende dashboard som gir ledelsen rask oversikt over finansiell utvikling, avdekker hva som faktisk driver resultatene — og peker på hvor tiltak bør settes inn. Dashboardet er strukturert for å bevege seg fra overordnet lønnsomhet ned til kategori-, segment- og regionsnivå.\n\n\n\n\n\n\nImportantHovedfunn\n\n\n\nLønnsomhetsutfordringen er rabattdrevet, ikke volumdrevet. Veksten er sterk, men marginen svekkes systematisk fordi rabatter over 20 % ikke kompenseres av økt volum — og fordi fraktkostnadene vokser raskere enn omsetningen.\n\n\n\n  \n    Funn 01\n    Vekst uten proporsjonal marginforbedring\n    Omsetning opp 20 %, profit opp 14 % — men kostnad opp 21 % og ordrevolumet opp 28 %. Veksten er real, men marginen tynnes ut.\n    +20% / +14%\n  \n  \n    Funn 02\n    Rabatter over 21 % utløser marginkollaps\n    Margin uten rabatt er 29,5 %. Med rabatt faller den til −2,9 %. Knekkpunktet er identifisert mellom 21–30 % rabatt — etter dette kollapser lønnsomheten.\n    −32pp \n  \n  \n    Funn 03\n    Fraktstrategi er regionalt sensitiv\n    Same Day er globalt lønnsom, men gir −8,4 % margin i South-regionen. Fraktmetode alene er ikke problemet — kombinasjonen med region avgjør.\n    \n  14% /\n  −8%"
+  },
+  {
+    "objectID": "projects/project_4_final/powerbi-prosjekt.html#datamodell-og-teknisk-oppsett",
+    "href": "projects/project_4_final/powerbi-prosjekt.html#datamodell-og-teknisk-oppsett",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Datamodell og teknisk oppsett",
+    "text": "Datamodell og teknisk oppsett\nRapporten er bygget på et stjerneskjema i Power BI med én sentral faktatabell og fire dimensjonstabeller. Strukturen gir effektiv filtrering på tvers av tid, geografi, kategori og kundetype.\n\n\n\n\n\n\nNoteDatamodell — klikk for å se\n\n\n\n\n\n\n\n\n\nFaktatabel inneholder salgstransaksjoner med pris, rabatt, kostnad og fraktmetode. Dimensjonene dekker dato (med tidsintelligens), produktkategori, kundesegment og lokasjon (by, stat, region).\nSentrale DAX-mål som er bygget:\n\n  \n    📐\n    \n      Tidsintelligens\n      Total Sales · Sales LY · Sales % vs LY — muliggjør YoY-sammenligning uten manuell datofiltrering.\n    \n  \n  \n    📉\n    \n      Lønnsomhet\n      Profit Margin · Avg Order Value · Margin delta ved rabatt — koblet mot segment og region.\n    \n  \n  \n    🎨\n    \n      Dynamisk formatering\n      KPI-farger endres automatisk basert på måloppnåelse — grønt over terskel, rødt under.\n    \n  \n  \n    🏆\n    \n      Dynamisk rangering\n      Top/Bottom 10-analyse per segment, kategori og marked — brukerstyrt via parameter."
+  },
+  {
+    "objectID": "projects/project_4_final/powerbi-prosjekt.html#executive-summary",
+    "href": "projects/project_4_final/powerbi-prosjekt.html#executive-summary",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Executive Summary",
+    "text": "Executive Summary\n\nVolumvekst driver omsetningen, men marginutviklingen følger ikke med. Kostnadsveksten på 21 % overstiger omsetningsveksten på 20 %, og gjennomsnittlig ordreverdi faller — noe som indikerer at veksten delvis er rabattdrevet og lavmarginaldrevet.\n\n\n\n\n\n\nNoteTolkning\n\n\n\nSelskapet vokser, men veksten er ikke lønnsom nok. AOV-fallet kombinert med kostnadsvekst er et varselsignal om at prisstrategi og rabattbruk bør gjennomgås systematisk."
+  },
+  {
+    "objectID": "projects/project_4_final/powerbi-prosjekt.html#markedsanalyse-og-regional-drilldown",
+    "href": "projects/project_4_final/powerbi-prosjekt.html#markedsanalyse-og-regional-drilldown",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Markedsanalyse og regional drilldown",
+    "text": "Markedsanalyse og regional drilldown\n\nOmsetningen er konsentrert i et fåtall stater, noe som gir eksponering mot regionale svingninger. Viktigere: omsetning og lønnsomhet korrelerer ikke lineært på markedsnivå. Noen høyvolumsmarkeder bidrar lite til bunnlinjen relativt til volum — og bør vurderes for ressursreallokering."
+  },
+  {
+    "objectID": "projects/project_4_final/powerbi-prosjekt.html#fraktmetode-og-regional-marginanalyse",
+    "href": "projects/project_4_final/powerbi-prosjekt.html#fraktmetode-og-regional-marginanalyse",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Fraktmetode og regional marginanalyse",
+    "text": "Fraktmetode og regional marginanalyse\n\nAnalysen avdekker at fraktstrategi ikke er et globalt problem — det er et regionalt sensitivt problem. First Class leverer den høyeste totalmarginen (~14 %), mens Same Day er lønnsom i de fleste regioner, men gir −8,4 % margin i South.\nTeknologikategorien i South-regionen er den sterkeste enkeltdriveren av negativt resultat og bør prioriteres for tiltak.\n\n\n\n\n\n\nTipAnbefaling\n\n\n\nFraktstrategi bør differensieres per region — ikke optimeres globalt. En global Same Day-strategi vil gi positiv totalmargin, men skjule et vesentlig tap i én region."
+  },
+  {
+    "objectID": "projects/project_4_final/powerbi-prosjekt.html#rabatt--og-marginanalyse",
+    "href": "projects/project_4_final/powerbi-prosjekt.html#rabatt--og-marginanalyse",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Rabatt- og marginanalyse",
+    "text": "Rabatt- og marginanalyse\n\nDette er den mest kritiske delen av analysen. Profit margin uten rabatt er 29,5 %. Med rabatt faller den til −2,9 % — et fall på 32 prosentpoeng. Scatter-analysen bekrefter at enhetsmargin faller konsistent ved stigende rabatt, og at høye rabatter ikke kompenseres av volumvekst.\nKnekkpunktet er kvantifisert:\n\n\n\n\n\n\n\n\nRabattnivå\nMargineffekt\nVurdering\n\n\n\n\n0–10 %\nRobust\n\n\n\n\nAkseptabelt\n\n\n\n11–20 %\nSvekkes\n\n\n\n\nOvervåk\n\n\n\n21–30 %\nKollaps\n\n\n\n\nUnngå\n\n\n\n30 %+\nKraftig negativ\n\n\n\n\nStopp\n\n\n\n\nTechnology og Furniture er hardest rammet. Flere segmenter går fra ~30 % margin til negativ — tapet skyldes prisstrategi, ikke etterspørselssvikt."
+  },
+  {
+    "objectID": "projects/project_4_final/powerbi-prosjekt.html#anbefalinger",
+    "href": "projects/project_4_final/powerbi-prosjekt.html#anbefalinger",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Anbefalinger",
+    "text": "Anbefalinger\n\n  \n    🚫\n    \n      Begrens rabatter over 20 %\n      Rabatter over knekkpunktet bør kun tillates med dokumentert volumgevinst som overstiger margintapet. Ingen kategorier er immune — Technology og Furniture er mest eksponerte.\n    \n  \n  \n    🗺️\n    \n      Differentier fraktstrategi regionalt\n      Same Day i South og Teknologi i South bør gjennomgås umiddelbart. En region-spesifikk fraktstrategi kan gi vesentlig marginforbedring uten å påvirke totalvolumet.\n    \n  \n  \n    📊\n    \n      Realloker ressurser mot lønnsomme markeder\n      Salgs- og markedsressurser bør vurderes mot lønnsomhetsbidrag, ikke kun omsetning. Høyvolumsmarkeder med lav margin bør analyseres for om de forsvarer investeringen.\n    \n  \n  \n    📈\n    \n      Overvåk AOV som ledende indikator\n      Fallende gjennomsnittlig ordreverdi er et tidlig varseltegn på rabattpress. AOV bør inngå i månedlig KPI-rapportering som separat styringsmetrikk for prisdisiplin."
+  },
+  {
+    "objectID": "projects/project_4_final/powerbi-prosjekt.html#hva-denne-casen-demonstrerer",
+    "href": "projects/project_4_final/powerbi-prosjekt.html#hva-denne-casen-demonstrerer",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Hva denne casen demonstrerer",
+    "text": "Hva denne casen demonstrerer\n\n  💡 Power BI\n  📐 DAX · Tidsintelligens\n  🏆 Dynamisk Top/Bottom 10\n  🗄️ Stjernemodell\n  📖 Visual storytelling\n  🎯 Forretningsforståelse\n\nProsjektet viser ikke bare teknisk Power BI-kompetanse — det demonstrerer evnen til å oversette komplekse datamønstre til konkrete, prioriterte anbefalinger med direkte forretningsverdi."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#formål",
+    "href": "projects/project_4_final/index.html#formål",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Formål",
+    "text": "Formål\nMålet var å utvikle et beslutningsstøttende dashboard som gir ledelsen rask oversikt over finansiell utvikling, avdekker hva som faktisk driver resultatene — og peker på hvor tiltak bør settes inn. Dashboardet er strukturert for å bevege seg fra overordnet lønnsomhet ned til kategori-, segment- og regionsnivå.\n\n\n\n\n\n\nImportantHovedfunn\n\n\n\nLønnsomhetsutfordringen er rabattdrevet, ikke volumdrevet. Veksten er sterk, men marginen svekkes systematisk fordi rabatter over 20 % ikke kompenseres av økt volum — og fordi fraktkostnadene vokser raskere enn omsetningen.\n\n\n\n  \n    Funn 01\n    Vekst uten proporsjonal marginforbedring\n    Omsetning opp 20 %, profit opp 14 % — men kostnad opp 21 % og ordrevolumet opp 28 %. Veksten er real, men marginen tynnes ut.\n    +20% / +14%\n  \n  \n    Funn 02\n    Rabatter over 21 % utløser marginkollaps\n    Margin uten rabatt er 29,5 %. Med rabatt faller den til −2,9 %. Knekkpunktet er identifisert mellom 21–30 % rabatt — etter dette kollapser lønnsomheten.\n    −32pp \n  \n  \n    Funn 03\n    Fraktstrategi er regionalt sensitiv\n    Same Day er globalt lønnsom, men gir −8,4 % margin i South-regionen. Fraktmetode alene er ikke problemet — kombinasjonen med region avgjør.\n    \n  14% /\n  −8%"
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#datamodell-og-teknisk-oppsett",
+    "href": "projects/project_4_final/index.html#datamodell-og-teknisk-oppsett",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Datamodell og teknisk oppsett",
+    "text": "Datamodell og teknisk oppsett\nRapporten er bygget på et stjerneskjema i Power BI med én sentral faktatabell og fire dimensjonstabeller. Strukturen gir effektiv filtrering på tvers av tid, geografi, kategori og kundetype.\n\n\n\n\n\n\nNoteDatamodell — klikk for å se\n\n\n\n\n\n\n\n\n\nFaktatabel inneholder salgstransaksjoner med pris, rabatt, kostnad og fraktmetode. Dimensjonene dekker dato (med tidsintelligens), produktkategori, kundesegment og lokasjon (by, stat, region).\nSentrale DAX-mål som er bygget:\n\n  \n    📐\n    \n      Tidsintelligens\n      Total Sales · Sales LY · Sales % vs LY — muliggjør YoY-sammenligning uten manuell datofiltrering.\n    \n  \n  \n    📉\n    \n      Lønnsomhet\n      Profit Margin · Avg Order Value · Margin delta ved rabatt — koblet mot segment og region.\n    \n  \n  \n    🎨\n    \n      Dynamisk formatering\n      KPI-farger endres automatisk basert på måloppnåelse — grønt over terskel, rødt under.\n    \n  \n  \n    🏆\n    \n      Dynamisk rangering\n      Top/Bottom 10-analyse per segment, kategori og marked — brukerstyrt via parameter."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#executive-summary",
+    "href": "projects/project_4_final/index.html#executive-summary",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Executive Summary",
+    "text": "Executive Summary\n\nVolumvekst driver omsetningen, men marginutviklingen følger ikke med. Kostnadsveksten på 21 % overstiger omsetningsveksten på 20 %, og gjennomsnittlig ordreverdi faller — noe som indikerer at veksten delvis er rabattdrevet og lavmarginaldrevet.\n\n\n\n\n\n\nNoteTolkning\n\n\n\nSelskapet vokser, men veksten er ikke lønnsom nok. AOV-fallet kombinert med kostnadsvekst er et varselsignal om at prisstrategi og rabattbruk bør gjennomgås systematisk."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#markedsanalyse-og-regional-drilldown",
+    "href": "projects/project_4_final/index.html#markedsanalyse-og-regional-drilldown",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Markedsanalyse og regional drilldown",
+    "text": "Markedsanalyse og regional drilldown\n\nOmsetningen er konsentrert i et fåtall stater, noe som gir eksponering mot regionale svingninger. Viktigere: omsetning og lønnsomhet korrelerer ikke lineært på markedsnivå. Noen høyvolumsmarkeder bidrar lite til bunnlinjen relativt til volum — og bør vurderes for ressursreallokering."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#fraktmetode-og-regional-marginanalyse",
+    "href": "projects/project_4_final/index.html#fraktmetode-og-regional-marginanalyse",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Fraktmetode og regional marginanalyse",
+    "text": "Fraktmetode og regional marginanalyse\n\nAnalysen avdekker at fraktstrategi ikke er et globalt problem — det er et regionalt sensitivt problem. First Class leverer den høyeste totalmarginen (~14 %), mens Same Day er lønnsom i de fleste regioner, men gir −8,4 % margin i South.\nTeknologikategorien i South-regionen er den sterkeste enkeltdriveren av negativt resultat og bør prioriteres for tiltak.\n\n\n\n\n\n\nTipAnbefaling\n\n\n\nFraktstrategi bør differensieres per region — ikke optimeres globalt. En global Same Day-strategi vil gi positiv totalmargin, men skjule et vesentlig tap i én region."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#rabatt--og-marginanalyse",
+    "href": "projects/project_4_final/index.html#rabatt--og-marginanalyse",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Rabatt- og marginanalyse",
+    "text": "Rabatt- og marginanalyse\n\nDette er den mest kritiske delen av analysen. Profit margin uten rabatt er 29,5 %. Med rabatt faller den til −2,9 % — et fall på 32 prosentpoeng. Scatter-analysen bekrefter at enhetsmargin faller konsistent ved stigende rabatt, og at høye rabatter ikke kompenseres av volumvekst.\nKnekkpunktet er kvantifisert:\n\n\n\n\n\n\n\n\nRabattnivå\nMargineffekt\nVurdering\n\n\n\n\n0–10 %\nRobust\n\n\n\n\nAkseptabelt\n\n\n\n11–20 %\nSvekkes\n\n\n\n\nOvervåk\n\n\n\n21–30 %\nKollaps\n\n\n\n\nUnngå\n\n\n\n30 %+\nKraftig negativ\n\n\n\n\nStopp\n\n\n\n\nTechnology og Furniture er hardest rammet. Flere segmenter går fra ~30 % margin til negativ — tapet skyldes prisstrategi, ikke etterspørselssvikt."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#hva-denne-casen-demonstrerer",
+    "href": "projects/project_4_final/index.html#hva-denne-casen-demonstrerer",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Hva denne casen demonstrerer",
+    "text": "Hva denne casen demonstrerer\n\n  💡 Power BI\n  📐 DAX · Tidsintelligens\n  🏆 Dynamisk Top/Bottom 10\n  🗄️ Stjernemodell\n  📖 Visual storytelling\n  🎯 Forretningsforståelse\n\nProsjektet viser ikke bare teknisk Power BI-kompetanse — det demonstrerer evnen til å oversette komplekse datamønstre til konkrete, prioriterte anbefalinger med direkte forretningsverdi."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#formål",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#formål",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Formål",
+    "text": "Formål\nMålet var å utvikle et beslutningsstøttende dashboard som gir ledelsen rask oversikt over finansiell utvikling, avdekker hva som faktisk driver resultatene — og peker på hvor tiltak bør settes inn. Dashboardet er strukturert for å bevege seg fra overordnet lønnsomhet ned til kategori-, segment- og regionsnivå.\n\n\n\n\n\n\nImportantHovedfunn\n\n\n\nLønnsomhetsutfordringen er rabattdrevet, ikke volumdrevet. Veksten er sterk, men marginen svekkes systematisk fordi rabatter over 20 % ikke kompenseres av økt volum — og fordi fraktkostnadene vokser raskere enn omsetningen.\n\n\n\n  \n    Funn 01\n    Vekst uten proporsjonal marginforbedring\n    Omsetning opp 20 %, profit opp 14 % — men kostnad opp 21 % og ordrevolumet opp 28 %. Veksten er real, men marginen tynnes ut.\n    +20% / +14%\n  \n  \n    Funn 02\n    Rabatter over 21 % utløser marginkollaps\n    Margin uten rabatt er 29,5 %. Med rabatt faller den til −2,9 %. Knekkpunktet er identifisert mellom 21–30 % rabatt — etter dette kollapser lønnsomheten.\n    −32pp \n  \n  \n    Funn 03\n    Fraktstrategi er regionalt sensitiv\n    Same Day er globalt lønnsom, men gir −8,4 % margin i South-regionen. Fraktmetode alene er ikke problemet — kombinasjonen med region avgjør.\n    \n  14% /\n  −8%"
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#markedsanalyse-og-regional-drilldown",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#markedsanalyse-og-regional-drilldown",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Markedsanalyse og regional drilldown",
+    "text": "Markedsanalyse og regional drilldown\n\nOmsetningen er konsentrert i et fåtall stater, noe som gir eksponering mot regionale svingninger. Viktigere: omsetning og lønnsomhet korrelerer ikke lineært på markedsnivå. Noen høyvolumsmarkeder bidrar lite til bunnlinjen relativt til volum — og bør vurderes for ressursreallokering."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#anbefalinger",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#anbefalinger",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Anbefalinger",
+    "text": "Anbefalinger\n\n  \n    🚫\n    \n      Begrens rabatter over 20 %\n      Rabatter over knekkpunktet bør kun tillates med dokumentert volumgevinst som overstiger margintapet. Ingen kategorier er immune — Technology og Furniture er mest eksponerte.\n    \n  \n  \n    🗺️\n    \n      Differentier fraktstrategi regionalt\n      Same Day i South og Teknologi i South bør gjennomgås umiddelbart. En region-spesifikk fraktstrategi kan gi vesentlig marginforbedring uten å påvirke totalvolumet.\n    \n  \n  \n    📊\n    \n      Realloker ressurser mot lønnsomme markeder\n      Salgs- og markedsressurser bør vurderes mot lønnsomhetsbidrag, ikke kun omsetning. Høyvolumsmarkeder med lav margin bør analyseres for om de forsvarer investeringen.\n    \n  \n  \n    📈\n    \n      Overvåk AOV som ledende indikator\n      Fallende gjennomsnittlig ordreverdi er et tidlig varseltegn på rabattpress. AOV bør inngå i månedlig KPI-rapportering som separat styringsmetrikk for prisdisiplin."
+  },
+  {
+    "objectID": "projects/project_1_salg_lønnsomhetsanalyse/index.html#hva-denne-casen-demonstrerer",
+    "href": "projects/project_1_salg_lønnsomhetsanalyse/index.html#hva-denne-casen-demonstrerer",
+    "title": "Finansiell innsikt for strategiske beslutninger",
+    "section": "Hva denne casen demonstrerer",
+    "text": "Hva denne casen demonstrerer\n\n  💡 Power BI\n  📐 DAX · Tidsintelligens\n  🏆 Dynamisk Top/Bottom 10\n  🗄️ Stjernemodell\n  📖 Visual storytelling\n  🎯 Forretningsforståelse\n\nProsjektet viser ikke bare teknisk Power BI-kompetanse — det demonstrerer evnen til å oversette komplekse datamønstre til konkrete, prioriterte anbefalinger med direkte forretningsverdi."
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#logistic-regression-model-python",
+    "href": "projects/project_4_final/index.html#logistic-regression-model-python",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Logistic Regression Model (Python)",
+    "text": "Logistic Regression Model (Python)\nX = df[['delay_days','total_order_value']]\nX = sm.add_constant(X)\n\nmodel_delay = sm.Logit(y, X).fit()\nprint(model_delay.summary())"
+  },
+  {
+    "objectID": "projects/project_4_final/index.html#forecast-model",
+    "href": "projects/project_4_final/index.html#forecast-model",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Forecast Model",
+    "text": "Forecast Model\nmodel_trend_season = sm.OLS(\n    monthly_kpis[\"total_revenue\"],\n    X\n).fit()"
+  },
+  {
+    "objectID": "projects/forside.html",
+    "href": "projects/forside.html",
+    "title": "Lars Tingelstad",
+    "section": "",
+    "text": "Data & Analytics\n  \n  Jeg hjelper organisasjoner med å strukturere data, analysere utvikling og bygge dashboards som gir bedre beslutningsgrunnlag — gjennom hele kjeden fra rådata til innsikt.\n  \n    PostgreSQL\n    SQL\n    R\n    Python\n    Power BI\n    DAX\n    Datamodellering\n    Statistisk analyse"
+  },
+  {
+    "objectID": "projects/forside.html#om-meg",
+    "href": "projects/forside.html#om-meg",
+    "title": "Lars Tingelstad",
+    "section": "Om meg",
+    "text": "Om meg\nJeg arbeider gjennom hele analyseprosessen — fra datainnhenting og modellering til analyse, visualisering og innsiktsformidling. Kombinasjonen av statistisk metode, datamodellering og tydelig visualisering gjør det mulig å gjøre komplekse datasett forståelige og handlingsrettede for beslutningstakere.\nMin bakgrunn inkluderer analyse av komplekse og longitudinelle datasett fra forskning, utvikling av KPI-rammeverk og bygging av beslutningsstøttende dashboards i Power BI."
+  },
+  {
+    "objectID": "projects/forside.html#analyseprosess",
+    "href": "projects/forside.html#analyseprosess",
+    "title": "Lars Tingelstad",
+    "section": "Analyseprosess",
+    "text": "Analyseprosess\nTypisk arbeidsflyt i et analyseprosjekt går fra rådata til en konkret anbefaling ledelsen kan handle på:\n\n  🗄️DatainnhentingAPI · DB · filer\n  →\n  🔧ModelleringStjerneskjema · SQL\n  →\n  📐AnalyseSQL · R · DAX\n  →\n  📊VisualiseringPower BI\n  →\n  🎯BeslutningsstøtteAnbefalinger"
+  },
+  {
+    "objectID": "projects/forside.html#teknologi",
+    "href": "projects/forside.html#teknologi",
+    "title": "Lars Tingelstad",
+    "section": "Teknologi",
+    "text": "Teknologi\n\n  \n    🐘 SQL · Databaser\n    Datamodellering i PostgreSQL, CTEs, joins, aggregering og analyse av relasjonelle datasett.\n  \n  \n    💡 Power BI · DAX\n    Stjerneskjema, DAX-mål, tidsintelligens, KPI-design og beslutningsstøttende dashboards.\n  \n  \n    📈 R · Python · Analyse\n    Datahåndtering (dplyr, Pandas), visualisering (ggplot2, Seaborn), statistisk modellering (regresjon, mixed models).\n  \n  \n    🔄 Power Query · Excel\n    Datarydding, transformasjon, pivottabeller og strukturert analyse av datasett."
+  },
+  {
+    "objectID": "projects/forside.html#prosjekter",
+    "href": "projects/forside.html#prosjekter",
+    "title": "Lars Tingelstad",
+    "section": "Prosjekter",
+    "text": "Prosjekter\n\n\n  \n    🚴\n    \n      Strava Analytics Pipeline\n      End-to-end datapipeline fra Strava API via R og PostgreSQL til Power BI — med analyse av treningsbelastning, prestasjon og treningsmønster.\n      \n        R\n        PostgreSQL\n        Power BI\n        API-integrasjon\n      \n    \n  \n\n  \n    💰\n    \n      Profitability Analysis\n      Analyse av hvordan rabattstrategi og fraktmetode driver marginkollaps — med identifisering av knekkpunkt ved 21 % rabatt og regionalt differensierte funn.\n      \n        Power BI\n        DAX\n        KPI-design\n      \n    \n  \n\n  \n    📊\n    \n      Bike Store Sales Analytics\n      SQL-datamodell og Power BI-dashboard som avdekker salgsdrivere, konsentrasjonsrisiko og vekstmønstre — med +42 % YoY-vekst i fokus.\n      \n        SQL\n        Power BI\n        Datamodellering\n      \n    \n  \n\n  \n    🛒\n    \n      Olist E-Commerce Analysis\n      Kommersiell analyse av ~100 000 ordre med logistisk regresjon, tidsserieprognose og scenarioanalyse — fra rådata til beslutningsgrunnlag for CFO.\n      \n        PostgreSQL\n        Python\n        Prediksjon\n        Forecasting"
+  },
+  {
+    "objectID": "projects/forside.html#sertifiseringer",
+    "href": "projects/forside.html#sertifiseringer",
+    "title": "Lars Tingelstad",
+    "section": "Sertifiseringer",
+    "text": "Sertifiseringer\n\n  \n    Data Analyst in Power BI\n    DataCamp · Februar 2025\n    DAX, datamodellering, KPI-rapportering, trendanalyse og datavisualisering.\n  \n  \n    Data Analyst Associate\n    DataCamp · Februar 2025\n    SQL, eksplorativ analyse (EDA), statistisk testing og innsiktskommunikasjon."
+  },
+  {
+    "objectID": "projects/forside.html#kontakt",
+    "href": "projects/forside.html#kontakt",
+    "title": "Lars Tingelstad",
+    "section": "Kontakt",
+    "text": "Kontakt\n\n  \n    📧 Send meg en e-post\n  \n  \n    🔗 LinkedIn"
+  },
+  {
+    "objectID": "projects/strava-prosjekt.html",
+    "href": "projects/strava-prosjekt.html",
+    "title": "Strava Analytics Pipeline",
+    "section": "",
+    "text": "End-to-end datapipeline · Treningsanalyse\n  \n  En automatisert datapipeline som henter treningsdata fra Strava API, lagrer det i PostgreSQL og analyserer treningsbelastning, prestasjon og treningsmønster i Power BI.\n  \n    R\n    PostgreSQL\n    Power BI\n    DAX\n    API-integrasjon\n    OAuth\n    Stjernemodell\n    Tidsserieanalyse"
+  },
+  {
+    "objectID": "projects/strava-prosjekt.html#problemstilling",
+    "href": "projects/strava-prosjekt.html#problemstilling",
+    "title": "Strava Analytics Pipeline",
+    "section": "Problemstilling",
+    "text": "Problemstilling\nTreningsdata fra apper og manuelle logger lagres i separate systemer og i ulike formater. Dette gjør det vanskelig å analysere treningsbelastning, utvikling over tid og prestasjonsmønstre på tvers av aktivitetstyper og perioder.\n\n\n\n\n\n\nImportantProsjektmål\n\n\n\nBygge en automatisert end-to-end pipeline som henter aktivitetsdata fra Strava API, strukturerer det i en analyseklar database, og visualiserer treningsinnsikt i Power BI — uten manuelle eksporttrinn.\n\n\n\n  \n    Funn 01\n    Stabilitet er viktigere enn toppuker\n    Stabil treningsmengde over tid er en bedre indikator på robusthet enn enkeltuker med høyt volum. Periodene med lavere aktivitet følger tydelige sesongmønstre.\n    Stabilitet\n  \n  \n    Funn 02\n    Tydelig døgnrytme i treningstid\n    Klar preferanse for trening på ettermiddag etter arbeidstid på hverdager, med tidligere øktstart i helgene. Mønsteret er konsistent på tvers av hele analyseperioden.\n    17:00–19:00\n  \n  \n    Funn 03\n    Overkropp dominerer styrketreningen\n    Benkpress, pull ups og triceps utgjør majoriteten av styrkeøktene. Underkroppsøvelser er påvirket av tidligere kneproblematikk og er underrepresentert relativt til treningsvolum.\n    Benkpress ↑"
+  },
+  {
+    "objectID": "projects/strava-prosjekt.html#pipeline-arkitektur",
+    "href": "projects/strava-prosjekt.html#pipeline-arkitektur",
+    "title": "Strava Analytics Pipeline",
+    "section": "Pipeline-arkitektur",
+    "text": "Pipeline-arkitektur\n\n  🔐OAuthStrava API-autentisering\n  →\n  📥DatainnhentingR · paginert API-kall\n  →\n  🗄️PostgreSQLLagring · stjerneskjema\n  →\n  📊Power BIDAX · dashboards\n\nData fra to kilder integreres i samme modell: Strava-aktiviteter (løp, sykkel, ski) og en manuell treningsdagbok for styrkeøkter. Stjerneskjemaet gjør det mulig å analysere begge på tvers av felles tidsdimensjon."
+  },
+  {
+    "objectID": "projects/strava-prosjekt.html#datainnhenting-strava-api-r",
+    "href": "projects/strava-prosjekt.html#datainnhenting-strava-api-r",
+    "title": "Strava Analytics Pipeline",
+    "section": "Datainnhenting — Strava API (R)",
+    "text": "Datainnhenting — Strava API (R)\nStrava-data hentes via REST API med OAuth 2.0-autentisering. Sensitiv informasjon håndteres via miljøvariabler — ingen credentials i koden.\n\nAutentisering (OAuth)\nlibrary(httr)\nlibrary(jsonlite)\n\n# Tilgangstoken via Strava OAuth-flyt\nres &lt;- POST(\"https://www.strava.com/oauth/token\",\n  body = list(\n    client_id     = Sys.getenv(\"STRAVA_CLIENT_ID\"),\n    client_secret = Sys.getenv(\"STRAVA_CLIENT_SECRET\"),\n    code          = Sys.getenv(\"STRAVA_AUTH_CODE\"),\n    grant_type    = \"authorization_code\"\n  ),\n  encode = \"form\"\n)\n\ntokens       &lt;- content(res, \"parsed\")\naccess_token &lt;- tokens$access_token\n\n\nPaginert aktivitetshenting\nAPI-et leverer maks 200 aktiviteter per side. Løkken henter alle sider automatisk til ingen flere resultater returneres.\nlibrary(dplyr)\n\nget_activities &lt;- function(page, token) {\n  GET(\n    \"https://www.strava.com/api/v3/athlete/activities\",\n    query = list(per_page = 200, page = page),\n    add_headers(Authorization = paste(\"Bearer\", token))\n  )\n}\n\nall_activities &lt;- list()\npage &lt;- 1\n\nrepeat {\n  res  &lt;- get_activities(page, access_token)\n  data &lt;- fromJSON(content(res, \"text\"), flatten = TRUE)\n\n  if (nrow(data) == 0) break\n\n  all_activities[[page]] &lt;- data\n  page &lt;- page + 1\n}\n\nactivities &lt;- bind_rows(all_activities)\n\n\nKlargjøring og kolonnevalg\nNested JSON-felter flates ut, og datasettet reduseres til analyserelvante kolonner før lagring.\nactivities_sql &lt;- activities %&gt;%\n  select(\n    activity_id          = id,\n    name,\n    type,\n    start_date,\n    distance,\n    moving_time,\n    elapsed_time,\n    total_elevation_gain,\n    average_speed,\n    max_speed,\n    average_watts,\n    max_watts,\n    average_heartrate,\n    max_heartrate,\n    location_city,\n    location_country,\n    athlete_id           = athlete.id\n  )\n\n\nLagring i PostgreSQL\nlibrary(DBI)\nlibrary(RPostgres)\n\ncon &lt;- dbConnect(\n  Postgres(),\n  dbname   = \"strava\",\n  host     = Sys.getenv(\"PG_HOST\"),\n  port     = as.integer(Sys.getenv(\"PG_PORT\")),\n  user     = Sys.getenv(\"PG_USER\"),\n  password = Sys.getenv(\"PG_PASSWORD\")\n)\n\ndbWriteTable(\n  con,\n  name  = Id(schema = \"public\", table = \"activities\"),\n  value = activities_sql,\n  overwrite = TRUE\n)\nEnkel validering etter lagring:\nSELECT COUNT(*) FROM public.activities;"
+  },
+  {
+    "objectID": "projects/strava-prosjekt.html#datamodell",
+    "href": "projects/strava-prosjekt.html#datamodell",
+    "title": "Strava Analytics Pipeline",
+    "section": "Datamodell",
+    "text": "Datamodell\nDatasettet ble strukturert som et stjerneskjema med to faktatabeller — én for Strava-aktiviteter og én for styrkeøkter — koblet mot felles dato- og aktivitetsdimensjon.\n\n\n\nDatamodell"
+  },
+  {
+    "objectID": "projects/strava-prosjekt.html#datarydding-power-query",
+    "href": "projects/strava-prosjekt.html#datarydding-power-query",
+    "title": "Strava Analytics Pipeline",
+    "section": "Datarydding — Power Query",
+    "text": "Datarydding — Power Query\nTreningsdagboken kom i bredt format med reps og belastning i samme celle. Ryddingen i Power Query fulgte fem trinn: standardisering av kolonnenavn og datatyper, transformasjon fra bredt til langt format, standardisering av øktnavn, fjerning av tomme rader og sammenslåing av årstabeller til én faktatabell.\n\n\n\n\n\n\nNoteStyrkefil — før rydding\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNoteStyrkefil — etter rydding\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNoteStrava-data i Power Query\n\n\n\n\n\n\n\n\n\n\nDAX — Kategorisering av kroppsdel\nKroppsdel =\nVAR x = UPPER('facts_styrke'[Økt])\nRETURN\nSWITCH(\n    TRUE(),\n    CONTAINSSTRING(x, \"UB\") || CONTAINSSTRING(x, \"UPPER\") || CONTAINSSTRING(x, \"OVER\"),\n    \"Overkropp\",\n    CONTAINSSTRING(x, \"LB\") || CONTAINSSTRING(x, \"BEIN\") || CONTAINSSTRING(x, \"LOWER\") || CONTAINSSTRING(x, \"REHAB\"),\n    \"Underkropp\",\n    \"Ukjent\"\n)"
+  },
+  {
+    "objectID": "projects/strava-prosjekt.html#dax-mål",
+    "href": "projects/strava-prosjekt.html#dax-mål",
+    "title": "Strava Analytics Pipeline",
+    "section": "DAX-mål",
+    "text": "DAX-mål\nDe mest sentrale DAX-målene som ble bygget for analyse og dashboards:\n\nTidsintelligens\nSessions LY =\nCALCULATE(\n    [Sessions],\n    SAMEPERIODLASTYEAR('Dim_date'[Date])\n)\n\n\nMest aktive treningsdag\nMost Frequent Training Day =\nVAR DayCounts =\n    SUMMARIZE(\n        'Dim_Date',\n        'Dim_Date'[ukedag],\n        \"Sessions\", CALCULATE(COUNT('facts_strava'[type]))\n    )\nVAR TopDay =\n    TOPN(1, DayCounts, [Sessions], DESC)\nRETURN\n    MAXX(TopDay, 'Dim_Date'[ukedag])\n\n\nPersonal best løpetid\nPB Duration (sec) =\nCALCULATE(\n    MIN('facts_strava'[moving_time]),\n    FILTER(\n        ALL('facts_strava'),\n        'facts_strava'[Run Distance Category]\n            = SELECTEDVALUE('facts_strava'[Run Distance Category])\n        && 'facts_strava'[type] = \"Run\"\n    )\n)\n\n\nPallen — topp 3 løp\nPallen =\nVAR ThisTime =\n    SELECTEDVALUE('facts_strava'[moving_time])\nRETURN\nRANKX(\n    ALLSELECTED('facts_strava'),\n    'facts_strava'[moving_time],\n    ThisTime,\n    ASC,\n    DENSE\n)"
+  },
+  {
+    "objectID": "projects/strava-prosjekt.html#analyse-og-visualisering",
+    "href": "projects/strava-prosjekt.html#analyse-og-visualisering",
+    "title": "Strava Analytics Pipeline",
+    "section": "Analyse og visualisering",
+    "text": "Analyse og visualisering\n\nUtøver-dashboard\n\n\n\nUtøver dashboard\n\n\nDashboardet gir oversikt over treningsvolum over tid, intensitetsfordeling og prestasjonsutvikling — med mulighet for å filtrere på periode og aktivitetstype.\n\n\nSammenligning av utøvere\n\n\n\nSammenligning\n\n\nSammenligningsdashboardet gjør det mulig å analysere treningsvolum, intensitetsprofil og prestasjon på tvers av utøvere innen en valgt periode.\n\n\nTreningspreferanser\n\n\n\nTreningspreferanser\n\n\nAnalysen avdekker en tydelig preferanse for trening på ettermiddag etter arbeidstid på hverdager, med tidligere øktstart i helgene.\n\n\nBeste prestasjoner\n\n\n\nBeste prestasjoner\n\n\n\n\nTreningsvolum over tid\n\n\n\nTreningsvolum\n\n\nAnalysen viser perioder med stabil treningsmengde og enkelte faser med lavere aktivitetsnivå — korrelert med kjente belastningsperioder utenfor trening.\n\n\nStyrkedashboard\n\n\n\nStyrkedata\n\n\nStyrkedashboardet viser jevn progresjon i benkpress over analyseperioden, dominans av overkroppsøvelser og underrepresentasjon av underkropp knyttet til tidligere kneproblematikk."
+  },
+  {
+    "objectID": "projects/strava-prosjekt.html#teknologi",
+    "href": "projects/strava-prosjekt.html#teknologi",
+    "title": "Strava Analytics Pipeline",
+    "section": "Teknologi",
+    "text": "Teknologi\n\n  🐍 R · httr · jsonlite\n  🐘 PostgreSQL · DBI\n  💡 Power BI\n  📐 DAX\n  🔄 Power Query\n  🔐 OAuth 2.0\n\n\n\n\n\n\n\nWarningMetoderefleksjon\n\n\n\nPulsdata er ikke tilgjengelig for alle aktiviteter, noe som begrenser intensitetsanalysen. Styrkedata er manuelt registrert og kan inneholde inkonsistenser i øvelsesnavn som ikke fanges opp av SWITCH-logikken. Automatisk re-autentisering ved token-utløp er ikke implementert i nåværende pipeline-versjon."
+  },
+  {
+    "objectID": "projects/bikestore-prosjekt.html",
+    "href": "projects/bikestore-prosjekt.html",
+    "title": "Bike Store Sales Analytics",
+    "section": "",
+    "text": "SQL · Power BI · Salgsvekstanalyse\n  \n  Strukturert rådata til et analyseklart stjerneskjema — og et dashboard som avdekker konsentrasjonsrisiko, vekstmønstre og salgsdrivere på tvers av produkter og butikker.\n  \n    SQL\n    PostgreSQL\n    Power BI\n    Stjernemodell\n    KPI-design\n    Salgsvekstanalyse"
+  },
+  {
+    "objectID": "projects/bikestore-prosjekt.html#problemstilling",
+    "href": "projects/bikestore-prosjekt.html#problemstilling",
+    "title": "Bike Store Sales Analytics",
+    "section": "Problemstilling",
+    "text": "Problemstilling\nLedelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen. Omsetningen vokste, men det var uklart hvilke produkter og butikker som sto for veksten — og om veksten var bredt forankret eller konsentrert i et fåtall enheter.\n\n\n\n\n\n\nImportantHovedfunn\n\n\n\nSalgsveksten er sterk (+42 % YoY), men tydelig konsentrert. En liten andel produkter driver en stor del av omsetningen, og én butikk står for en uforholdsmessig stor andel av salget. Veksten er primært volumdrevet — ikke prisdrevet.\n\n\n\n  \n    Funn 01\n    Sterk vekst, men smal base\n    +42 % YoY er imponerende, men omsetningen er konsentrert i et begrenset antall produkter. Dette innebærer konsentrasjonsrisiko mot sortimentsendringer og leverandørproblemer.\n    +42% YoY\n  \n  \n    Funn 02\n    Én butikk dominerer\n    Én hovedbutikk står for en betydelig andel av totalomsetningen. Geografisk konsentrasjon begrenser vekstpotensialet og øker risikoen ved lokale markedsendringer.\n    Geo-risiko\n  \n  \n    Funn 03\n    Volumdrevet, ikke prisdrevet\n    Veksten forklares primært av økt salgsvolum. Det er rom for å vurdere prissetting og sortimentsoptimalisering for å forbedre marginen uten å ofre volum.\n    Volum ↑"
+  },
+  {
+    "objectID": "projects/bikestore-prosjekt.html#analyseprosess",
+    "href": "projects/bikestore-prosjekt.html#analyseprosess",
+    "title": "Bike Store Sales Analytics",
+    "section": "Analyseprosess",
+    "text": "Analyseprosess\nProsjektet fulgte en tredelt prosess: datakvalitetskontroll i SQL, modellering som stjerneskjema, og analyse i Power BI.\n\n  🔍DatakvalitetNULL · duplikat · relasjoner\n  →\n  🗄️SQL-modellDimensjoner · faktatabell\n  →\n  📊Power BIDashboard · innsikt\n  →\n  🎯AnbefalingerSortiment · geografi"
+  },
+  {
+    "objectID": "projects/bikestore-prosjekt.html#sql-datamodellering",
+    "href": "projects/bikestore-prosjekt.html#sql-datamodellering",
+    "title": "Bike Store Sales Analytics",
+    "section": "SQL — Datamodellering",
+    "text": "SQL — Datamodellering\nDatastrukturen ble modellert som et stjerneskjema med dimensjonstabeller for produkt, butikk, selger og kunde, og én sentral faktatabell for salgstransaksjoner.\n\nDimensjonstabeller\n-- Produktdimensjon med kategori og merke\nCREATE OR REPLACE VIEW dim_products AS\nSELECT\n    p.product_id,\n    p.product_name,\n    c.category_name AS category,\n    b.brand_name    AS brand,\n    p.list_price\nFROM products p\n    JOIN brands     b USING (brand_id)\n    JOIN categories c USING (category_id);\n\n-- Butikkdimensjon\nCREATE OR REPLACE VIEW dim_stores AS\nSELECT\n    store_id,\n    store_name,\n    city,\n    state,\n    CONCAT(city, ', ', state) AS location\nFROM stores;\n\n-- Selgerdimensjon med rolle-flagg\nCREATE OR REPLACE VIEW dim_staff AS\nSELECT\n    staff_id,\n    CONCAT(first_name, ' ', last_name) AS name,\n    email,\n    store_id,\n    manager_id,\n    CASE\n        WHEN manager_id IS NULL THEN 'Manager'\n        ELSE 'Staff'\n    END AS role\nFROM staffs\n    JOIN stores USING (store_id);\n\n\nFaktatabell\nFaktatabellen samler alle salgshendelser på ordrenivå med både brutto- og nettoomsetning — noe som muliggjør analyse av rabatteffekter direkte i Power BI.\nCREATE OR REPLACE VIEW fact_sales AS\nSELECT\n    o.order_id,\n    o.order_date,\n    o.store_id,\n    o.staff_id,\n    o.customer_id,\n    oi.product_id,\n    oi.quantity,\n    oi.list_price,\n    oi.discount,\n    oi.quantity * oi.list_price                       AS gross_revenue,\n    oi.quantity * oi.list_price * (1 - oi.discount)  AS net_revenue\nFROM orders o\nJOIN order_items oi USING (order_id);\n\n\nAggregerte analyse-views\nFor å forenkle Power BI-siden ble aggregerte views bygget direkte i SQL — slik at Power BI henter ferdige aggregater fremfor å beregne disse på importert rådata.\nCREATE OR REPLACE VIEW vw_monthly_store_revenue AS\nSELECT\n    s.store_name,\n    EXTRACT(YEAR  FROM order_date) AS year,\n    EXTRACT(MONTH FROM order_date) AS month,\n    SUM(gross_revenue)             AS gross_revenue,\n    SUM(net_revenue)               AS net_revenue\nFROM fact_sales f\n    LEFT JOIN dim_stores s ON f.store_id = s.store_id\nGROUP BY store_name, year, month\nORDER BY store_name, year, month;"
+  },
+  {
+    "objectID": "projects/bikestore-prosjekt.html#power-bi-dashboard",
+    "href": "projects/bikestore-prosjekt.html#power-bi-dashboard",
+    "title": "Bike Store Sales Analytics",
+    "section": "Power BI — Dashboard",
+    "text": "Power BI — Dashboard\nSQL-modellen brukes direkte som semantisk lag i Power BI — ingen transformasjon i Power Query utover datatyper.\n\n\n\n\n\n\nNoteDatamodell i Power BI\n\n\n\n\n\n\n\n\n\n\n\n\nSalgsanalyse dashboard\n\n\nDashboardet er strukturert rundt tre analyser. Salgsutvikling over tid visualiserer månedlig omsetning og gjør det mulig å identifisere sesongmønstre og vekstperioder. Produkt- og kategorianalysen viser hvilke enheter som driver størstedelen av omsetningen og avdekker konsentrasjonsrisiko. Butikkanalysen sammenligner geografisk salgsprestasjon.\n\n\n\n\n\n\nTipStrategisk tolkning\n\n\n\nHøy konsentrasjon i produktportefølje og geografi er en risikofaktor som bør adresseres eksplisitt i sortiments- og ekspansjonsstrategi. Veksten er reell, men ikke bredt forankret."
+  },
+  {
+    "objectID": "projects/bikestore-prosjekt.html#anbefalinger",
+    "href": "projects/bikestore-prosjekt.html#anbefalinger",
+    "title": "Bike Store Sales Analytics",
+    "section": "Anbefalinger",
+    "text": "Anbefalinger\n\n  \n    📦\n    \n      Reducer konsentrasjonsrisiko i sortimentet\n      Når en liten andel produkter driver en stor del av omsetningen, er avhengigheten av disse produktene høy. Aktiv bredding av sortimentet kan redusere risikoen ved leverandørproblemer eller etterspørselsfall.\n    \n  \n  \n    🗺️\n    \n      Vurder geografisk ekspansjon\n      Dominansen til én butikk indikerer uutnyttet potensial i andre geografier. En markedsanalyse av underrepresenterte regioner kan gi grunnlag for ekspansjonsbeslutninger.\n    \n  \n  \n    💰\n    \n      Optimaliser prissetting\n      Volumdrevet vekst er positivt, men prisoptimalisering på topprodukter kan forbedre margin uten å ofre volum. Rabattanalyse på produktnivå er et naturlig neste steg.\n    \n  \n  \n    📊\n    \n      Implementer løpende KPI-overvåkning\n      Dashboardet gir et godt grunnlag, men bør utvides med marginkPI-er på produktnivå og automatisk varsling ved avvik fra trendlinje."
+  },
+  {
+    "objectID": "projects/bikestore-prosjekt.html#teknologi",
+    "href": "projects/bikestore-prosjekt.html#teknologi",
+    "title": "Bike Store Sales Analytics",
+    "section": "Teknologi",
+    "text": "Teknologi\n\n  🐘 PostgreSQL\n  🔍 SQL Views\n  💡 Power BI\n  📐 DAX\n  🗄️ Stjerneskjema\n\n\n\n\n\n\n\nWarningMetoderefleksjon\n\n\n\nAnalysen er basert på transaksjonsdata uten kostnadsinformasjon utover listepriser og rabatter. Full marginanalyse krever innkjøpskostnader. Kundelojalitet og gjenkjøpsrate er ikke analysert i dette prosjektet — et naturlig neste steg."
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html",
+    "href": "projects/project_4_final/index_old.html",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "",
+    "text": "Verktøy: SQL · Python · Power BI\nDatasett: ~100k ordre\nMetoder: prediktiv modellering, forecasting, scenarioanalyse"
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#viktigste-funn",
+    "href": "projects/project_4_final/index_old.html#viktigste-funn",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Viktigste funn",
+    "text": "Viktigste funn\n1. Leveringsforsinkelser er den viktigste driveren for lav kundevurdering\nEn forsinket ordre øker sannsynligheten for lav rating fra omtrent 9 % til 59 %.\n2. Omsetningen vokser stabilt\nTrendmodell estimerer en økning på omtrent 54 000 per måned.\n3. Operasjonelle forbedringer kan redusere kostnader\nEn reduksjon i forsinkelser på 5 % kan forhindre omtrent 322 forsinkede ordre."
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#beslutningsspørsmål",
+    "href": "projects/project_4_final/index_old.html#beslutningsspørsmål",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Beslutningsspørsmål",
+    "text": "Beslutningsspørsmål\nHvordan kan Olist øke lønnsomheten gjennom:\n\nbedre leveranseprestasjon\nøkt kundeverdi\nmer presis prognose for fremtidig omsetning"
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#faktatabeller",
+    "href": "projects/project_4_final/index_old.html#faktatabeller",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Faktatabeller",
+    "text": "Faktatabeller\n\norders\norder_items\npayments"
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#dimensjonstabeller",
+    "href": "projects/project_4_final/index_old.html#dimensjonstabeller",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Dimensjonstabeller",
+    "text": "Dimensjonstabeller\n\ncustomers\nproducts\nsellers\ngeolocation\nproduct_categories\n\nDette gjør det mulig å analysere både operasjonell ytelse og kommersiell utvikling."
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#eksempel-på-sql-transformasjon",
+    "href": "projects/project_4_final/index_old.html#eksempel-på-sql-transformasjon",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Eksempel på SQL-transformasjon",
+    "text": "Eksempel på SQL-transformasjon\nCREATE TABLE fact_orders_v3 AS\nSELECT *,\n       total_price + total_freight AS total_order_value,\n       (order_delivered_customer_date::date \n        - order_purchase_timestamp::date) AS delivery_time_days,\n       (order_delivered_customer_date::date \n        - order_estimated_delivery_date::date) AS delay_days\nFROM fact_orders_v2\nWHERE order_status = 'delivered';"
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#feature-engineering",
+    "href": "projects/project_4_final/index_old.html#feature-engineering",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Feature engineering",
+    "text": "Feature engineering\nFor å analysere driverne bak kundetilfredshet og omsetning ble flere analytiske variabler konstruert.\n\nOrdre-nivå\n\ntotal_order_value\ndelivery_time_days\ndelay_flag\ndelay_days\nreview_score\n\n\n\nKunde-nivå\n\nrepeat_customer_flag\ncustomer_order_number\n\n\n\nProduktkategori\nProduktkategorier ble aggregert til makrokategorier:\n\nelectronics_tech\nhome_furniture\nfashion\nbeauty_health\nsports_leisure\nbooks_media\n\nDette gjør analysen mer robust og enklere å tolke."
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#analyse-operasjonell-ytelse",
+    "href": "projects/project_4_final/index_old.html#analyse-operasjonell-ytelse",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Analyse – operasjonell ytelse",
+    "text": "Analyse – operasjonell ytelse\n\nGjennomsnittlig ordreverdi\n\n\n\nEndring i AOV over tid\n\n\nGjennomsnittlig ordreverdi viser en svak oppadgående trend.\n\n\nOmsetning per måned\n\n\n\nUtvikling i omsetning per måned\n\n\nOmsetningen vokser betydelig gjennom analyseperioden.\nEn lineær trendmodell estimerer en økning på omtrent 54 000 per måned.\n\n\nLeveringsforsinkelser\n\n\n\nVariasjon i leveringsforsinkelser\n\n\nForsinkelser varierer mellom måneder og kan indikere kapasitetsproblemer i logistikk. Særlig økning ble observert i Q1 i 2018.\n\n\nLav kundevurdering\n\n\n\nUtvikling i lav kundevurdering over tid\n\n\nPerioder med høyere forsinkelser sammenfaller med økt andel lave kundevurderinger."
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#prediktiv-analyse",
+    "href": "projects/project_4_final/index_old.html#prediktiv-analyse",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Prediktiv analyse",
+    "text": "Prediktiv analyse\nEn logistisk regresjonsmodell ble brukt for å estimere sannsynligheten for lav kundevurdering.\n\nForklaringsvariabler\n\ndelay_days\ntotal_order_value\nproduktkategori"
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#logistic-regression-model-python",
+    "href": "projects/project_4_final/index_old.html#logistic-regression-model-python",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Logistic Regression Model (Python)",
+    "text": "Logistic Regression Model (Python)\nX = df[['delay_days','total_order_value']]\nX = sm.add_constant(X)\n\nmodel_delay = sm.Logit(y, X).fit()\nprint(model_delay.summary())"
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#forecast-model",
+    "href": "projects/project_4_final/index_old.html#forecast-model",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Forecast Model",
+    "text": "Forecast Model\nmodel_trend_season = sm.OLS(\n    monthly_kpis[\"total_revenue\"],\n    X\n).fit()"
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#prognose",
+    "href": "projects/project_4_final/index_old.html#prognose",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Prognose",
+    "text": "Prognose\nModellen forklarer omtrent 95 % av variasjonen i historisk omsetning.\nPrognosen indikerer fortsatt vekst i månedlig omsetning."
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#scenarioanalyse",
+    "href": "projects/project_4_final/index_old.html#scenarioanalyse",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Scenarioanalyse",
+    "text": "Scenarioanalyse\nEffekten av redusert leveringsforsinkelse ble simulert.\n\n\n\n\n\n\n\n\nReduksjon i forsinkelser\nUnngåtte forsinkede ordre\nKostnadsbesparelse\n\n\n\n\n2 %\n129\n339\n\n\n5 %\n322\n847\n\n\n8 %\n515\n1355\n\n\n\nSelv små forbedringer i leveringspresisjon kan gi målbare besparelser."
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#anbefalinger",
+    "href": "projects/project_4_final/index_old.html#anbefalinger",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Anbefalinger",
+    "text": "Anbefalinger\n\nReduser leveringsforsinkelser\nLeveringsforsinkelser er den viktigste driveren for lav kundetilfredshet.\nDette bør være første prioritet operasjonelt.\n\n\nEtabler KPI-overvåkning\nFølgende KPIer bør overvåkes løpende:\n\nomsetning\ndelay rate\nkundevurderinger\n\nDette kan implementeres i et BI-dashboard.\n\n\nPrioriter utsatte kategorier\nNoen produktkategorier har høyere risiko for lav rating og bør analyseres nærmere."
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#begrensninger",
+    "href": "projects/project_4_final/index_old.html#begrensninger",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Begrensninger",
+    "text": "Begrensninger\nAnalysen har noen begrensninger:\n\nmanglende kostnadsdata gjør full marginanalyse vanskelig\nhistoriske data dekker kun perioden 2016–2018\nkundelojalitet kunne vært modellert mer eksplisitt"
+  },
+  {
+    "objectID": "projects/project_4_final/index_old.html#teknologi",
+    "href": "projects/project_4_final/index_old.html#teknologi",
+    "title": "Kommersiell analyse og omsetningsprognose – Olist e-commerce case",
+    "section": "Teknologi",
+    "text": "Teknologi\nProsjektet er gjennomført med:\n\nPostgreSQL – datamodellering og transformasjon\nPython (Pandas, Statsmodels) – statistisk modellering\nMatplotlib / Seaborn – visualisering\nPower BI – dashboard design\nQuarto\n\n\n\nDette prosjektet viser:\n✔ SQL datamodellering\n✔ Feature engineering\n✔ Prediktiv modellering\n✔ Forecasting\n✔ Scenarioanalyse\n✔ Business recommendations"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#pipeline-arkitektur",
+    "href": "projects/project_3_strava/index.html#pipeline-arkitektur",
+    "title": "Strava Analytics Pipeline",
+    "section": "Pipeline-arkitektur",
+    "text": "Pipeline-arkitektur\n\n  🔐OAuthStrava API-autentisering\n  →\n  📥DatainnhentingR · paginert API-kall\n  →\n  🗄️PostgreSQLLagring · stjerneskjema\n  →\n  📊Power BIDAX · dashboards\n\nData fra to kilder integreres i samme modell: Strava-aktiviteter (løp, sykkel, ski) og en manuell treningsdagbok for styrkeøkter. Stjerneskjemaet gjør det mulig å analysere begge på tvers av felles tidsdimensjon."
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#datarydding-power-query",
+    "href": "projects/project_3_strava/index.html#datarydding-power-query",
+    "title": "Strava Analytics Pipeline",
+    "section": "Datarydding — Power Query",
+    "text": "Datarydding — Power Query\nTreningsdagboken kom i bredt format med reps og belastning i samme celle. Ryddingen i Power Query fulgte fem trinn: standardisering av kolonnenavn og datatyper, transformasjon fra bredt til langt format, standardisering av øktnavn, fjerning av tomme rader og sammenslåing av årstabeller til én faktatabell.\n\n\n\n\n\n\nNoteStyrkefil — før rydding\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNoteStyrkefil — etter rydding\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNoteStrava-data i Power Query\n\n\n\n\n\n\n\n\n\n\nDAX — Kategorisering av kroppsdel\n\n\nkode\n\nKroppsdel =\nVAR x = UPPER('facts_styrke'[Økt])\nRETURN\nSWITCH(\n    TRUE(),\n    CONTAINSSTRING(x, \"UB\") || CONTAINSSTRING(x, \"UPPER\") || CONTAINSSTRING(x, \"OVER\"),\n    \"Overkropp\",\n    CONTAINSSTRING(x, \"LB\") || CONTAINSSTRING(x, \"BEIN\") || CONTAINSSTRING(x, \"LOWER\") || CONTAINSSTRING(x, \"REHAB\"),\n    \"Underkropp\",\n    \"Ukjent\"\n)"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#dax-mål",
+    "href": "projects/project_3_strava/index.html#dax-mål",
+    "title": "Strava Analytics Pipeline",
+    "section": "DAX-mål",
+    "text": "DAX-mål\nDe mest sentrale DAX-målene som ble bygget for analyse og dashboards:\n\n\nTidsintelligens\n\nSessions LY =\nCALCULATE(\n    [Sessions],\n    SAMEPERIODLASTYEAR('Dim_date'[Date])\n)\n\n\n\nMest aktive treningsdag\n\nMost Frequent Training Day =\nVAR DayCounts =\n    SUMMARIZE(\n        'Dim_Date',\n        'Dim_Date'[ukedag],\n        \"Sessions\", CALCULATE(COUNT('facts_strava'[type]))\n    )\nVAR TopDay =\n    TOPN(1, DayCounts, [Sessions], DESC)\nRETURN\n    MAXX(TopDay, 'Dim_Date'[ukedag])\n\n\n\nPersonal best løpetid\n\nPB Duration (sec) =\nCALCULATE(\n    MIN('facts_strava'[moving_time]),\n    FILTER(\n        ALL('facts_strava'),\n        'facts_strava'[Run Distance Category]\n            = SELECTEDVALUE('facts_strava'[Run Distance Category])\n        && 'facts_strava'[type] = \"Run\"\n    )\n)\n\n\n\nPallen — topp 3 løp\n\nPallen =\nVAR ThisTime =\n    SELECTEDVALUE('facts_strava'[moving_time])\nRETURN\nRANKX(\n    ALLSELECTED('facts_strava'),\n    'facts_strava'[moving_time],\n    ThisTime,\n    ASC,\n    DENSE\n)"
+  },
+  {
+    "objectID": "projects/project_3_strava/index.html#teknologi",
+    "href": "projects/project_3_strava/index.html#teknologi",
+    "title": "Strava Analytics Pipeline",
+    "section": "Teknologi",
+    "text": "Teknologi\n\n  🐍 R · httr · jsonlite\n  🐘 PostgreSQL · DBI\n  💡 Power BI\n  📐 DAX\n  🔄 Power Query\n  🔐 OAuth 2.0\n\n\n\n\n\n\n\nWarningMetoderefleksjon\n\n\n\nPulsdata er ikke tilgjengelig for alle aktiviteter, noe som begrenser intensitetsanalysen. Styrkedata er manuelt registrert og kan inneholde inkonsistenser i øvelsesnavn som ikke fanges opp av SWITCH-logikken. Automatisk re-autentisering ved token-utløp er ikke implementert i nåværende pipeline-versjon."
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html#sql-datamodellering",
+    "href": "projects/project_2_Bike_Store/index.html#sql-datamodellering",
+    "title": "Bike Store Sales Analytics",
+    "section": "SQL — Datamodellering",
+    "text": "SQL — Datamodellering\nDatastrukturen ble modellert som et stjerneskjema med dimensjonstabeller for produkt, butikk, selger og kunde, og én sentral faktatabell for salgstransaksjoner.\n\nDimensjonstabeller\n\n\nFull kode\n\n-- Produktdimensjon med kategori og merke\nCREATE OR REPLACE VIEW dim_products AS\nSELECT\n    p.product_id,\n    p.product_name,\n    c.category_name AS category,\n    b.brand_name    AS brand,\n    p.list_price\nFROM products p\n    JOIN brands     b USING (brand_id)\n    JOIN categories c USING (category_id);\n\n-- Butikkdimensjon\nCREATE OR REPLACE VIEW dim_stores AS\nSELECT\n    store_id,\n    store_name,\n    city,\n    state,\n    CONCAT(city, ', ', state) AS location\nFROM stores;\n\n-- Selgerdimensjon med rolle-flagg\nCREATE OR REPLACE VIEW dim_staff AS\nSELECT\n    staff_id,\n    CONCAT(first_name, ' ', last_name) AS name,\n    email,\n    store_id,\n    manager_id,\n    CASE\n        WHEN manager_id IS NULL THEN 'Manager'\n        ELSE 'Staff'\n    END AS role\nFROM staffs\n    JOIN stores USING (store_id);\n\n\n\nFaktatabell\nFaktatabellen samler alle salgshendelser på ordrenivå med både brutto- og nettoomsetning — noe som muliggjør analyse av rabatteffekter direkte i Power BI.\n\n\nFull kode\n\nCREATE OR REPLACE VIEW fact_sales AS\nSELECT\n    o.order_id,\n    o.order_date,\n    o.store_id,\n    o.staff_id,\n    o.customer_id,\n    oi.product_id,\n    oi.quantity,\n    oi.list_price,\n    oi.discount,\n    oi.quantity * oi.list_price                       AS gross_revenue,\n    oi.quantity * oi.list_price * (1 - oi.discount)  AS net_revenue\nFROM orders o\nJOIN order_items oi USING (order_id);\n\n\n\nAggregerte analyse-views\nFor å forenkle Power BI-siden ble aggregerte views bygget direkte i SQL — slik at Power BI henter ferdige aggregater fremfor å beregne disse på importert rådata.\n\n\nKode\n\nCREATE OR REPLACE VIEW vw_monthly_store_revenue AS\nSELECT\n    s.store_name,\n    EXTRACT(YEAR  FROM order_date) AS year,\n    EXTRACT(MONTH FROM order_date) AS month,\n    SUM(gross_revenue)             AS gross_revenue,\n    SUM(net_revenue)               AS net_revenue\nFROM fact_sales f\n    LEFT JOIN dim_stores s ON f.store_id = s.store_id\nGROUP BY store_name, year, month\nORDER BY store_name, year, month;"
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html#power-bi-dashboard",
+    "href": "projects/project_2_Bike_Store/index.html#power-bi-dashboard",
+    "title": "Bike Store Sales Analytics",
+    "section": "Power BI — Dashboard",
+    "text": "Power BI — Dashboard\nSQL-modellen brukes direkte som semantisk lag i Power BI — ingen transformasjon i Power Query utover datatyper.\n\n\n\n\n\n\nNoteDatamodell i Power BI\n\n\n\n\n\n\n\n\n\n\n\n\nSalgsanalyse dashboard\n\n\nDashboardet er strukturert rundt tre analyser. Salgsutvikling over tid visualiserer månedlig omsetning og gjør det mulig å identifisere sesongmønstre og vekstperioder. Produkt- og kategorianalysen viser hvilke enheter som driver størstedelen av omsetningen og avdekker konsentrasjonsrisiko. Butikkanalysen sammenligner geografisk salgsprestasjon.\n\n\n\n\n\n\nTipStrategisk tolkning\n\n\n\nHøy konsentrasjon i produktportefølje og geografi er en risikofaktor som bør adresseres eksplisitt i sortiments- og ekspansjonsstrategi. Veksten er reell, men ikke bredt forankret."
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html#anbefalinger",
+    "href": "projects/project_2_Bike_Store/index.html#anbefalinger",
+    "title": "Bike Store Sales Analytics",
+    "section": "Anbefalinger",
+    "text": "Anbefalinger\n\n  \n    📦\n    \n      Reducer konsentrasjonsrisiko i sortimentet\n      Når en liten andel produkter driver en stor del av omsetningen, er avhengigheten av disse produktene høy. Aktiv bredding av sortimentet kan redusere risikoen ved leverandørproblemer eller etterspørselsfall.\n    \n  \n  \n    🗺️\n    \n      Vurder geografisk ekspansjon\n      Dominansen til én butikk indikerer uutnyttet potensial i andre geografier. En markedsanalyse av underrepresenterte regioner kan gi grunnlag for ekspansjonsbeslutninger.\n    \n  \n  \n    💰\n    \n      Optimaliser prissetting\n      Volumdrevet vekst er positivt, men prisoptimalisering på topprodukter kan forbedre margin uten å ofre volum. Rabattanalyse på produktnivå er et naturlig neste steg.\n    \n  \n  \n    📊\n    \n      Implementer løpende KPI-overvåkning\n      Dashboardet gir et godt grunnlag, men bør utvides med marginkPI-er på produktnivå og automatisk varsling ved avvik fra trendlinje."
+  },
+  {
+    "objectID": "projects/project_2_Bike_Store/index.html#teknologi",
+    "href": "projects/project_2_Bike_Store/index.html#teknologi",
+    "title": "Bike Store Sales Analytics",
+    "section": "Teknologi",
+    "text": "Teknologi\n\n  🐘 PostgreSQL\n  🔍 SQL Views\n  💡 Power BI\n  📐 DAX\n  🗄️ Stjerneskjema\n\n\n\n\n\n\n\nWarningMetoderefleksjon\n\n\n\nAnalysen er basert på transaksjonsdata uten kostnadsinformasjon utover listepriser og rabatter. Full marginanalyse krever innkjøpskostnader. Kundelojalitet og gjenkjøpsrate er ikke analysert i dette prosjektet — et naturlig neste steg."
   }
 ]

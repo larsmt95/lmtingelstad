@@ -1,111 +1,173 @@
 ---
-title: "Lars Tingelstad. PhD"
-subtitle: "Data & Analytics | SQL · Power BI · R | Datamodellering, analyse og beslutningsstøtte"
+title: "Lars Tingelstad"
 format:
   html:
     toc: false
-    lightbox: true
+    css: styles.css 
 ---
 
-Jeg hjelper organisasjoner med å strukturere data, analysere utvikling og bygge dashboards som gir bedre beslutningsgrunnlag.
+```{=html}
+<div class="project-hero" style="padding-bottom: 40px;">
+  <div class="hero-eyebrow">Data & Analytics</div>
+  <h1 class="hero-title">Jeg gjør komplekse data<br><em>forståelige og handlingsrettede.</em></h1>
+  <p class="hero-sub">Jeg hjelper organisasjoner med å strukturere data, analysere utvikling og bygge dashboards som gir bedre beslutningsgrunnlag — gjennom hele kjeden fra rådata til innsikt.</p>
+  <div class="tag-row">
+    <span class="ptag sql">PostgreSQL</span>
+    <span class="ptag python">R</span>
+    <span class="ptag python">Python</span>
+    <span class="ptag bi">Power BI</span>
+    <span class="ptag bi">DAX</span>
+    <span class="ptag">Datamodellering</span>
+    <span class="ptag">Statistisk analyse</span>
+  </div>
+</div>
+```
 
-Jeg arbeider gjennom hele analyseprosessen – fra datainnhenting og datamodellering til analyse, visualisering og innsiktsformidling. Arbeidet mitt kombinerer statistisk metode, datamodellering og tydelig visualisering for å gjøre komplekse data forståelige og handlingsrettede.
+## Om meg
 
-Min erfaring inkluderer analyse av komplekse og longitudinelle datasett, utvikling av KPI-rammeverk og bygging av beslutningsstøttende dashboards i Power BI.
+Jeg arbeider gjennom hele analyseprosessen — fra datainnhenting og modellering til analyse, visualisering og innsiktsformidling. Kombinasjonen av statistisk metode, datamodellering og tydelig visualisering gjør det mulig å gjøre komplekse datasett forståelige og handlingsrettede for beslutningstakere.
 
-------------------------------------------------------------------------
-
-### Analyseprosess
-
-Typisk arbeidsflyt i analyseprosjekter:
-
-**Datakilder → Datainnhenting → Datamodellering → Analyse → Visualisering → Beslutningsstøtte**
-
--   Datainnhenting fra API, databaser og filer\
--   Datarydding og strukturering\
--   Datamodellering (stjerneskjema)\
--   Analyse i SQL, R og DAX\
--   Visualisering i Power BI\
--   Innsiktsformidling til beslutningstakere
-
-------------------------------------------------------------------------
-
-### Teknologi
-
-| **SQL / Databaser** | **Power BI** | **R / Analyse** | **Excel / Databehandling** |
-|----|----|----|----|
-| Datamodellering i PostgreSQL, joins, aggregering, analyse av relasjonelle datasett. | Datamodellering (stjerneskjema), DAX-målinger, tidsintelligens, KPI-design og dashboards. | Datahåndtering (dplyr, tidyr), visualisering (ggplot2), statistisk modellering (ANOVA, regresjon, mixed models). | Power Query, pivottabeller og strukturert analyse av datasett. |
-
-### Kjernekompetanse
-
--   Datainnhenting, datarensing og kvalitetskontroll\
--   Datamodellering og analyse av relasjonelle datasett\
--   Statistisk analyse og tidsserieanalyse\
--   KPI-design og resultatoppfølging\
--   Visualisering og innsiktsformidling\
--   Beslutningsstøtte for operative og strategiske beslutninger
+Min bakgrunn inkluderer analyse av komplekse og longitudinelle datasett fra forskning, utvikling av KPI-rammeverk og bygging av beslutningsstøttende dashboards i Power BI.
 
 ------------------------------------------------------------------------
 
-### Sertifiseringer \| Kurs
+## Analyseprosess
 
-**Data Analyst in Power BI – DataCamp (02.2025)**\
-DAX, datamodellering, KPI-rapportering, trendanalyse og datavisualisering.
+Typisk arbeidsflyt i et analyseprosjekt går fra rådata til en konkret anbefaling ledelsen kan handle på:
 
-**Data Analyst Associate – DataCamp (02.2025)**\
-SQL, eksplorativ analyse (EDA), statistisk testing og innsiktskommunikasjon.
+```{=html}
+<div class="pipeline-row">
+  <div class="pl-step"><div class="pl-icon">🗄️</div><div class="pl-label">Datainnhenting</div><div class="pl-sub">API · DB · filer</div></div>
+  <div class="pl-arrow">→</div>
+  <div class="pl-step"><div class="pl-icon">🔧</div><div class="pl-label">Modellering</div><div class="pl-sub">Stjerneskjema · PostgreSQL </div></div>
+  <div class="pl-arrow">→</div>
+  <div class="pl-step"><div class="pl-icon">📐</div><div class="pl-label">Analyse</div><div class="pl-sub">PostgreSQL  · R · DAX</div></div>
+  <div class="pl-arrow">→</div>
+  <div class="pl-step"><div class="pl-icon">📊</div><div class="pl-label">Visualisering</div><div class="pl-sub">Power BI</div></div>
+  <div class="pl-arrow">→</div>
+  <div class="pl-step"><div class="pl-icon">🎯</div><div class="pl-label">Beslutningsstøtte</div><div class="pl-sub">Anbefalinger</div></div>
+</div>
+```
 
 ------------------------------------------------------------------------
 
-### Prosjekter
+## Teknologi
 
-:::::: grid
-::: {.g-col-4 .project-card}
-📊 **Sales Analytics**
+```{=html}
+<div class="tech-grid">
+  <div class="tech-block">
+    <div class="tech-block-title">🐘 PostgreSQL  · Databaser</div>
+    <div class="tech-block-body">Datamodellering i PostgreSQL, CTEs, joins, aggregering og analyse av relasjonelle datasett.</div>
+  </div>
+  <div class="tech-block">
+    <div class="tech-block-title">💡 Power BI · DAX</div>
+    <div class="tech-block-body">Stjerneskjema, DAX-mål, tidsintelligens, KPI-design og beslutningsstøttende dashboards.</div>
+  </div>
+  <div class="tech-block">
+    <div class="tech-block-title">📈 R · Python · Analyse</div>
+    <div class="tech-block-body">Datahåndtering (dplyr, Pandas), visualisering (ggplot2, Seaborn), statistisk modellering (regresjon, mixed models).</div>
+  </div>
+  <div class="tech-block">
+    <div class="tech-block-title">🔄 Power Query · Excel</div>
+    <div class="tech-block-body">Datarydding, transformasjon, pivottabeller og strukturert analyse av datasett.</div>
+  </div>
+</div>
+```
 
-Analyse av salgsdrivere i Bike Store ved bruk av SQL og Power BI.
+------------------------------------------------------------------------
 
-**Teknologi**
+## Prosjekter
 
-SQL\
-Power BI\
-Datamodellering
+```{=html}
+<div class="home-projects">
 
-[Se prosjekt →](projects/project_2_Bike_Store/)
-:::
+  <a href="projects/project_3_strava/" class="home-card">
+    <div class="home-card-emoji">🚴</div>
+    <div>
+      <div class="home-card-title">Strava Analytics Pipeline</div>
+      <div class="home-card-body">End-to-end datapipeline fra Strava API via R og PostgreSQL til Power BI — med analyse av treningsbelastning, prestasjon og treningsmønster.</div>
+      <div class="home-card-tags">
+        <span class="ptag python">R</span>
+        <span class="ptag sql">PostgreSQL</span>
+        <span class="ptag bi">Power BI</span>
+        <span class="ptag">API-integrasjon</span>
+      </div>
+    </div>
+  </a>
 
-::: {.g-col-4 .project-card}
-💰 **Profitability Analysis**
+  <a href="projects/project_1_salg_lønnsomhetsanalyse/" class="home-card">
+    <div class="home-card-emoji">💰</div>
+    <div>
+      <div class="home-card-title">Profitability Analysis</div>
+      <div class="home-card-body">Analyse av hvordan rabattstrategi og fraktmetode driver marginkollaps — med identifisering av knekkpunkt ved 21 % rabatt og regionalt differensierte funn.</div>
+      <div class="home-card-tags">
+        <span class="ptag bi">Power BI</span>
+        <span class="ptag bi">DAX</span>
+        <span class="ptag">KPI-design</span>
+      </div>
+    </div>
+  </a>
 
-Analyse av hvordan rabatter, fraktstrategi og volum påvirker margin.
+  <a href="projects/project_2_Bike_Store/" class="home-card">
+    <div class="home-card-emoji">📊</div>
+    <div>
+      <div class="home-card-title">Bike Store Sales Analytics</div>
+      <div class="home-card-body">PostgreSQL -datamodell og Power BI-dashboard som avdekker salgsdrivere, konsentrasjonsrisiko og vekstmønstre — med +42 % YoY-vekst i fokus.</div>
+      <div class="home-card-tags">
+        <span class="ptag sql">PostgreSQL </span>
+        <span class="ptag bi">Power BI</span>
+        <span class="ptag">Datamodellering</span>
+      </div>
+    </div>
+  </a>
 
-**Teknologi**
+  <a href="projects/project_olist/" class="home-card">
+    <div class="home-card-emoji">🛒</div>
+    <div>
+      <div class="home-card-title">Olist E-Commerce Analysis</div>
+      <div class="home-card-body">Kommersiell analyse av ~100 000 ordre med logistisk regresjon, tidsserieprognose og scenarioanalyse — fra rådata til beslutningsgrunnlag for CFO.</div>
+      <div class="home-card-tags">
+        <span class="ptag sql">PostgreSQL</span>
+        <span class="ptag python">Python</span>
+        <span class="ptag">Prediksjon</span>
+        <span class="ptag">Forecasting</span>
+      </div>
+    </div>
+  </a>
 
-Power BI\
-DAX\
-KPI-design
+</div>
+```
 
-[Se prosjekt →](projects/project_1_salg_lønnsomhetsanalyse/)
-:::
+------------------------------------------------------------------------
 
-::: {.g-col-4 .project-card}
-🚴 **Strava Data Pipeline**
+## Sertifiseringer
 
-End-to-end pipeline for treningsdata.\
-Strava API → R → PostgreSQL → Power BI
+```{=html}
+<div class="cert-row">
+  <div class="cert-card">
+    <div class="cert-title">Data Analyst in Power BI</div>
+    <div class="cert-issuer">DataCamp · Februar 2025</div>
+    <div class="cert-body">DAX, datamodellering, KPI-rapportering, trendanalyse og datavisualisering.</div>
+  </div>
+  <div class="cert-card">
+    <div class="cert-title">Data Analyst Associate</div>
+    <div class="cert-issuer">DataCamp · Februar 2025</div>
+    <div class="cert-body">PostgreSQL, eksplorativ analyse (EDA), statistisk testing og innsiktskommunikasjon.</div>
+  </div>
+</div>
+```
 
-**Teknologi**
+------------------------------------------------------------------------
 
-R\
-PostgreSQL\
-Power BI
+## Kontakt
 
-[Se prosjekt →](projects/project_3_strava/)
-:::
-::::::
-
-### Kontakt
-
-|  |  |
-|----|----|
-| 📧 [Send meg en e-post](mailto:lmtingelstad@outlook.com?subject=Henvendelse%20fra%20portef%C3%B8lje) | 🔗 [LinkedIn](https://www.linkedin.com/in/lars-martin-tingelstad-657940113/) |
+```{=html}
+<div class="contact-row">
+  <a href="mailto:lmtingelstad@outlook.com?subject=Henvendelse%20fra%20portefølje" class="contact-btn">
+    📧 Send meg en e-post
+  </a>
+  <a href="https://www.linkedin.com/in/lars-martin-tingelstad-657940113/" target="_blank" class="contact-btn contact-btn-secondary">
+    🔗 LinkedIn
+  </a>
+</div>
+```

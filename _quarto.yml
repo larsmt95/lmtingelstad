@@ -15,6 +15,8 @@ website:
         text: 📊 Prosjekt - Sales Analytics
       - href: projects/project_3_strava/
         text: 🚴 Prosjekt - Strava Analytics Pipeline
+      - href: projects/project_4_final/
+        text: 🚴 Prosjekt - Commercial Analytics Case
 
     right:
       - icon: linkedin
@@ -30,6 +32,9 @@ format:
     highlight-style: github
     grid:
       body-width: 1100px
+    include-in-header:
+      text: |
+        <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 editor: visual
 

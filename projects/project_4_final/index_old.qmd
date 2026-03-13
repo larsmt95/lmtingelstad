@@ -1,0 +1,286 @@
+---
+title: "Kommersiell analyse og omsetningsprognose – Olist e-commerce case"
+subtitle: "Fra rådata til beslutningsgrunnlag for CFO og operasjonell ledelse"
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+execute:
+  warning: false
+  message: false
+  enabled: false
+---
+
+> **Verktøy:** SQL · Python · Power BI\
+> **Datasett:** \~100k ordre\
+> **Metoder:** prediktiv modellering, forecasting, scenarioanalyse
+
+::: callout-important
+## Hovedinnsikt
+
+Leveringsforsinkelser er den sterkeste driveren for lav kundetilfredshet.
+:::
+
+# Executive Summary
+
+Dette prosjektet analyserer kommersiell ytelse i den brasilianske e-commerce plattformen **Olist**.\
+Målet er å identifisere hvilke faktorer som påvirker **kundetilfredshet, omsetning og operasjonell risiko**, og oversette analysen til **konkrete forretningsanbefalinger**.
+
+Analysen kombinerer:
+
+-   SQL datamodellering
+-   statistisk modellering i Python
+-   tidsserieanalyse
+-   scenarioanalyse
+
+## Viktigste funn
+
+**1. Leveringsforsinkelser er den viktigste driveren for lav kundevurdering**
+
+En forsinket ordre øker sannsynligheten for lav rating fra omtrent **9 % til 59 %**.
+
+**2. Omsetningen vokser stabilt**
+
+Trendmodell estimerer en økning på omtrent **54 000 per måned**.
+
+**3. Operasjonelle forbedringer kan redusere kostnader**
+
+En reduksjon i forsinkelser på **5 %** kan forhindre omtrent **322 forsinkede ordre**.
+
+------------------------------------------------------------------------
+
+# Forretningskontekst
+
+Olist er en brasiliansk markedsplass som kobler selgere og kunder.
+
+Datasettet inneholder omtrent **100 000 ordre** med informasjon om:
+
+-   ordre
+-   produkter
+-   betalinger
+-   anmeldelser
+-   leveringsdatoer
+
+Selskapet opplever:
+
+-   varierende leveringsprestasjon
+-   økende ordrevolum
+-   usikker fremtidig omsetning
+
+## Beslutningsspørsmål
+
+Hvordan kan Olist øke lønnsomheten gjennom:
+
+1.  bedre leveranseprestasjon
+2.  økt kundeverdi
+3.  mer presis prognose for fremtidig omsetning
+
+------------------------------------------------------------------------
+
+# Data og datamodell
+
+Databasen ble strukturert som en **stjernemodell**.
+
+## Faktatabeller
+
+-   orders
+-   order_items
+-   payments
+
+## Dimensjonstabeller
+
+-   customers
+-   products
+-   sellers
+-   geolocation
+-   product_categories
+
+Dette gjør det mulig å analysere både operasjonell ytelse og kommersiell utvikling.
+
+## Eksempel på SQL-transformasjon
+
+```{sql}
+CREATE TABLE fact_orders_v3 AS
+SELECT *,
+       total_price + total_freight AS total_order_value,
+       (order_delivered_customer_date::date 
+        - order_purchase_timestamp::date) AS delivery_time_days,
+       (order_delivered_customer_date::date 
+        - order_estimated_delivery_date::date) AS delay_days
+FROM fact_orders_v2
+WHERE order_status = 'delivered';
+```
+
+## Feature engineering
+
+For å analysere driverne bak kundetilfredshet og omsetning ble flere analytiske variabler konstruert.
+
+### Ordre-nivå
+
+-   `total_order_value`
+-   `delivery_time_days`
+-   `delay_flag`
+-   `delay_days`
+-   `review_score`
+
+### Kunde-nivå
+
+-   `repeat_customer_flag`
+-   `customer_order_number`
+
+### Produktkategori
+
+Produktkategorier ble aggregert til makrokategorier:
+
+-   `electronics_tech`
+-   `home_furniture`
+-   `fashion`
+-   `beauty_health`
+-   `sports_leisure`
+-   `books_media`
+
+Dette gjør analysen mer robust og enklere å tolke.
+
+------------------------------------------------------------------------
+
+## Analyse – operasjonell ytelse
+
+### Gjennomsnittlig ordreverdi
+
+![Endring i AOV over tid](figs/AOV_over_time.png)
+
+Gjennomsnittlig ordreverdi viser en svak oppadgående trend.
+
+### Omsetning per måned
+
+![Utvikling i omsetning per måned](figs/monthly_revenue_trend.png)
+
+Omsetningen vokser betydelig gjennom analyseperioden.
+
+En lineær trendmodell estimerer en økning på omtrent **54 000 per måned**.
+
+### Leveringsforsinkelser
+
+![Variasjon i leveringsforsinkelser](figs/monthly_delay_Rate.png)
+
+Forsinkelser varierer mellom måneder og kan indikere kapasitetsproblemer i logistikk. Særlig økning ble observert i Q1 i 2018.
+
+### Lav kundevurdering
+
+![Utvikling i lav kundevurdering over tid](figs/low_rating_over_time.png)
+
+Perioder med høyere forsinkelser sammenfaller med økt andel lave kundevurderinger.
+
+------------------------------------------------------------------------
+
+## Prediktiv analyse
+
+En logistisk regresjonsmodell ble brukt for å estimere sannsynligheten for lav kundevurdering.
+
+### Forklaringsvariabler
+
+-   `delay_days`
+-   `total_order_value`
+-   `produktkategori`
+
+## Logistic Regression Model (Python)
+
+``` python
+X = df[['delay_days','total_order_value']]
+X = sm.add_constant(X)
+
+model_delay = sm.Logit(y, X).fit()
+print(model_delay.summary())
+```
+
+## Forecast Model
+
+``` python
+model_trend_season = sm.OLS(
+    monthly_kpis["total_revenue"],
+    X
+).fit()
+```
+
+## Prognose
+
+Modellen forklarer omtrent **95 % av variasjonen i historisk omsetning**.
+
+Prognosen indikerer fortsatt vekst i månedlig omsetning.
+
+![](figs/revenue_forvast.png)
+
+------------------------------------------------------------------------
+
+## Scenarioanalyse
+
+Effekten av redusert leveringsforsinkelse ble simulert.
+
+| Reduksjon i forsinkelser | Unngåtte forsinkede ordre | Kostnadsbesparelse |
+|--------------------------|---------------------------|--------------------|
+| 2 %                      | 129                       | 339                |
+| 5 %                      | 322                       | 847                |
+| 8 %                      | 515                       | 1355               |
+
+Selv små forbedringer i leveringspresisjon kan gi målbare besparelser.
+
+------------------------------------------------------------------------
+
+## Anbefalinger
+
+### Reduser leveringsforsinkelser
+
+Leveringsforsinkelser er den viktigste driveren for lav kundetilfredshet.\
+Dette bør være første prioritet operasjonelt.
+
+### Etabler KPI-overvåkning
+
+Følgende KPIer bør overvåkes løpende:
+
+-   omsetning
+-   delay rate
+-   kundevurderinger
+
+Dette kan implementeres i et BI-dashboard.
+
+### Prioriter utsatte kategorier
+
+Noen produktkategorier har høyere risiko for lav rating og bør analyseres nærmere.
+
+------------------------------------------------------------------------
+
+## Begrensninger
+
+Analysen har noen begrensninger:
+
+-   manglende kostnadsdata gjør full marginanalyse vanskelig
+-   historiske data dekker kun perioden 2016–2018
+-   kundelojalitet kunne vært modellert mer eksplisitt
+
+------------------------------------------------------------------------
+
+## Teknologi
+
+Prosjektet er gjennomført med:
+
+-   **PostgreSQL** – datamodellering og transformasjon
+
+-   **Python (Pandas, Statsmodels)** – statistisk modellering
+
+-   **Matplotlib / Seaborn** – visualisering
+
+-   **Power BI** – dashboard design
+
+-   **Quarto**
+
+------------------------------------------------------------------------
+
+### Dette prosjektet viser:
+
+✔ SQL datamodellering\
+✔ Feature engineering\
+✔ Prediktiv modellering\
+✔ Forecasting\
+✔ Scenarioanalyse\
+✔ Business recommendations

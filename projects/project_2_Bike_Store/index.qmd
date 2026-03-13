@@ -1,262 +1,283 @@
 ---
-title: "Bike Store – Analyse av salgsdrivere"
-subtitle: "SQL og Power BI analyse av hva som driver omsetning, vekst og margin"
+title: "Sales Analytics"
+subtitle: "SQL · Power BI · Analyse av salgsdrivere"
 format:
   html:
     toc: true
+    toc-depth: 2
+    toc-title: "Innhold"
+    code-fold: true
+    code-tools: true
     lightbox: true
+    theme: cosmo
+    css: styles.css 
 ---
 
+```{=html}
+<div class="project-hero">
+  <div class="hero-eyebrow">PostgreSQL  · Power BI · Salgsvekstanalyse</div>
+  <h1 class="hero-title">Bike Store:<br><em>Hva driver egentlig omsetningen?</em></h1>
+  <p class="hero-sub">Strukturert rådata til et analyseklart stjerneskjema — og et dashboard som avdekker konsentrasjonsrisiko, vekstmønstre og salgsdrivere på tvers av produkter og butikker.</p>
+  <div class="tag-row">
+    <span class="ptag sql">PostgreSQL</span>
+    <span class="ptag bi">Power BI</span>
+    <span class="ptag">Stjernemodell</span>
+    <span class="ptag">KPI-design</span>
+    <span class="ptag">Salgsvekstanalyse</span>
+  </div>
+</div>
 
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">+42<span class="stat-accent">%</span></div>
+    <div class="stat-label">Salgsvekst YoY</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">3 <span class="stat-accent">steg</span></div>
+    <div class="stat-label">PostgreSQL  → modell → BI</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">1</div>
+    <div class="stat-label">Butikk dominerer salget</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">⚠</div>
+    <div class="stat-label">Konsentrasjonsrisiko</div>
+  </div>
+</div>
+```
 
-## Problemstilling 
+## Problemstilling
 
-Ledelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen.
+Ledelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen. Omsetningen vokste, men det var uklart hvilke produkter og butikker som sto for veksten — og om veksten var bredt forankret eller konsentrert i et fåtall enheter.
 
-Sentrale spørsmål var:
+::: callout-important
+## Hovedfunn
 
--   Hvilke produkter og kategorier driver omsetningen?
--   Hvordan utvikler salget seg over tid?
--   Hvor konsentrert er omsetningen på tvers av butikker og produkter?
+Salgsveksten er sterk (+42 % YoY), men tydelig konsentrert. En liten andel produkter driver en stor del av omsetningen, og én butikk står for en uforholdsmessig stor andel av salget. Veksten er primært volumdrevet — ikke prisdrevet.
+:::
 
-Målet med analysen var å strukturere rådata til et analyseklart datagrunnlag og utvikle et dashboard som forklarer drivere bak omsetning og vekst.
+```{=html}
+<div class="findings-grid">
+  <div class="finding-card">
+    <div class="finding-idx">Funn 01</div>
+    <div class="finding-headline">Sterk vekst, men smal base</div>
+    <div class="finding-body">+42 % YoY er imponerende, men omsetningen er konsentrert i et begrenset antall produkter. Dette innebærer konsentrasjonsrisiko mot sortimentsendringer og leverandørproblemer.</div>
+    <span class="finding-metric" style="color:#16a34a">+42% YoY</span>
+  </div>
+  <div class="finding-card">
+    <div class="finding-idx">Funn 02</div>
+    <div class="finding-headline">Én butikk dominerer</div>
+    <div class="finding-body">Én hovedbutikk står for en betydelig andel av totalomsetningen. Geografisk konsentrasjon begrenser vekstpotensialet og øker risikoen ved lokale markedsendringer.</div>
+    <span class="finding-metric">Geo-risiko</span>
+  </div>
+  <div class="finding-card">
+    <div class="finding-idx">Funn 03</div>
+    <div class="finding-headline">Volumdrevet, ikke prisdrevet</div>
+    <div class="finding-body">Veksten forklares primært av økt salgsvolum. Det er rom for å vurdere prissetting og sortimentsoptimalisering for å forbedre marginen uten å ofre volum.</div>
+    <span class="finding-metric">Volum ↑</span>
+  </div>
+</div>
+```
 
----
-
-## Executive summary
-
-- Salgsanalysen viser sterk vekst (**+42 % YoY**), men omsetningen er konsentrert i et begrenset antall produkter og butikker.
-- Datamodellen ble strukturert som et stjerneskjema i SQL og brukt som semantisk lag for Power BI.
-- Dashboardet gjør det mulig å identifisere drivere bak salgsvekst og gir grunnlag for beslutninger knyttet til sortiment, lager og salg.
-
----
+------------------------------------------------------------------------
 
 ## Analyseprosess
 
-Prosjektet ble gjennomført i tre steg:
+Prosjektet fulgte en tredelt prosess: datakvalitetskontroll i PostgreSQL, modellering som stjerneskjema, og ana
 
-1.  Datarydding og strukturering i SQL\
-2.  Datamodellering (stjerneskjema)\
-3.  Analyse og visualisering i Power BI
+```{=html}
+<div class="pipeline-row">
+  <div class="pl-step"><div class="pl-icon">🔍</div><div class="pl-label">Datakvalitet</div><div class="pl-sub">NULL · duplikat · relasjoner</div></div>
+  <div class="pl-arrow">→</div>
+  <div class="pl-step"><div class="pl-icon">🗄️</div><div class="pl-label">PostgreSQL-modell</div><div class="pl-sub">Dimensjoner · faktatabell</div></div>
+  <div class="pl-arrow">→</div>
+  <div class="pl-step"><div class="pl-icon">📊</div><div class="pl-label">Power BI</div><div class="pl-sub">Dashboard · innsikt</div></div>
+  <div class="pl-arrow">→</div>
+  <div class="pl-step"><div class="pl-icon">🎯</div><div class="pl-label">Anbefalinger</div><div class="pl-sub">Sortiment · geografi</div></div>
+</div>
+```
 
-Pipeline:
+------------------------------------------------------------------------
 
-**Rådata → SQL datamodell → Power BI analyse → beslutningsstøtte**
+## PostgreSQL — Datamodellering
 
----
+Datastrukturen ble modellert som et **stjerneskjema** med dimensjonstabeller for produkt, butikk, selger og kunde, og én sentral faktatabell for salgstransaksjoner.
 
-# Data preparation \| SQL
-
-### Datakvalitet og struktur
-
-Før modellering ble datasettet gjennomgått for å sikre konsistent datagrunnlag.
-
-Kontroller inkluderte:
-
--   verifisering av radantall per tabell\
--   kontroll av NULL-verdier i primær- og fremmednøkler\
--   identifisering av duplikater\
--   validering av relasjoner mellom ordre, produkter og butikker
-
-Dette sikrer at analysene i Power BI bygger på konsistente og pålitelige data.
-
----
-
-### Datamodellering – dimensjonstabeller
-
-Datastrukturen ble modellert som et **stjerneskjema**, der dimensjonstabeller beskriver forretningsentiteter og faktatabellen inneholder transaksjoner.
+### Dimensjonstabeller
 
 <details>
 
-<summary>Dimensjonstabeller</summary>
+<summary>Full kode</summary>
 
 ``` sql
--- dim_products
-SELECT p.product_id, 
-        p.product_name, 
-        c.category_name AS category, 
-        b.brand_name AS brand, 
-        p.list_price
+-- Produktdimensjon med kategori og merke
+CREATE OR REPLACE VIEW dim_products AS
+SELECT
+    p.product_id,
+    p.product_name,
+    c.category_name AS category,
+    b.brand_name    AS brand,
+    p.list_price
 FROM products p
-    JOIN brands b USING (brand_id)
+    JOIN brands     b USING (brand_id)
     JOIN categories c USING (category_id);
 
-
--- dim_stores
+-- Butikkdimensjon
 CREATE OR REPLACE VIEW dim_stores AS
-SELECT 
+SELECT
     store_id,
-    store_name, 
+    store_name,
     city,
     state,
     CONCAT(city, ', ', state) AS location
 FROM stores;
 
--- dim_staff
+-- Selgerdimensjon med rolle-flagg
 CREATE OR REPLACE VIEW dim_staff AS
-SELECT 
+SELECT
     staff_id,
-    first_name,
-    last_name,
-    staffs.email,
+    CONCAT(first_name, ' ', last_name) AS name,
+    email,
     store_id,
     manager_id,
-    CONCAT(first_name, ' ', last_name) AS name,
     CASE
         WHEN manager_id IS NULL THEN 'Manager'
         ELSE 'Staff'
     END AS role
 FROM staffs
     JOIN stores USING (store_id);
-
--- dim_customers
-CREATE OR REPLACE VIEW dim_customers AS
-SELECT 
-    CONCAT(first_name, ' ', last_name) AS name,
-    street,
-    city,
-    state,
-    zip_code,
-    CONCAT(state, '/', city)
-FROM customers;
-
-SELECT *
-FROM order_items;
 ```
 
 </details>
 
-Faktatabellen samler alle salgsrelaterte hendelser på ordrenivå og inneholder både brutto- og nettoomsetning.
+### Faktatabell
 
-Dette muliggjør fleksibel analyse av volum, pris og rabatter i Power BI.
+Faktatabellen samler alle salgshendelser på ordrenivå med både brutto- og nettoomsetning — noe som muliggjør analyse av rabatteffekter direkte i Power BI.
 
 <details>
 
-<summary>Faktatabell</summary>
+<summary>Full kode</summary>
 
 ``` sql
 CREATE OR REPLACE VIEW fact_sales AS
-SELECT 
-  o.order_id,
-  o.order_date,
-  o.store_id,
-  o.staff_id,
-  o.customer_id,
-  oi.product_id,
-  oi.quantity,
-  oi.list_price,
-  oi.discount, 
-  oi.quantity * oi.list_price AS gross_revenue,
-  oi.quantity * oi.list_price * (1 - oi.discount) AS net_revenue
+SELECT
+    o.order_id,
+    o.order_date,
+    o.store_id,
+    o.staff_id,
+    o.customer_id,
+    oi.product_id,
+    oi.quantity,
+    oi.list_price,
+    oi.discount,
+    oi.quantity * oi.list_price                       AS gross_revenue,
+    oi.quantity * oi.list_price * (1 - oi.discount)  AS net_revenue
 FROM orders o
 JOIN order_items oi USING (order_id);
 ```
 
 </details>
 
-**Analyse-views**. For å forenkle analyse i Power BI ble aggregerte views opprettet i SQL.
+### Aggregerte analyse-views
+
+For å forenkle Power BI-siden ble aggregerte views bygget direkte i PostgresSQL, slik at Power BI henter ferdige aggregater fremfor å beregne disse på importert
 
 <details>
 
-<summary>SQL analyser</summary>
+<summary>Kode</summary>
 
 ``` sql
-CREATE OR REPLACE VIEW vw_montly_store_revenue AS
-SELECT 
+CREATE OR REPLACE VIEW vw_monthly_store_revenue AS
+SELECT
     s.store_name,
-    EXTRACT(YEAR FROM order_date) AS year,
+    EXTRACT(YEAR  FROM order_date) AS year,
     EXTRACT(MONTH FROM order_date) AS month,
-    SUM(gross_revenue) AS gross_revenue,
-    SUM(net_revenue) AS net_revenue
+    SUM(gross_revenue)             AS gross_revenue,
+    SUM(net_revenue)               AS net_revenue
 FROM fact_sales f
-    LEFT JOIN dim_stores s
-    ON f.store_id = s.store_id
+    LEFT JOIN dim_stores s ON f.store_id = s.store_id
 GROUP BY store_name, year, month
 ORDER BY store_name, year, month;
 ```
 
-<summary>SQL output</summary>
-
-![](bilder/sql_output.png)
-
 </details>
 
----
+------------------------------------------------------------------------
 
-# Data visualisering \| Power BI
+## Power BI — Dashboard
 
-SQL-modellen fungerer som et semantisk lag for Power BI.
+PostgreSQL-modellen brukes direkte som semantisk lag i Power BI — ingen transformasjon i Power Query utover datatyper.
 
-<details>
-
-<summary>Datamodell</summary>
+::: {.callout-note collapse="true"}
+## Datamodell i Power BI
 
 ![](bilder/datamodell_v2.png)
+:::
 
-</details>
+![Salgsanalyse dashboard](bilder/dashboard.png)
 
----
+Dashboardet er strukturert rundt tre analyser. Salgsutvikling over tid visualiserer månedlig omsetning og gjør det mulig å identifisere sesongmønstre og vekstperioder. Produkt- og kategorianalysen viser hvilke enheter som driver størstedelen av omsetningen og avdekker konsentrasjonsrisiko. Butikkanalysen sammenligner geografisk salgsprestasjon.
 
-## Dashboard – oversikt over salgsutvikling
+::: callout-tip
+## Strategisk tolkning
 
-![](bilder/dashboard.png){fig-align="center"}
+Høy konsentrasjon i produktportefølje og geografi er en risikofaktor som bør adresseres eksplisitt i sortiments- og ekspansjonsstrategi. Veksten er reell, men ikke bredt forankret.
+:::
 
-Dashboardet er designet for å gi en rask oversikt over:
+------------------------------------------------------------------------
 
-- utvikling i omsetning over tid  
-- hvilke produkter og kategorier som driver salget  
-- hvordan omsetningen fordeler seg mellom butikker  
+## Anbefalinger
 
-Visualiseringen gjør det mulig å identifisere både vekstmønstre og konsentrasjon i salget.
+```{=html}
+<div class="rec-grid">
+  <div class="rec-card">
+    <div class="rec-icon">📦</div>
+    <div>
+      <div class="rec-title">Reducer konsentrasjonsrisiko i sortimentet</div>
+      <div class="rec-body">Når en liten andel produkter driver en stor del av omsetningen, er avhengigheten av disse produktene høy. Aktiv bredding av sortimentet kan redusere risikoen ved leverandørproblemer eller etterspørselsfall.</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-icon">🗺️</div>
+    <div>
+      <div class="rec-title">Vurder geografisk ekspansjon</div>
+      <div class="rec-body">Dominansen til én butikk indikerer uutnyttet potensial i andre geografier. En markedsanalyse av underrepresenterte regioner kan gi grunnlag for ekspansjonsbeslutninger.</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-icon">💰</div>
+    <div>
+      <div class="rec-title">Optimaliser prissetting</div>
+      <div class="rec-body">Volumdrevet vekst er positivt, men prisoptimalisering på topprodukter kan forbedre margin uten å ofre volum. Rabattanalyse på produktnivå er et naturlig neste steg.</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-icon">📊</div>
+    <div>
+      <div class="rec-title">Implementer løpende KPI-overvåkning</div>
+      <div class="rec-body">Dashboardet gir et godt grunnlag, men bør utvides med marginkPI-er på produktnivå og automatisk varsling ved avvik fra trendlinje.</div>
+    </div>
+  </div>
+</div>
+```
 
----
+------------------------------------------------------------------------
 
-## Hvordan dashboardet brukes
+## Teknologi
 
-Dashboardet er strukturert rundt tre analyser:
+```{=html}
+<div class="tech-row">
+  <div class="tech-pill"><span>🐘</span> PostgreSQL</div>
+  <div class="tech-pill"><span>🔍</span> SQL Views</div>
+  <div class="tech-pill"><span>💡</span> Power BI</div>
+  <div class="tech-pill"><span>📐</span> DAX</div>
+  <div class="tech-pill"><span>🗄️</span> Stjerneskjema</div>
+</div>
+```
 
-**1. Salgsutvikling over tid**
+::: callout-warning
+## Metoderefleksjon
 
-Visualiserer månedlig utvikling i omsetning og gjør det mulig å identifisere sesongmønstre og vekstperioder.
-
-**2. Produkt- og kategorianalyse**
-
-Viser hvilke produkter og kategorier som står for størstedelen av omsetningen.
-
-Dette gjør det mulig å identifisere:
-
-- topprodukter  
-- konsentrasjonsrisiko  
-- potensial for sortimentsoptimalisering  
-
-**3. Butikkanalyse**
-
-Sammenligner omsetning mellom butikker for å identifisere geografiske forskjeller i salgsytelse.
-
----
-
-## Innsikt fra analysen
-
-Analysen viser at salgsveksten i Bike Store er sterk (**+42 % YoY**), men samtidig tydelig konsentrert.
-
-Viktige funn:
-
-- en liten andel produkter driver en stor del av omsetningen  
-- én hovedbutikk står for en betydelig andel av salget  
-- veksten er i stor grad volumdrevet  
-
-Dette indikerer både høy avhengighet av enkelte produkter og potensial for optimalisering av sortiment og lagerstrategi.
-
-## Hva denne casen demonstrerer
-
--   SQL datamodellering
-
--   Design av stjerneskjema
-
--   Datarydding og kvalitetssikring
-
--   KPI-design i Power BI
-
--   Analyse av forretningsdrivere
-
--   Visualisering av innsikt for beslutningsstøtte
+Analysen er basert på transaksjonsdata uten kostnadsinformasjon utover listepriser og rabatter. Full marginanalyse krever innkjøpskostnader. Kundelojalitet og gjenkjøpsrate er ikke analysert i dette prosjektet — et naturlig neste steg.
+:::

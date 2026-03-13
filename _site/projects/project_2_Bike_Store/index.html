@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Bike Store – Analyse av salgsdrivere – Lars Tingelstad, Data &amp; Analytics</title>
+<title>Bike Store Sales Analytics – Lars Tingelstad, Data &amp; Analytics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -109,6 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -164,24 +165,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">Innhold</h2>
    
-  <ul>
+  <ul class="collapse">
   <li><a href="#problemstilling" id="toc-problemstilling" class="nav-link active" data-scroll-target="#problemstilling">Problemstilling</a></li>
-  <li><a href="#executive-summary" id="toc-executive-summary" class="nav-link" data-scroll-target="#executive-summary">Executive summary</a></li>
   <li><a href="#analyseprosess" id="toc-analyseprosess" class="nav-link" data-scroll-target="#analyseprosess">Analyseprosess</a></li>
-  <li><a href="#data-preparation-sql" id="toc-data-preparation-sql" class="nav-link" data-scroll-target="#data-preparation-sql">Data preparation | SQL</a>
-  <ul class="collapse">
-  <li><a href="#datakvalitet-og-struktur" id="toc-datakvalitet-og-struktur" class="nav-link" data-scroll-target="#datakvalitet-og-struktur">Datakvalitet og struktur</a></li>
-  <li><a href="#datamodellering-dimensjonstabeller" id="toc-datamodellering-dimensjonstabeller" class="nav-link" data-scroll-target="#datamodellering-dimensjonstabeller">Datamodellering – dimensjonstabeller</a></li>
-  </ul></li>
-  <li><a href="#data-visualisering-power-bi" id="toc-data-visualisering-power-bi" class="nav-link" data-scroll-target="#data-visualisering-power-bi">Data visualisering | Power BI</a>
-  <ul class="collapse">
-  <li><a href="#dashboard-oversikt-over-salgsutvikling" id="toc-dashboard-oversikt-over-salgsutvikling" class="nav-link" data-scroll-target="#dashboard-oversikt-over-salgsutvikling">Dashboard – oversikt over salgsutvikling</a></li>
-  <li><a href="#hvordan-dashboardet-brukes" id="toc-hvordan-dashboardet-brukes" class="nav-link" data-scroll-target="#hvordan-dashboardet-brukes">Hvordan dashboardet brukes</a></li>
-  <li><a href="#innsikt-fra-analysen" id="toc-innsikt-fra-analysen" class="nav-link" data-scroll-target="#innsikt-fra-analysen">Innsikt fra analysen</a></li>
-  <li><a href="#hva-denne-casen-demonstrerer" id="toc-hva-denne-casen-demonstrerer" class="nav-link" data-scroll-target="#hva-denne-casen-demonstrerer">Hva denne casen demonstrerer</a></li>
-  </ul></li>
+  <li><a href="#sql-datamodellering" id="toc-sql-datamodellering" class="nav-link" data-scroll-target="#sql-datamodellering">SQL — Datamodellering</a></li>
+  <li><a href="#power-bi-dashboard" id="toc-power-bi-dashboard" class="nav-link" data-scroll-target="#power-bi-dashboard">Power BI — Dashboard</a></li>
+  <li><a href="#anbefalinger" id="toc-anbefalinger" class="nav-link" data-scroll-target="#anbefalinger">Anbefalinger</a></li>
+  <li><a href="#teknologi" id="toc-teknologi" class="nav-link" data-scroll-target="#teknologi">Teknologi</a></li>
   </ul>
 </nav>
     </div>
@@ -190,8 +182,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Bike Store – Analyse av salgsdrivere</h1>
-<p class="subtitle lead">SQL og Power BI analyse av hva som driver omsetning, vekst og margin</p>
+<div class="quarto-title-block"><div><h1 class="title">Bike Store Sales Analytics</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">SQL · Power BI · Analyse av salgsdrivere</p>
 </div>
 
 
@@ -208,238 +200,284 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="project-hero">
+  <div class="hero-eyebrow">SQL · Power BI · Salgsvekstanalyse</div>
+  <h1 class="hero-title">Bike Store:<br><em>Hva driver egentlig omsetningen?</em></h1>
+  <p class="hero-sub">Strukturert rådata til et analyseklart stjerneskjema — og et dashboard som avdekker konsentrasjonsrisiko, vekstmønstre og salgsdrivere på tvers av produkter og butikker.</p>
+  <div class="tag-row">
+    <span class="ptag sql">SQL</span>
+    <span class="ptag sql">PostgreSQL</span>
+    <span class="ptag bi">Power BI</span>
+    <span class="ptag">Stjernemodell</span>
+    <span class="ptag">KPI-design</span>
+    <span class="ptag">Salgsvekstanalyse</span>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">+42<span class="stat-accent">%</span></div>
+    <div class="stat-label">Salgsvekst YoY</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">3 <span class="stat-accent">steg</span></div>
+    <div class="stat-label">SQL → modell → BI</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">1</div>
+    <div class="stat-label">Butikk dominerer salget</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">⚠</div>
+    <div class="stat-label">Konsentrasjonsrisiko</div>
+  </div>
+</div>
 <section id="problemstilling" class="level2">
 <h2 class="anchored" data-anchor-id="problemstilling">Problemstilling</h2>
-<p>Ledelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen.</p>
-<p>Sentrale spørsmål var:</p>
-<ul>
-<li>Hvilke produkter og kategorier driver omsetningen?</li>
-<li>Hvordan utvikler salget seg over tid?</li>
-<li>Hvor konsentrert er omsetningen på tvers av butikker og produkter?</li>
-</ul>
-<p>Målet med analysen var å strukturere rådata til et analyseklart datagrunnlag og utvikle et dashboard som forklarer drivere bak omsetning og vekst.</p>
-<hr>
-</section>
-<section id="executive-summary" class="level2">
-<h2 class="anchored" data-anchor-id="executive-summary">Executive summary</h2>
-<ul>
-<li>Salgsanalysen viser sterk vekst (<strong>+42 % YoY</strong>), men omsetningen er konsentrert i et begrenset antall produkter og butikker.</li>
-<li>Datamodellen ble strukturert som et stjerneskjema i SQL og brukt som semantisk lag for Power BI.</li>
-<li>Dashboardet gjør det mulig å identifisere drivere bak salgsvekst og gir grunnlag for beslutninger knyttet til sortiment, lager og salg.</li>
-</ul>
+<p>Ledelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen. Omsetningen vokste, men det var uklart hvilke produkter og butikker som sto for veksten — og om veksten var bredt forankret eller konsentrert i et fåtall enheter.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Hovedfunn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Salgsveksten er sterk (+42 % YoY), men tydelig konsentrert. En liten andel produkter driver en stor del av omsetningen, og én butikk står for en uforholdsmessig stor andel av salget. Veksten er primært volumdrevet — ikke prisdrevet.</p>
+</div>
+</div>
+<div class="findings-grid">
+  <div class="finding-card">
+    <div class="finding-idx">Funn 01</div>
+    <div class="finding-headline">Sterk vekst, men smal base</div>
+    <div class="finding-body">+42 % YoY er imponerende, men omsetningen er konsentrert i et begrenset antall produkter. Dette innebærer konsentrasjonsrisiko mot sortimentsendringer og leverandørproblemer.</div>
+    <span class="finding-metric" style="color:#16a34a">+42% YoY</span>
+  </div>
+  <div class="finding-card">
+    <div class="finding-idx">Funn 02</div>
+    <div class="finding-headline">Én butikk dominerer</div>
+    <div class="finding-body">Én hovedbutikk står for en betydelig andel av totalomsetningen. Geografisk konsentrasjon begrenser vekstpotensialet og øker risikoen ved lokale markedsendringer.</div>
+    <span class="finding-metric">Geo-risiko</span>
+  </div>
+  <div class="finding-card">
+    <div class="finding-idx">Funn 03</div>
+    <div class="finding-headline">Volumdrevet, ikke prisdrevet</div>
+    <div class="finding-body">Veksten forklares primært av økt salgsvolum. Det er rom for å vurdere prissetting og sortimentsoptimalisering for å forbedre marginen uten å ofre volum.</div>
+    <span class="finding-metric">Volum ↑</span>
+  </div>
+</div>
 <hr>
 </section>
 <section id="analyseprosess" class="level2">
 <h2 class="anchored" data-anchor-id="analyseprosess">Analyseprosess</h2>
-<p>Prosjektet ble gjennomført i tre steg:</p>
-<ol type="1">
-<li>Datarydding og strukturering i SQL<br>
-</li>
-<li>Datamodellering (stjerneskjema)<br>
-</li>
-<li>Analyse og visualisering i Power BI</li>
-</ol>
-<p>Pipeline:</p>
-<p><strong>Rådata → SQL datamodell → Power BI analyse → beslutningsstøtte</strong></p>
+<p>Prosjektet fulgte en tredelt prosess: datakvalitetskontroll i SQL, modellering som stjerneskjema, og analyse i Power BI.</p>
+<div class="pipeline-row">
+  <div class="pl-step"><div class="pl-icon">🔍</div><div class="pl-label">Datakvalitet</div><div class="pl-sub">NULL · duplikat · relasjoner</div></div>
+  <div class="pl-arrow">→</div>
+  <div class="pl-step"><div class="pl-icon">🗄️</div><div class="pl-label">SQL-modell</div><div class="pl-sub">Dimensjoner · faktatabell</div></div>
+  <div class="pl-arrow">→</div>
+  <div class="pl-step"><div class="pl-icon">📊</div><div class="pl-label">Power BI</div><div class="pl-sub">Dashboard · innsikt</div></div>
+  <div class="pl-arrow">→</div>
+  <div class="pl-step"><div class="pl-icon">🎯</div><div class="pl-label">Anbefalinger</div><div class="pl-sub">Sortiment · geografi</div></div>
+</div>
 <hr>
 </section>
-<section id="data-preparation-sql" class="level1">
-<h1>Data preparation | SQL</h1>
-<section id="datakvalitet-og-struktur" class="level3">
-<h3 class="anchored" data-anchor-id="datakvalitet-og-struktur">Datakvalitet og struktur</h3>
-<p>Før modellering ble datasettet gjennomgått for å sikre konsistent datagrunnlag.</p>
-<p>Kontroller inkluderte:</p>
-<ul>
-<li>verifisering av radantall per tabell<br>
-</li>
-<li>kontroll av NULL-verdier i primær- og fremmednøkler<br>
-</li>
-<li>identifisering av duplikater<br>
-</li>
-<li>validering av relasjoner mellom ordre, produkter og butikker</li>
-</ul>
-<p>Dette sikrer at analysene i Power BI bygger på konsistente og pålitelige data.</p>
-<hr>
-</section>
-<section id="datamodellering-dimensjonstabeller" class="level3">
-<h3 class="anchored" data-anchor-id="datamodellering-dimensjonstabeller">Datamodellering – dimensjonstabeller</h3>
-<p>Datastrukturen ble modellert som et <strong>stjerneskjema</strong>, der dimensjonstabeller beskriver forretningsentiteter og faktatabellen inneholder transaksjoner.</p>
+<section id="sql-datamodellering" class="level2">
+<h2 class="anchored" data-anchor-id="sql-datamodellering">SQL — Datamodellering</h2>
+<p>Datastrukturen ble modellert som et <strong>stjerneskjema</strong> med dimensjonstabeller for produkt, butikk, selger og kunde, og én sentral faktatabell for salgstransaksjoner.</p>
+<section id="dimensjonstabeller" class="level3">
+<h3 class="anchored" data-anchor-id="dimensjonstabeller">Dimensjonstabeller</h3>
 <details>
 <summary>
-Dimensjonstabeller
+Full kode
 </summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- dim_products</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> p.product_id, </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        p.product_name, </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        c.category_name <span class="kw">AS</span> <span class="kw">category</span>, </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        b.brand_name <span class="kw">AS</span> brand, </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        p.list_price</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products p</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">JOIN</span> brands b <span class="kw">USING</span> (brand_id)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">JOIN</span> categories c <span class="kw">USING</span> (category_id);</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">-- dim_stores</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">VIEW</span> dim_stores <span class="kw">AS</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    store_id,</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    store_name, </span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    city,</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    state,</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">CONCAT</span>(city, <span class="st">', '</span>, state) <span class="kw">AS</span> location</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> stores;</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">-- dim_staff</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">VIEW</span> dim_staff <span class="kw">AS</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    staff_id,</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    first_name,</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    last_name,</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    staffs.email,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Produktdimensjon med kategori og merke</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">VIEW</span> dim_products <span class="kw">AS</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    p.product_id,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    p.product_name,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    c.category_name <span class="kw">AS</span> <span class="kw">category</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    b.brand_name    <span class="kw">AS</span> brand,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    p.list_price</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products p</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">JOIN</span> brands     b <span class="kw">USING</span> (brand_id)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">JOIN</span> categories c <span class="kw">USING</span> (category_id);</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- Butikkdimensjon</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">VIEW</span> dim_stores <span class="kw">AS</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    store_id,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    store_name,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    city,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    state,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">CONCAT</span>(city, <span class="st">', '</span>, state) <span class="kw">AS</span> location</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> stores;</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">-- Selgerdimensjon med rolle-flagg</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">VIEW</span> dim_staff <span class="kw">AS</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    staff_id,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">CONCAT</span>(first_name, <span class="st">' '</span>, last_name) <span class="kw">AS</span> name,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    email,</span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    store_id,</span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    manager_id,</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">CONCAT</span>(first_name, <span class="st">' '</span>, last_name) <span class="kw">AS</span> name,</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">CASE</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> manager_id <span class="kw">IS</span> <span class="kw">NULL</span> <span class="cf">THEN</span> <span class="st">'Manager'</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">ELSE</span> <span class="st">'Staff'</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="kw">AS</span> <span class="kw">role</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> staffs</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">JOIN</span> stores <span class="kw">USING</span> (store_id);</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="co">-- dim_customers</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">VIEW</span> dim_customers <span class="kw">AS</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">CONCAT</span>(first_name, <span class="st">' '</span>, last_name) <span class="kw">AS</span> name,</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    street,</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    city,</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    state,</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    zip_code,</span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">CONCAT</span>(state, <span class="st">'/'</span>, city)</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers;</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> order_items;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">CASE</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> manager_id <span class="kw">IS</span> <span class="kw">NULL</span> <span class="cf">THEN</span> <span class="st">'Manager'</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">ELSE</span> <span class="st">'Staff'</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="kw">AS</span> <span class="kw">role</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> staffs</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">JOIN</span> stores <span class="kw">USING</span> (store_id);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<p>Faktatabellen samler alle salgsrelaterte hendelser på ordrenivå og inneholder både brutto- og nettoomsetning.</p>
-<p>Dette muliggjør fleksibel analyse av volum, pris og rabatter i Power BI.</p>
+</section>
+<section id="faktatabell" class="level3">
+<h3 class="anchored" data-anchor-id="faktatabell">Faktatabell</h3>
+<p>Faktatabellen samler alle salgshendelser på ordrenivå med både brutto- og nettoomsetning — noe som muliggjør analyse av rabatteffekter direkte i Power BI.</p>
 <details>
 <summary>
-Faktatabell
+Full kode
 </summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">VIEW</span> fact_sales <span class="kw">AS</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  o.order_id,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  o.order_date,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  o.store_id,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  o.staff_id,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  o.customer_id,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  oi.product_id,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  oi.quantity,</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  oi.list_price,</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  oi.discount, </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  oi.quantity <span class="op">*</span> oi.list_price <span class="kw">AS</span> gross_revenue,</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  oi.quantity <span class="op">*</span> oi.list_price <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> oi.discount) <span class="kw">AS</span> net_revenue</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    o.order_id,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    o.order_date,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    o.store_id,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    o.staff_id,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    o.customer_id,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    oi.product_id,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    oi.quantity,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    oi.list_price,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    oi.discount,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    oi.quantity <span class="op">*</span> oi.list_price                       <span class="kw">AS</span> gross_revenue,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    oi.quantity <span class="op">*</span> oi.list_price <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> oi.discount)  <span class="kw">AS</span> net_revenue</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> orders o</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> order_items oi <span class="kw">USING</span> (order_id);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<p><strong>Analyse-views</strong>. For å forenkle analyse i Power BI ble aggregerte views opprettet i SQL.</p>
+</section>
+<section id="aggregerte-analyse-views" class="level3">
+<h3 class="anchored" data-anchor-id="aggregerte-analyse-views">Aggregerte analyse-views</h3>
+<p>For å forenkle Power BI-siden ble aggregerte views bygget direkte i SQL — slik at Power BI henter ferdige aggregater fremfor å beregne disse på importert rådata.</p>
 <details>
 <summary>
-SQL analyser
+Kode
 </summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">VIEW</span> vw_montly_store_revenue <span class="kw">AS</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">VIEW</span> vw_monthly_store_revenue <span class="kw">AS</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    s.store_name,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">EXTRACT</span>(<span class="dt">YEAR</span> <span class="kw">FROM</span> order_date) <span class="kw">AS</span> <span class="dt">year</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">EXTRACT</span>(<span class="dt">YEAR</span>  <span class="kw">FROM</span> order_date) <span class="kw">AS</span> <span class="dt">year</span>,</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">EXTRACT</span>(<span class="dt">MONTH</span> <span class="kw">FROM</span> order_date) <span class="kw">AS</span> <span class="dt">month</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(gross_revenue) <span class="kw">AS</span> gross_revenue,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(net_revenue) <span class="kw">AS</span> net_revenue</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(gross_revenue)             <span class="kw">AS</span> gross_revenue,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(net_revenue)               <span class="kw">AS</span> net_revenue</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> fact_sales f</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> dim_stores s</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> f.store_id <span class="op">=</span> s.store_id</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> store_name, <span class="dt">year</span>, <span class="dt">month</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> store_name, <span class="dt">year</span>, <span class="dt">month</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<summary>
-SQL output
-</summary>
-<p><a href="bilder/sql_output.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="bilder/sql_output.png" class="img-fluid"></a></p>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> dim_stores s <span class="kw">ON</span> f.store_id <span class="op">=</span> s.store_id</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> store_name, <span class="dt">year</span>, <span class="dt">month</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> store_name, <span class="dt">year</span>, <span class="dt">month</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <hr>
 </section>
 </section>
-<section id="data-visualisering-power-bi" class="level1">
-<h1>Data visualisering | Power BI</h1>
-<p>SQL-modellen fungerer som et semantisk lag for Power BI.</p>
-<details>
-<summary>
-Datamodell
-</summary>
-<p><a href="bilder/datamodell_v2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="bilder/datamodell_v2.png" class="img-fluid"></a></p>
-</details>
-<hr>
-<section id="dashboard-oversikt-over-salgsutvikling" class="level2">
-<h2 class="anchored" data-anchor-id="dashboard-oversikt-over-salgsutvikling">Dashboard – oversikt over salgsutvikling</h2>
+<section id="power-bi-dashboard" class="level2">
+<h2 class="anchored" data-anchor-id="power-bi-dashboard">Power BI — Dashboard</h2>
+<p>SQL-modellen brukes direkte som semantisk lag i Power BI — ingen transformasjon i Power Query utover datatyper.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Datamodell i Power BI
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><a href="bilder/datamodell_v2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="bilder/datamodell_v2.png" class="img-fluid"></a></p>
+</div>
+</div>
+</div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="bilder/dashboard.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="bilder/dashboard.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
+<p><a href="bilder/dashboard.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Salgsanalyse dashboard"><img src="bilder/dashboard.png" class="img-fluid figure-img" alt="Salgsanalyse dashboard"></a></p>
+<figcaption>Salgsanalyse dashboard</figcaption>
 </figure>
 </div>
-<p>Dashboardet er designet for å gi en rask oversikt over:</p>
-<ul>
-<li>utvikling i omsetning over tid<br>
-</li>
-<li>hvilke produkter og kategorier som driver salget<br>
-</li>
-<li>hvordan omsetningen fordeler seg mellom butikker</li>
-</ul>
-<p>Visualiseringen gjør det mulig å identifisere både vekstmønstre og konsentrasjon i salget.</p>
+<p>Dashboardet er strukturert rundt tre analyser. Salgsutvikling over tid visualiserer månedlig omsetning og gjør det mulig å identifisere sesongmønstre og vekstperioder. Produkt- og kategorianalysen viser hvilke enheter som driver størstedelen av omsetningen og avdekker konsentrasjonsrisiko. Butikkanalysen sammenligner geografisk salgsprestasjon.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Strategisk tolkning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Høy konsentrasjon i produktportefølje og geografi er en risikofaktor som bør adresseres eksplisitt i sortiments- og ekspansjonsstrategi. Veksten er reell, men ikke bredt forankret.</p>
+</div>
+</div>
 <hr>
 </section>
-<section id="hvordan-dashboardet-brukes" class="level2">
-<h2 class="anchored" data-anchor-id="hvordan-dashboardet-brukes">Hvordan dashboardet brukes</h2>
-<p>Dashboardet er strukturert rundt tre analyser:</p>
-<p><strong>1. Salgsutvikling over tid</strong></p>
-<p>Visualiserer månedlig utvikling i omsetning og gjør det mulig å identifisere sesongmønstre og vekstperioder.</p>
-<p><strong>2. Produkt- og kategorianalyse</strong></p>
-<p>Viser hvilke produkter og kategorier som står for størstedelen av omsetningen.</p>
-<p>Dette gjør det mulig å identifisere:</p>
-<ul>
-<li>topprodukter<br>
-</li>
-<li>konsentrasjonsrisiko<br>
-</li>
-<li>potensial for sortimentsoptimalisering</li>
-</ul>
-<p><strong>3. Butikkanalyse</strong></p>
-<p>Sammenligner omsetning mellom butikker for å identifisere geografiske forskjeller i salgsytelse.</p>
+<section id="anbefalinger" class="level2">
+<h2 class="anchored" data-anchor-id="anbefalinger">Anbefalinger</h2>
+<div class="rec-grid">
+  <div class="rec-card">
+    <div class="rec-icon">📦</div>
+    <div>
+      <div class="rec-title">Reducer konsentrasjonsrisiko i sortimentet</div>
+      <div class="rec-body">Når en liten andel produkter driver en stor del av omsetningen, er avhengigheten av disse produktene høy. Aktiv bredding av sortimentet kan redusere risikoen ved leverandørproblemer eller etterspørselsfall.</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-icon">🗺️</div>
+    <div>
+      <div class="rec-title">Vurder geografisk ekspansjon</div>
+      <div class="rec-body">Dominansen til én butikk indikerer uutnyttet potensial i andre geografier. En markedsanalyse av underrepresenterte regioner kan gi grunnlag for ekspansjonsbeslutninger.</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-icon">💰</div>
+    <div>
+      <div class="rec-title">Optimaliser prissetting</div>
+      <div class="rec-body">Volumdrevet vekst er positivt, men prisoptimalisering på topprodukter kan forbedre margin uten å ofre volum. Rabattanalyse på produktnivå er et naturlig neste steg.</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-icon">📊</div>
+    <div>
+      <div class="rec-title">Implementer løpende KPI-overvåkning</div>
+      <div class="rec-body">Dashboardet gir et godt grunnlag, men bør utvides med marginkPI-er på produktnivå og automatisk varsling ved avvik fra trendlinje.</div>
+    </div>
+  </div>
+</div>
 <hr>
 </section>
-<section id="innsikt-fra-analysen" class="level2">
-<h2 class="anchored" data-anchor-id="innsikt-fra-analysen">Innsikt fra analysen</h2>
-<p>Analysen viser at salgsveksten i Bike Store er sterk (<strong>+42 % YoY</strong>), men samtidig tydelig konsentrert.</p>
-<p>Viktige funn:</p>
-<ul>
-<li>en liten andel produkter driver en stor del av omsetningen<br>
-</li>
-<li>én hovedbutikk står for en betydelig andel av salget<br>
-</li>
-<li>veksten er i stor grad volumdrevet</li>
-</ul>
-<p>Dette indikerer både høy avhengighet av enkelte produkter og potensial for optimalisering av sortiment og lagerstrategi.</p>
-</section>
-<section id="hva-denne-casen-demonstrerer" class="level2">
-<h2 class="anchored" data-anchor-id="hva-denne-casen-demonstrerer">Hva denne casen demonstrerer</h2>
-<ul>
-<li><p>SQL datamodellering</p></li>
-<li><p>Design av stjerneskjema</p></li>
-<li><p>Datarydding og kvalitetssikring</p></li>
-<li><p>KPI-design i Power BI</p></li>
-<li><p>Analyse av forretningsdrivere</p></li>
-<li><p>Visualisering av innsikt for beslutningsstøtte</p></li>
-</ul>
+<section id="teknologi" class="level2">
+<h2 class="anchored" data-anchor-id="teknologi">Teknologi</h2>
+<div class="tech-row">
+  <div class="tech-pill"><span>🐘</span> PostgreSQL</div>
+  <div class="tech-pill"><span>🔍</span> SQL Views</div>
+  <div class="tech-pill"><span>💡</span> Power BI</div>
+  <div class="tech-pill"><span>📐</span> DAX</div>
+  <div class="tech-pill"><span>🗄️</span> Stjerneskjema</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Metoderefleksjon
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Analysen er basert på transaksjonsdata uten kostnadsinformasjon utover listepriser og rabatter. Full marginanalyse krever innkjøpskostnader. Kundelojalitet og gjenkjøpsrate er ikke analysert i dette prosjektet — et naturlig neste steg.</p>
+</div>
+</div>
 
 
-</section>
+<!-- -->
+
 </section>
 
 </main> <!-- /main -->
@@ -513,6 +551,57 @@ Datamodell
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -842,7 +931,292 @@ Datamodell
       }
     }
   });
-  </script>
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Bike Store Sales Analytics"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "SQL · Power BI · Analyse av salgsdrivere"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 2</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-title: "Innhold"</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">    lightbox: true</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: cosmo</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">    css: styles.css </span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="project-hero"&gt;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="hero-eyebrow"&gt;SQL · Power BI · Salgsvekstanalyse&lt;/div&gt;</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;h1 class="hero-title"&gt;Bike Store:&lt;br&gt;&lt;em&gt;Hva driver egentlig omsetningen?&lt;/em&gt;&lt;/h1&gt;</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;p class="hero-sub"&gt;Strukturert rådata til et analyseklart stjerneskjema — og et dashboard som avdekker konsentrasjonsrisiko, vekstmønstre og salgsdrivere på tvers av produkter og butikker.&lt;/p&gt;</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="tag-row"&gt;</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="ptag sql"&gt;SQL&lt;/span&gt;</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="ptag sql"&gt;PostgreSQL&lt;/span&gt;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="ptag bi"&gt;Power BI&lt;/span&gt;</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="ptag"&gt;Stjernemodell&lt;/span&gt;</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="ptag"&gt;KPI-design&lt;/span&gt;</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="ptag"&gt;Salgsvekstanalyse&lt;/span&gt;</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="stats-bar"&gt;</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="stat-item"&gt;</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="stat-num"&gt;+42&lt;span class="stat-accent"&gt;%&lt;/span&gt;&lt;/div&gt;</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="stat-label"&gt;Salgsvekst YoY&lt;/div&gt;</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="stat-item"&gt;</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="stat-num"&gt;3 &lt;span class="stat-accent"&gt;steg&lt;/span&gt;&lt;/div&gt;</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="stat-label"&gt;SQL → modell → BI&lt;/div&gt;</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="stat-item"&gt;</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="stat-num"&gt;1&lt;/div&gt;</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="stat-label"&gt;Butikk dominerer salget&lt;/div&gt;</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="stat-item"&gt;</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="stat-num"&gt;⚠&lt;/div&gt;</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="stat-label"&gt;Konsentrasjonsrisiko&lt;/div&gt;</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="fu">## Problemstilling</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>Ledelsen i Bike Store manglet oversikt over hva som faktisk driver salgsutviklingen. Omsetningen vokste, men det var uklart hvilke produkter og butikker som sto for veksten — og om veksten var bredt forankret eller konsentrert i et fåtall enheter.</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hovedfunn</span></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>Salgsveksten er sterk (+42 % YoY), men tydelig konsentrert. En liten andel produkter driver en stor del av omsetningen, og én butikk står for en uforholdsmessig stor andel av salget. Veksten er primært volumdrevet — ikke prisdrevet.</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="findings-grid"&gt;</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="finding-card"&gt;</span></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="finding-idx"&gt;Funn 01&lt;/div&gt;</span></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="finding-headline"&gt;Sterk vekst, men smal base&lt;/div&gt;</span></span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="finding-body"&gt;+42 % YoY er imponerende, men omsetningen er konsentrert i et begrenset antall produkter. Dette innebærer konsentrasjonsrisiko mot sortimentsendringer og leverandørproblemer.&lt;/div&gt;</span></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="finding-metric" style="color:#16a34a"&gt;+42% YoY&lt;/span&gt;</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="finding-card"&gt;</span></span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="finding-idx"&gt;Funn 02&lt;/div&gt;</span></span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="finding-headline"&gt;Én butikk dominerer&lt;/div&gt;</span></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="finding-body"&gt;Én hovedbutikk står for en betydelig andel av totalomsetningen. Geografisk konsentrasjon begrenser vekstpotensialet og øker risikoen ved lokale markedsendringer.&lt;/div&gt;</span></span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="finding-metric"&gt;Geo-risiko&lt;/span&gt;</span></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="finding-card"&gt;</span></span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="finding-idx"&gt;Funn 03&lt;/div&gt;</span></span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="finding-headline"&gt;Volumdrevet, ikke prisdrevet&lt;/div&gt;</span></span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="finding-body"&gt;Veksten forklares primært av økt salgsvolum. Det er rom for å vurdere prissetting og sortimentsoptimalisering for å forbedre marginen uten å ofre volum.&lt;/div&gt;</span></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="finding-metric"&gt;Volum ↑&lt;/span&gt;</span></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a><span class="fu">## Analyseprosess</span></span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>Prosjektet fulgte en tredelt prosess: datakvalitetskontroll i SQL, modellering som stjerneskjema, og analyse i Power BI.</span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="pipeline-row"&gt;</span></span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="pl-step"&gt;&lt;div class="pl-icon"&gt;🔍&lt;/div&gt;&lt;div class="pl-label"&gt;Datakvalitet&lt;/div&gt;&lt;div class="pl-sub"&gt;NULL · duplikat · relasjoner&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="pl-arrow"&gt;→&lt;/div&gt;</span></span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="pl-step"&gt;&lt;div class="pl-icon"&gt;🗄️&lt;/div&gt;&lt;div class="pl-label"&gt;SQL-modell&lt;/div&gt;&lt;div class="pl-sub"&gt;Dimensjoner · faktatabell&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="pl-arrow"&gt;→&lt;/div&gt;</span></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="pl-step"&gt;&lt;div class="pl-icon"&gt;📊&lt;/div&gt;&lt;div class="pl-label"&gt;Power BI&lt;/div&gt;&lt;div class="pl-sub"&gt;Dashboard · innsikt&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="pl-arrow"&gt;→&lt;/div&gt;</span></span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="pl-step"&gt;&lt;div class="pl-icon"&gt;🎯&lt;/div&gt;&lt;div class="pl-label"&gt;Anbefalinger&lt;/div&gt;&lt;div class="pl-sub"&gt;Sortiment · geografi&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a><span class="fu">## SQL — Datamodellering</span></span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>Datastrukturen ble modellert som et **stjerneskjema** med dimensjonstabeller for produkt, butikk, selger og kunde, og én sentral faktatabell for salgstransaksjoner.</span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a><span class="fu">### Dimensjonstabeller</span></span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Full kode<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a><span class="co">-- Produktdimensjon med kategori og merke</span></span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> VIEW dim_products <span class="kw">AS</span></span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>    p<span class="ch">.</span>product_id,</span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>    p<span class="ch">.</span>product_name,</span>
+<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>    c<span class="ch">.</span>category_name <span class="kw">AS</span> category,</span>
+<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a>    b<span class="ch">.</span>brand_name    <span class="kw">AS</span> brand,</span>
+<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>    p<span class="ch">.</span>list_price</span>
+<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products p</span>
+<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a>    <span class="kw">JOIN</span> brands     b <span class="kw">USING</span> (brand_id)</span>
+<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>    <span class="kw">JOIN</span> categories c <span class="kw">USING</span> (category_id);</span>
+<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a><span class="co">-- Butikkdimensjon</span></span>
+<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> VIEW dim_stores <span class="kw">AS</span></span>
+<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a>    store_id,</span>
+<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a>    store_name,</span>
+<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a>    city,</span>
+<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>    state,</span>
+<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a>    <span class="fu">CONCAT</span>(city, <span class="st">', '</span>, state) <span class="kw">AS</span> location</span>
+<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> stores;</span>
+<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a><span class="co">-- Selgerdimensjon med rolle-flagg</span></span>
+<span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> VIEW dim_staff <span class="kw">AS</span></span>
+<span id="cb4-139"><a href="#cb4-139" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a>    staff_id,</span>
+<span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a>    <span class="fu">CONCAT</span>(first_name, <span class="st">' '</span>, last_name) <span class="kw">AS</span> name,</span>
+<span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a>    email,</span>
+<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a>    store_id,</span>
+<span id="cb4-144"><a href="#cb4-144" aria-hidden="true" tabindex="-1"></a>    manager_id,</span>
+<span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a>    <span class="cf">CASE</span></span>
+<span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> manager_id <span class="kw">IS</span> <span class="kw">NULL</span> <span class="cf">THEN</span> <span class="st">'Manager'</span></span>
+<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a>        <span class="cf">ELSE</span> <span class="st">'Staff'</span></span>
+<span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="kw">AS</span> role</span>
+<span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> staffs</span>
+<span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a>    <span class="kw">JOIN</span> stores <span class="kw">USING</span> (store_id);</span>
+<span id="cb4-151"><a href="#cb4-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-152"><a href="#cb4-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-153"><a href="#cb4-153" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a><span class="fu">### Faktatabell</span></span>
+<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a>Faktatabellen samler alle salgshendelser på ordrenivå med både brutto- og nettoomsetning — noe som muliggjør analyse av rabatteffekter direkte i Power BI.</span>
+<span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Full kode<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb4-162"><a href="#cb4-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
+<span id="cb4-164"><a href="#cb4-164" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> VIEW fact_sales <span class="kw">AS</span></span>
+<span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb4-166"><a href="#cb4-166" aria-hidden="true" tabindex="-1"></a>    o<span class="ch">.</span>order_id,</span>
+<span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a>    o<span class="ch">.</span>order_date,</span>
+<span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a>    o<span class="ch">.</span>store_id,</span>
+<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a>    o<span class="ch">.</span>staff_id,</span>
+<span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a>    o<span class="ch">.</span>customer_id,</span>
+<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a>    oi<span class="ch">.</span>product_id,</span>
+<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a>    oi<span class="ch">.</span>quantity,</span>
+<span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a>    oi<span class="ch">.</span>list_price,</span>
+<span id="cb4-174"><a href="#cb4-174" aria-hidden="true" tabindex="-1"></a>    oi<span class="ch">.</span>discount,</span>
+<span id="cb4-175"><a href="#cb4-175" aria-hidden="true" tabindex="-1"></a>    oi<span class="ch">.</span>quantity <span class="op">*</span> oi<span class="ch">.</span>list_price                       <span class="kw">AS</span> gross_revenue,</span>
+<span id="cb4-176"><a href="#cb4-176" aria-hidden="true" tabindex="-1"></a>    oi<span class="ch">.</span>quantity <span class="op">*</span> oi<span class="ch">.</span>list_price <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> oi<span class="ch">.</span>discount)  <span class="kw">AS</span> net_revenue</span>
+<span id="cb4-177"><a href="#cb4-177" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> orders o</span>
+<span id="cb4-178"><a href="#cb4-178" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> order_items oi <span class="kw">USING</span> (order_id);</span>
+<span id="cb4-179"><a href="#cb4-179" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-180"><a href="#cb4-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-181"><a href="#cb4-181" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb4-182"><a href="#cb4-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-183"><a href="#cb4-183" aria-hidden="true" tabindex="-1"></a><span class="fu">### Aggregerte analyse-views</span></span>
+<span id="cb4-184"><a href="#cb4-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-185"><a href="#cb4-185" aria-hidden="true" tabindex="-1"></a>For å forenkle Power BI-siden ble aggregerte views bygget direkte i SQL — slik at Power BI henter ferdige aggregater fremfor å beregne disse på importert rådata.</span>
+<span id="cb4-186"><a href="#cb4-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-187"><a href="#cb4-187" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb4-188"><a href="#cb4-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-189"><a href="#cb4-189" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Kode<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb4-190"><a href="#cb4-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-191"><a href="#cb4-191" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
+<span id="cb4-192"><a href="#cb4-192" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> VIEW vw_monthly_store_revenue <span class="kw">AS</span></span>
+<span id="cb4-193"><a href="#cb4-193" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb4-194"><a href="#cb4-194" aria-hidden="true" tabindex="-1"></a>    s<span class="ch">.</span>store_name,</span>
+<span id="cb4-195"><a href="#cb4-195" aria-hidden="true" tabindex="-1"></a>    <span class="fu">EXTRACT</span>(<span class="fu">YEAR</span>  <span class="kw">FROM</span> order_date) <span class="kw">AS</span> <span class="fu">year</span>,</span>
+<span id="cb4-196"><a href="#cb4-196" aria-hidden="true" tabindex="-1"></a>    <span class="fu">EXTRACT</span>(<span class="fu">MONTH</span> <span class="kw">FROM</span> order_date) <span class="kw">AS</span> <span class="fu">month</span>,</span>
+<span id="cb4-197"><a href="#cb4-197" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(gross_revenue)             <span class="kw">AS</span> gross_revenue,</span>
+<span id="cb4-198"><a href="#cb4-198" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(net_revenue)               <span class="kw">AS</span> net_revenue</span>
+<span id="cb4-199"><a href="#cb4-199" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> fact_sales f</span>
+<span id="cb4-200"><a href="#cb4-200" aria-hidden="true" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> dim_stores s <span class="kw">ON</span> f<span class="ch">.</span>store_id <span class="op">=</span> s<span class="ch">.</span>store_id</span>
+<span id="cb4-201"><a href="#cb4-201" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> store_name, <span class="fu">year</span>, <span class="fu">month</span></span>
+<span id="cb4-202"><a href="#cb4-202" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> store_name, <span class="fu">year</span>, <span class="fu">month</span>;</span>
+<span id="cb4-203"><a href="#cb4-203" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-204"><a href="#cb4-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-205"><a href="#cb4-205" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb4-206"><a href="#cb4-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-207"><a href="#cb4-207" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb4-208"><a href="#cb4-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-209"><a href="#cb4-209" aria-hidden="true" tabindex="-1"></a><span class="fu">## Power BI — Dashboard</span></span>
+<span id="cb4-210"><a href="#cb4-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-211"><a href="#cb4-211" aria-hidden="true" tabindex="-1"></a>SQL-modellen brukes direkte som semantisk lag i Power BI — ingen transformasjon i Power Query utover datatyper.</span>
+<span id="cb4-212"><a href="#cb4-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-213"><a href="#cb4-213" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true"}</span>
+<span id="cb4-214"><a href="#cb4-214" aria-hidden="true" tabindex="-1"></a><span class="fu">## Datamodell i Power BI</span></span>
+<span id="cb4-215"><a href="#cb4-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-216"><a href="#cb4-216" aria-hidden="true" tabindex="-1"></a><span class="al">![](bilder/datamodell_v2.png)</span></span>
+<span id="cb4-217"><a href="#cb4-217" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb4-218"><a href="#cb4-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-219"><a href="#cb4-219" aria-hidden="true" tabindex="-1"></a><span class="al">![Salgsanalyse dashboard](bilder/dashboard.png)</span></span>
+<span id="cb4-220"><a href="#cb4-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-221"><a href="#cb4-221" aria-hidden="true" tabindex="-1"></a>Dashboardet er strukturert rundt tre analyser. Salgsutvikling over tid visualiserer månedlig omsetning og gjør det mulig å identifisere sesongmønstre og vekstperioder. Produkt- og kategorianalysen viser hvilke enheter som driver størstedelen av omsetningen og avdekker konsentrasjonsrisiko. Butikkanalysen sammenligner geografisk salgsprestasjon.</span>
+<span id="cb4-222"><a href="#cb4-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-223"><a href="#cb4-223" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb4-224"><a href="#cb4-224" aria-hidden="true" tabindex="-1"></a><span class="fu">## Strategisk tolkning</span></span>
+<span id="cb4-225"><a href="#cb4-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-226"><a href="#cb4-226" aria-hidden="true" tabindex="-1"></a>Høy konsentrasjon i produktportefølje og geografi er en risikofaktor som bør adresseres eksplisitt i sortiments- og ekspansjonsstrategi. Veksten er reell, men ikke bredt forankret.</span>
+<span id="cb4-227"><a href="#cb4-227" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb4-228"><a href="#cb4-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-229"><a href="#cb4-229" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb4-230"><a href="#cb4-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-231"><a href="#cb4-231" aria-hidden="true" tabindex="-1"></a><span class="fu">## Anbefalinger</span></span>
+<span id="cb4-232"><a href="#cb4-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-233"><a href="#cb4-233" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb4-234"><a href="#cb4-234" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="rec-grid"&gt;</span></span>
+<span id="cb4-235"><a href="#cb4-235" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="rec-card"&gt;</span></span>
+<span id="cb4-236"><a href="#cb4-236" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="rec-icon"&gt;📦&lt;/div&gt;</span></span>
+<span id="cb4-237"><a href="#cb4-237" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div&gt;</span></span>
+<span id="cb4-238"><a href="#cb4-238" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;div class="rec-title"&gt;Reducer konsentrasjonsrisiko i sortimentet&lt;/div&gt;</span></span>
+<span id="cb4-239"><a href="#cb4-239" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;div class="rec-body"&gt;Når en liten andel produkter driver en stor del av omsetningen, er avhengigheten av disse produktene høy. Aktiv bredding av sortimentet kan redusere risikoen ved leverandørproblemer eller etterspørselsfall.&lt;/div&gt;</span></span>
+<span id="cb4-240"><a href="#cb4-240" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;/div&gt;</span></span>
+<span id="cb4-241"><a href="#cb4-241" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb4-242"><a href="#cb4-242" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="rec-card"&gt;</span></span>
+<span id="cb4-243"><a href="#cb4-243" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="rec-icon"&gt;🗺️&lt;/div&gt;</span></span>
+<span id="cb4-244"><a href="#cb4-244" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div&gt;</span></span>
+<span id="cb4-245"><a href="#cb4-245" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;div class="rec-title"&gt;Vurder geografisk ekspansjon&lt;/div&gt;</span></span>
+<span id="cb4-246"><a href="#cb4-246" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;div class="rec-body"&gt;Dominansen til én butikk indikerer uutnyttet potensial i andre geografier. En markedsanalyse av underrepresenterte regioner kan gi grunnlag for ekspansjonsbeslutninger.&lt;/div&gt;</span></span>
+<span id="cb4-247"><a href="#cb4-247" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;/div&gt;</span></span>
+<span id="cb4-248"><a href="#cb4-248" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb4-249"><a href="#cb4-249" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="rec-card"&gt;</span></span>
+<span id="cb4-250"><a href="#cb4-250" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="rec-icon"&gt;💰&lt;/div&gt;</span></span>
+<span id="cb4-251"><a href="#cb4-251" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div&gt;</span></span>
+<span id="cb4-252"><a href="#cb4-252" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;div class="rec-title"&gt;Optimaliser prissetting&lt;/div&gt;</span></span>
+<span id="cb4-253"><a href="#cb4-253" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;div class="rec-body"&gt;Volumdrevet vekst er positivt, men prisoptimalisering på topprodukter kan forbedre margin uten å ofre volum. Rabattanalyse på produktnivå er et naturlig neste steg.&lt;/div&gt;</span></span>
+<span id="cb4-254"><a href="#cb4-254" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;/div&gt;</span></span>
+<span id="cb4-255"><a href="#cb4-255" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb4-256"><a href="#cb4-256" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="rec-card"&gt;</span></span>
+<span id="cb4-257"><a href="#cb4-257" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="rec-icon"&gt;📊&lt;/div&gt;</span></span>
+<span id="cb4-258"><a href="#cb4-258" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div&gt;</span></span>
+<span id="cb4-259"><a href="#cb4-259" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;div class="rec-title"&gt;Implementer løpende KPI-overvåkning&lt;/div&gt;</span></span>
+<span id="cb4-260"><a href="#cb4-260" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;div class="rec-body"&gt;Dashboardet gir et godt grunnlag, men bør utvides med marginkPI-er på produktnivå og automatisk varsling ved avvik fra trendlinje.&lt;/div&gt;</span></span>
+<span id="cb4-261"><a href="#cb4-261" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;/div&gt;</span></span>
+<span id="cb4-262"><a href="#cb4-262" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb4-263"><a href="#cb4-263" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb4-264"><a href="#cb4-264" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-265"><a href="#cb4-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-266"><a href="#cb4-266" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb4-267"><a href="#cb4-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-268"><a href="#cb4-268" aria-hidden="true" tabindex="-1"></a><span class="fu">## Teknologi</span></span>
+<span id="cb4-269"><a href="#cb4-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-270"><a href="#cb4-270" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb4-271"><a href="#cb4-271" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="tech-row"&gt;</span></span>
+<span id="cb4-272"><a href="#cb4-272" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="tech-pill"&gt;&lt;span&gt;🐘&lt;/span&gt; PostgreSQL&lt;/div&gt;</span></span>
+<span id="cb4-273"><a href="#cb4-273" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="tech-pill"&gt;&lt;span&gt;🔍&lt;/span&gt; SQL Views&lt;/div&gt;</span></span>
+<span id="cb4-274"><a href="#cb4-274" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="tech-pill"&gt;&lt;span&gt;💡&lt;/span&gt; Power BI&lt;/div&gt;</span></span>
+<span id="cb4-275"><a href="#cb4-275" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="tech-pill"&gt;&lt;span&gt;📐&lt;/span&gt; DAX&lt;/div&gt;</span></span>
+<span id="cb4-276"><a href="#cb4-276" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="tech-pill"&gt;&lt;span&gt;🗄️&lt;/span&gt; Stjerneskjema&lt;/div&gt;</span></span>
+<span id="cb4-277"><a href="#cb4-277" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb4-278"><a href="#cb4-278" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-279"><a href="#cb4-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-280"><a href="#cb4-280" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
+<span id="cb4-281"><a href="#cb4-281" aria-hidden="true" tabindex="-1"></a><span class="fu">## Metoderefleksjon</span></span>
+<span id="cb4-282"><a href="#cb4-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-283"><a href="#cb4-283" aria-hidden="true" tabindex="-1"></a>Analysen er basert på transaksjonsdata uten kostnadsinformasjon utover listepriser og rabatter. Full marginanalyse krever innkjøpskostnader. Kundelojalitet og gjenkjøpsrate er ikke analysert i dette prosjektet — et naturlig neste steg.</span>
+<span id="cb4-284"><a href="#cb4-284" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
 (function() {
