@@ -160,6 +160,10 @@ Databasen ble strukturert som en **stjernemodell** i PostgreSQL — med en sentr
 
 Rådata fra åtte tabeller ble transformert til én analyseklar faktatabell gjennom iterative CTE-baserte builds. Under er kjernetransformasjonen:
 
+<details>
+
+<summary>kode</summary>
+
 ``` sql
 -- Aggreger order_items til ordre-nivå og beregn forsinkelse
 CREATE TABLE fact_orders_v3 AS
@@ -193,7 +197,13 @@ WHERE order_status = 'delivered'
   AND order_delivered_customer_date >= order_purchase_timestamp;
 ```
 
+</details>
+
 ### PostgreSQL — Feature engineering
+
+<details>
+
+<summary>kode</summary>
 
 ``` sql
 -- Atferdsvariabler og rating-flagg
@@ -213,7 +223,13 @@ FROM (
 ) sub;
 ```
 
+</details>
+
 ### PostgreSQL — Makrokategorier
+
+<details>
+
+<summary>kode</summary>
 
 ``` sql
 -- Aggreger 70+ kategorier til 8 meningsfulle makrogrupper
@@ -257,6 +273,8 @@ SELECT
 FROM dim_product_category;
 ```
 
+</details>
+
 ------------------------------------------------------------------------
 
 ## Prediktiv analyse
@@ -264,6 +282,10 @@ FROM dim_product_category;
 ### Logistisk regresjon: Forsinkelse → Lav kundevurdering
 
 En logistisk regresjonsmodell ble brukt for å estimere sannsynligheten for lav kundevurdering (≤ 2 stjerner), med `delay_days`, `total_order_value` og `category_macro` som forklaringsvariabler.
+
+<details>
+
+<summary>kode</summary>
 
 ``` python
 import statsmodels.api as sm
@@ -293,6 +315,8 @@ pred = model_delay.predict(new_data)
 # P(lav rating | 10 dagers forsinkelse)   ≈ 0.59
 ```
 
+</details>
+
 ::: callout-note
 ## Modelltolkning
 
@@ -300,6 +324,10 @@ pred = model_delay.predict(new_data)
 :::
 
 ### Modell med makrokategorier
+
+<details>
+
+<summary>kode</summary>
 
 ``` python
 # Modell inkludert kategori som forklaringsvariabel
@@ -314,11 +342,15 @@ print(model_macro.summary())
 np.exp(model_macro.params)
 ```
 
-------------------------------------------------------------------------
+</details>
 
 ## Tidsserieanalyse og prognose
 
 ### Operasjonelle KPIer over tid
+
+<details>
+
+<summary>kode</summary>
 
 ``` python
 import pandas as pd
@@ -341,6 +373,8 @@ model = sm.OLS(aov["aov"], X).fit()
 aov["trend"] = model.predict(X)
 ```
 
+</details>
+
 ![Gjennomsnittlig ordreverdi over tid](figs/AOV_over_time.png)
 
 ![Månedlig omsetning med trend](figs/monthly_revenue_trend.png)
@@ -350,6 +384,10 @@ aov["trend"] = model.predict(X)
 ![Andel lave kundevurderinger over tid](figs/low_rating_over_time.png)
 
 ### Omsetningsprognose: Trend + sesong
+
+<details>
+
+<summary>kode</summary>
 
 ``` python
 # Trend + sesong (månedsdummyer)
@@ -375,6 +413,8 @@ future_pred = model_trend_season.get_prediction(future_X)
 future_ci   = future_pred.summary_frame(alpha=0.05)
 ```
 
+</details>
+
 ![Revenue Forecast med 95 % prediksjonsintervall](figs/revenue_forvast.png)
 
 ::: callout-tip
@@ -388,6 +428,10 @@ Trend + sesong-modellen slår ren trendmodell på AIC, noe som bekrefter at seso
 ## Scenarioanalyse
 
 Effekten av redusert leveringsforsinkelse ble simulert basert på observert fraktkostnadsdifferanse mellom forsinkede og ikke-forsinkede ordre (≈ 2,63 enheter per ordre).
+
+<details>
+
+<summary>kode</summary>
 
 ``` python
 baseline_delay_rate = fact_orders["delay_flag"].mean()
@@ -410,6 +454,8 @@ for reduction in scenarios:
 
 scenario_table = pd.DataFrame(results)
 ```
+
+</details>
 
 ```{=html}
 <table class="scenario-tbl">
@@ -443,8 +489,6 @@ scenario_table = pd.DataFrame(results)
   </tbody>
 </table>
 ```
-
-------------------------------------------------------------------------
 
 ## Anbefalinger
 
@@ -480,8 +524,6 @@ scenario_table = pd.DataFrame(results)
   </div>
 </div>
 ```
-
-------------------------------------------------------------------------
 
 ## Begrensninger
 
